@@ -1,0 +1,40 @@
+{
+  "name": "Holla",
+  "version": "0.0.0",
+  "description": "Locatio based commenting",
+  "main": "backend/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node lib/index.js",
+    "lint-windows": "eslint.cmd backend",
+    "babel-windows": "babel.cmd backend -d lib",
+    "build-windows": "npm run lint-windows && npm run babel-windows"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Zettoy/Holla.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/Zettoy/Holla/issues"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "bluebird": "^3.5.2",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "helmet": "^3.13.0",
+    "mongoose": "^5.2.13",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-google": "^0.10.0",
+    "eslint-plugin-import": "^2.14.0"
+  }
+}
