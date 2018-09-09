@@ -7,7 +7,7 @@ const prodConfig = {
 };
 
 const defaultConfig = {
-  PORT: process.env.port || 3000,
+  PORT: process.env.PORT || 3000,
 };
 
 const envConfig = (env) => {
