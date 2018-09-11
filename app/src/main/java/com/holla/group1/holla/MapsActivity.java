@@ -2,29 +2,28 @@ package com.holla.group1.holla;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+import java.util.ArrayList;
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
+    private ArrayList<PostMarker> markers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +65,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng sydney = new LatLng(-34, 151);
 
-        PostMarker postMarker = new PostMarker(sydney, "This is a tes...", mMap);
+        markers = new ArrayList<>();
+        PostMarker postMarker = new PostMarker(sydney, "This is a missing test message. If you see this message, please return it to it's owner. #Missing", mMap);
+        markers.add(postMarker);
+
+        LatLng testLatLng = new LatLng(-33, 150);
+        postMarker = new PostMarker(testLatLng, "I wish we actually connected to the backend for this stuff. #Hopeful", mMap);
+        markers.add(postMarker);
+
+        testLatLng = new LatLng(-30, 149);
+        postMarker = new PostMarker(testLatLng, "I personally wish to not get grilled in the sprint review. #Wishful", mMap);
+        markers.add(postMarker);
+
+        testLatLng = new LatLng(-29, 150);
+        postMarker = new PostMarker(testLatLng, "Don't forget to subscribe.", mMap);
+        markers.add(postMarker);
+
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        /*LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.post_map_fragment, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+        popupWindow.showAtLocation(this.findViewById(android.R.id.content)
+                , Gravity.CENTER, 0, 0);*/
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        //Dirty way to do it
+        for (PostMarker map_marker : markers) {
+            if (map_marker.getMarker().equals(marker)) {
+                Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
+                TextView overlayText = (TextView) overlayFragment.getView().findViewById(R.id.post_map_text);
+                overlayText.setText(map_marker.getText());
+            }
+        }
+        return false;
     }
 }
