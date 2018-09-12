@@ -49,6 +49,7 @@ tools:context=".MapsActivity" >
                 android:layout_centerVertical="true"
                 android:hint="Enter something..."
                 android:textSize="15sp"
+                android:imeOptions="actionSearch"
                 android:id="@+id/text"/>
 
         </RelativeLayout>

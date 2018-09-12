@@ -2,12 +2,17 @@ package com.holla.group1.holla;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,12 +23,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private ArrayList<PostMarker> markers;
+
+    private EditText searchText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +41,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        // Initialize search bar
+        initSearchBar();
+
         mapFragment.getMapAsync(this);
     }
-
 
     /**
      * Manipulates the map once available.
@@ -110,5 +122,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         return false;
+    }
+
+    private void initSearchBar() {
+        searchText = findViewById(R.id.text);
+
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE
+                        ||  actionId == EditorInfo.IME_ACTION_SEARCH
+                        ||  event.getAction() == KeyEvent.KEYCODE_ENTER
+                        ||  event.getAction() == KeyEvent.ACTION_DOWN) {
+                    // Search for location
+                    geoLocate();
+                }
+                return false;
+            }
+        });
+    }
+
+    private void geoLocate() {
+        Geocoder geocoder = new Geocoder(MapsActivity.this);
+        List<Address> addresses = new ArrayList<>();
+
+        try {
+            addresses = geocoder.getFromLocationName(
+                    searchText.getText().toString(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (!addresses.isEmpty()) {
+            Address address = addresses.get(0);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
+                    new LatLng(address.getLatitude(), address.getLongitude()), 10));
+        }
     }
 }
