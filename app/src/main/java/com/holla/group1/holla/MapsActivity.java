@@ -4,14 +4,16 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,19 +36,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View.OnClickListener,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener,
-        RestAPIClient.OnTweetsLoadedListener
-{
+        RestAPIClient.OnTweetsLoadedListener {
 
+    private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
-
     private EditText searchText;
-    private final String TAG = "MapsActivity";
     private RestAPIClient apiClient;
+
+
+    private void showOverlay() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
+        ft.show(overlayFragment);
+        ft.commit();
+    }
+
+    private void hideOverlay() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
+        ft.hide(overlayFragment);
+        ft.commit();
+    }
 
     @Override
     public void onMapClick(LatLng latLng) {
         setOverlayText(""); //set to blank
+        hideOverlay();
     }
 
     @Override
@@ -63,12 +81,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
+        mapFragment.getMapAsync(this);
         // Initialize search bar
         initSearchBar();
-
-        mapFragment.getMapAsync(this);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         apiClient = new RestAPIClient(getApplicationContext(), this);
         markerPostHashMap = new HashMap<>();
+        hideOverlay();
     }
 
     /**
@@ -99,16 +118,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
 
         addSamplePosts();
 
     }
-    private void addSamplePosts(){
-        for(Post p : SamplePosts.getSamplePosts()){
+
+    private void addSamplePosts() {
+        for (Post p : SamplePosts.getSamplePosts()) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(p.getLocation());
             Marker marker = mMap.addMarker(markerOptions);
@@ -136,10 +155,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         TextView overlayText = overlayFragment.getView().findViewById(R.id.post_map_text);
         overlayText.setText(text);
     }
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         Post post = markerPostHashMap.get(marker);
         setOverlayText(post.getContent());
+        showOverlay();
         return false;
     }
 
@@ -150,9 +171,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE
-                        ||  actionId == EditorInfo.IME_ACTION_SEARCH
-                        ||  event.getAction() == KeyEvent.KEYCODE_ENTER
-                        ||  event.getAction() == KeyEvent.ACTION_DOWN) {
+                        || actionId == EditorInfo.IME_ACTION_SEARCH
+                        || event.getAction() == KeyEvent.KEYCODE_ENTER
+                        || event.getAction() == KeyEvent.ACTION_DOWN) {
                     // Search for location
                     geoLocate();
                 }
