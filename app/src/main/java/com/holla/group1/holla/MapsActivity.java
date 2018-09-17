@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -36,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View.OnClickListener,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener,
-        RestAPIClient.OnTweetsLoadedListener {
+        RestAPIClient.OnPostsLoadedListener {
 
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
@@ -63,13 +62,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapClick(LatLng latLng) {
-        setOverlayText(""); //set to blank
         hideOverlay();
     }
 
     @Override
-    public void onTweetsLoaded(List<String> tweets) {
-        Log.d(TAG, tweets.toString());
+    public void onPostsLoaded(List<Post> posts) {
+        drawPostsOnMap(posts);
     }
 
     @Override
@@ -101,7 +99,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        apiClient.loadFakeTweets();
+        apiClient.loadFakeTweets(this.getApplicationContext());
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -125,15 +123,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         addSamplePosts();
 
     }
-
-    private void addSamplePosts() {
-        for (Post p : SamplePosts.getSamplePosts()) {
+    private void drawPostsOnMap(List<Post> posts){
+        for (Post p : posts) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(p.getLocation());
             Marker marker = mMap.addMarker(markerOptions);
-            mMap.setOnMarkerClickListener(this);
             markerPostHashMap.put(marker, p);
         }
+    }
+    private void addSamplePosts() {
+        drawPostsOnMap(SamplePosts.getSamplePosts());
     }
 
     @Override
@@ -150,16 +149,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 , Gravity.CENTER, 0, 0);*/
     }
 
-    public void setOverlayText(String text) {
-        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
-        TextView overlayText = overlayFragment.getView().findViewById(R.id.post_map_text);
-        overlayText.setText(text);
+    public void setOverlayPost(Post post) {
+        PostMapOverlay overlayFragment = (PostMapOverlay) getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
+        overlayFragment.showPost(post);
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
         Post post = markerPostHashMap.get(marker);
-        setOverlayText(post.getContent());
+        setOverlayPost(post);
         showOverlay();
         return false;
     }
