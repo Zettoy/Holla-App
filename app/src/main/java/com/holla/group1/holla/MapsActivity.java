@@ -46,6 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initSearchBar();
 
         mapFragment.getMapAsync(this);
+        RestAPIClient.loadTweets(this.getApplicationContext());
     }
 
     /**
