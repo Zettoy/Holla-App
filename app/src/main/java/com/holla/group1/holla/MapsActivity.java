@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,12 +28,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, RestAPIClient.OnTweetsLoadedListener {
 
     private GoogleMap mMap;
     private ArrayList<PostMarker> markers;
 
     private EditText searchText;
+    private final String TAG = "MapsActivity";
+
+    @Override
+    public void onTweetsLoaded(List<String> tweets) {
+        Log.d(TAG, tweets.toString());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initSearchBar();
 
         mapFragment.getMapAsync(this);
-        RestAPIClient.loadTweets(this.getApplicationContext());
+        RestAPIClient apiClient = new RestAPIClient(getApplicationContext(), this);
+        apiClient.loadFakeTweets();
     }
 
     /**
