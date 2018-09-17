@@ -35,6 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText searchText;
     private final String TAG = "MapsActivity";
+    private RestAPIClient apiClient;
 
     @Override
     public void onTweetsLoaded(List<String> tweets) {
@@ -53,8 +54,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initSearchBar();
 
         mapFragment.getMapAsync(this);
-        RestAPIClient apiClient = new RestAPIClient(getApplicationContext(), this);
-        apiClient.loadFakeTweets();
+        apiClient = new RestAPIClient(getApplicationContext(), this);
     }
 
     /**
@@ -68,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        apiClient.loadFakeTweets();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
