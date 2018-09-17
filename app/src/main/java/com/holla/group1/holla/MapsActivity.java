@@ -23,19 +23,31 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener, GoogleMap.OnMarkerClickListener, RestAPIClient.OnTweetsLoadedListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+        View.OnClickListener,
+        GoogleMap.OnMarkerClickListener,
+        GoogleMap.OnMapClickListener,
+        RestAPIClient.OnTweetsLoadedListener
+{
 
     private GoogleMap mMap;
-    private ArrayList<PostMarker> markers;
+    private HashMap<Marker, Post> markerPostHashMap;
 
     private EditText searchText;
     private final String TAG = "MapsActivity";
     private RestAPIClient apiClient;
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        setOverlayText(""); //set to blank
+    }
 
     @Override
     public void onTweetsLoaded(List<String> tweets) {
@@ -45,7 +57,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_maps_linearlayout);
+//        setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -55,6 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mapFragment.getMapAsync(this);
         apiClient = new RestAPIClient(getApplicationContext(), this);
+        markerPostHashMap = new HashMap<>();
     }
 
     /**
@@ -68,7 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        apiClient.loadFakeTweets();
+//        apiClient.loadFakeTweets();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -86,25 +100,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         LatLng sydney = new LatLng(-34, 151);
-
-        markers = new ArrayList<>();
-        PostMarker postMarker = new PostMarker(sydney, "This is a missing test message. If you see this message, please return it to it's owner. #Missing", mMap);
-        markers.add(postMarker);
-
-        LatLng testLatLng = new LatLng(-33, 150);
-        postMarker = new PostMarker(testLatLng, "I wish we actually connected to the backend for this stuff. #Hopeful", mMap);
-        markers.add(postMarker);
-
-        testLatLng = new LatLng(-30, 149);
-        postMarker = new PostMarker(testLatLng, "I personally wish to not get grilled in the sprint review. #Wishful", mMap);
-        markers.add(postMarker);
-
-        testLatLng = new LatLng(-29, 150);
-        postMarker = new PostMarker(testLatLng, "Don't forget to subscribe.", mMap);
-        markers.add(postMarker);
-
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.setOnMarkerClickListener(this);
+        mMap.setOnMapClickListener(this);
+
+        addSamplePosts();
+
+    }
+    private void addSamplePosts(){
+        for(Post p : SamplePosts.getSamplePosts()){
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(p.getLocation());
+            Marker marker = mMap.addMarker(markerOptions);
+            mMap.setOnMarkerClickListener(this);
+            markerPostHashMap.put(marker, p);
+        }
     }
 
     @Override
@@ -121,16 +131,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 , Gravity.CENTER, 0, 0);*/
     }
 
+    public void setOverlayText(String text) {
+        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
+        TextView overlayText = overlayFragment.getView().findViewById(R.id.post_map_text);
+        overlayText.setText(text);
+    }
     @Override
     public boolean onMarkerClick(Marker marker) {
-        //Dirty way to do it
-        for (PostMarker map_marker : markers) {
-            if (map_marker.getMarker().equals(marker)) {
-                Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
-                TextView overlayText = (TextView) overlayFragment.getView().findViewById(R.id.post_map_text);
-                overlayText.setText(map_marker.getText());
-            }
-        }
+        Post post = markerPostHashMap.get(marker);
+        setOverlayText(post.getContent());
         return false;
     }
 
