@@ -199,8 +199,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if (!addresses.isEmpty()) {
             Address address = addresses.get(0);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(address.getLatitude(), address.getLongitude()), 10));
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+            MarkerOptions options = new MarkerOptions()
+                    .position(latLng);
+            mMap.addMarker(options);
         }
     }
 }
