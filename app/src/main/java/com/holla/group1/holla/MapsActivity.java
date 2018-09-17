@@ -1,6 +1,7 @@
 package com.holla.group1.holla;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -10,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -44,6 +46,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RestAPIClient apiClient;
 
 
+    public void showMakePostActivity(View view){
+        Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
+        startActivity(intent);
+    }
     private void showOverlay() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
