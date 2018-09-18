@@ -204,6 +204,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MarkerOptions options = new MarkerOptions()
                     .position(latLng);
             mMap.addMarker(options);
+
         }
     }
 }
