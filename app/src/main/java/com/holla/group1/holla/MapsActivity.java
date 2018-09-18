@@ -150,6 +150,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.i(TAG, "Place Selected: " + place.getName());
                 searchText = (String)place.getName();
+
+                // Modify the button text with what the user had entered
+                Button openButton = findViewById(R.id.open_button);
+                openButton.setText(searchText);
+
                 geoLocate();
             }
         }
@@ -245,9 +250,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Address address = addresses.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng);
-            mMap.addMarker(options);
 
         }
     }
