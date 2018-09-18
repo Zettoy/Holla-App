@@ -11,6 +11,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -18,6 +20,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MakePostActivity extends AppCompatActivity {
 
@@ -62,9 +66,20 @@ public class MakePostActivity extends AppCompatActivity {
 
         post = findViewById(R.id.post_edit_text);
 
+        // Automatically pop up keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
     }
 
-    public void getLocation() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        getLocation();
+
+    }
+
+    private void getLocation() {
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this,
