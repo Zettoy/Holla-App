@@ -3,6 +3,8 @@ package com.holla.group1.holla;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,14 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import org.xml.sax.helpers.LocatorImpl;
+import java.io.IOException;
 
 public class MakePostActivity extends AppCompatActivity {
 
@@ -86,7 +85,25 @@ public class MakePostActivity extends AppCompatActivity {
     }
 
     private void setLocationText() {
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        locationText.setText(latLng.toString());
+        Geocoder geocoder = new Geocoder(MakePostActivity.this);
+
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
+
+        try {
+            String address = geocoder
+                    .getFromLocation(lat, lng, 1)
+                    .get(0)
+                    .getAddressLine(0);
+
+            // TODO: find a better way to limit the length of address
+            address = address.split(",")[0];
+
+            locationText.setText(address);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 }
