@@ -14,4 +14,5 @@
 .externalNativeBuild
 /node_modules
 
-/app/src/debug/res/values/google_maps_api.xml
+app/src/debug/res/values/google_maps_api.xml
+app/src/main/res/values/google_maps_api.xml
