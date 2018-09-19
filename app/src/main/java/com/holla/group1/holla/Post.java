@@ -42,6 +42,9 @@ public class Post {
         this.username = username;
     }
 
+    public String get_timestamp_ago(){
+        return DateTimeFormatter.getTimestampAgo(this.creation_time);
+    }
     public DateTime getCreation_time() {
         return creation_time;
     }

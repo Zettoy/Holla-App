@@ -32,7 +32,7 @@ public class PostMapOverlay extends Fragment {
 //        overlayText.setText(text.substring(0, Math.min(text.length()-1, 100)));
         overlayTextView.setText(post.getContent().trim());
         usernameTextView.setText("@" + post.getUsername());
-        dateTextView.setText(" ·"+" 2d");
+        dateTextView.setText(" · " + post.get_timestamp_ago());
     }
 
 }
