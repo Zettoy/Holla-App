@@ -25,10 +25,14 @@ public class PostMapOverlay extends Fragment {
 
     public void showPost(Post post){
 
-        TextView overlayText = getView().findViewById(R.id.post_map_text);
+        TextView overlayTextView = getView().findViewById(R.id.postContentTextView);
+        TextView usernameTextView = getView().findViewById(R.id.usernameTextview);
+        TextView dateTextView = getView().findViewById(R.id.dateTextView);
         //truncate text with hard limit
 //        overlayText.setText(text.substring(0, Math.min(text.length()-1, 100)));
-        overlayText.setText(post.getContent());
+        overlayTextView.setText(post.getContent().trim());
+        usernameTextView.setText("@" + post.getUsername());
+        dateTextView.setText(" ·"+" 2d");
     }
 
 }
