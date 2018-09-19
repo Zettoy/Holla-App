@@ -7,13 +7,14 @@ POST /posts/create
 
 ### body expects json :
 
-{ "location" : {
-	"type" : "Point",
-	"coordinates":[-33.912383,151.223480]
-  },
-  "location_name": "UNSW roundhouse" 
-  "content" : "Get ahead of the Weekly Trivia game at Unibar ❓Don't water-fail this week 🌊t"
-}
+	{ 
+	"location" : {
+		"type" : "Point",
+		"coordinates":[-33.912383,151.223480]
+	  },
+	  "location_name": "UNSW roundhouse" ,
+	  "content" : "Get ahead of the Weekly Trivia game at Unibar ❓Don't water-fail this week 🌊t"
+	}
 required : all but location_name
 ### body expect cookies : (cookies should identify user etc. google oauth, facebook login)
 
