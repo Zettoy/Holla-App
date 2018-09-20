@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.JsonArray;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -35,7 +36,7 @@ public class RestAPIClient {
         this.mListener = listener;
     }
 
-    public static void loadTweets(Context ctx) {
+    public void loadTweets() {
         String url = "https://holla-alpha.herokuapp.com/posts/search/location";
 //        String url = "https://jsonplaceholder.typicode.com/users";
         JsonArrayRequest request = new JsonArrayRequest(
@@ -43,7 +44,29 @@ public class RestAPIClient {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d(TAG, response.toString());
+                        ArrayList<Post> posts = new ArrayList<>();
+                        for (int i = 0; i < response.length(); i++) {
+                            try{
+                                JSONObject post_obj = response.getJSONObject(i);
+                                String timestamp_iso8601 = post_obj.getString("date");
+                                DateTime dateTime = new DateTime(timestamp_iso8601);
+                                JSONArray coords = post_obj.getJSONObject("location").getJSONArray("coordinates");
+                                LatLng loc = new LatLng(
+                                        coords.getDouble(0),
+                                        coords.getDouble(1)
+                                );
+                                String content = post_obj.getString("content");
+                                String username = post_obj.getString("author");
+                                posts.add(
+                                        new Post(loc, content,username, dateTime)
+                                );
+                            }catch (Exception e){
+                                Log.e(TAG, e.toString());
+
+                            }
+                        }
+                        mListener.onPostsLoaded(posts);
+
 
                     }
                 },
@@ -55,10 +78,10 @@ public class RestAPIClient {
                     }
                 }
         );
-        RequestQueueSingleton.getInstance(ctx).addToRequestQueue(request);
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
-    public void loadFakeTweets(final Context context) {
+    public void loadFakeTweets() {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -96,7 +119,7 @@ public class RestAPIClient {
 
             }
         };
-        Handler mainHandler = new Handler(context.getMainLooper());
+        Handler mainHandler = new Handler(this.context.getMainLooper());
         mainHandler.post(runnable);
 
     }
