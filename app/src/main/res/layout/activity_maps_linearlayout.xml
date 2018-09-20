@@ -9,39 +9,63 @@
 
     <!--android:elevation="10dp"-->
     <RelativeLayout
-        android:id="@+id/relayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:id="@+id/relayout">
 
         <ImageButton
-            android:id="@+id/menu"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:src="@drawable/ic_menu"
             android:layout_centerVertical="true"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_menu" />
+            android:id="@+id/menu"/>
 
-        <Button
-            android:id="@+id/open_button"
-            android:layout_width="251dp"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="11dp"
-            android:background="#fff"
-            android:text="@string/open_activity" />
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/while_border"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="5dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_search"
+                android:id="@+id/ic_search"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@id/ic_search"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#fff"
+                android:layout_centerVertical="true"
+                android:hint="Enter something..."
+                android:textSize="15sp"
+                android:imeOptions="actionSearch"
+                android:id="@+id/text"/>
+
+        </RelativeLayout>
 
         <ImageButton
-            android:id="@+id/make_post_btn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_post"
             android:layout_centerVertical="true"
             android:background="@color/colorPrimary"
+            android:id="@+id/make_post_btn"
             android:onClick="showMakePostActivity"
-            android:src="@drawable/ic_post" />
+            />
+
 
 
     </RelativeLayout>
@@ -66,9 +90,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            tools:layout="@layout/post_map_overlay_fragment" />
+            tools:layout="@layout/post_map_overlay_fragment" />﻿
 
-        ﻿<!--android:layout_alignParentTop="false"-->
+        <!--android:layout_alignParentTop="false"-->
         <!--android:layout_centerHorizontal="true"-->
 
     </FrameLayout>
