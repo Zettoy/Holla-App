@@ -105,8 +105,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-//        apiClient.loadFakeTweets();
-        apiClient.loadTweets();
+        apiClient.loadFakeTweets();
+//        apiClient.loadTweets();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
