@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#515151</color>
+    <!--Dark Theme-->
+    <!--<color name="colorPrimary">#ffffff</color>-->
+    <!--<color name="colorSecondary">#999999</color>-->
+    <!--<color name="colorBackground">#000000</color>-->
+
+    <!--Light Theme-->
+    <color name="colorPrimary">#000000</color>
+    <color name="colorSecondary">#999999</color>
+    <color name="colorBackground">#ffffff</color>
+
     <color name="colorPrimaryDark">#515151</color>
     <color name="colorAccent">#ff5500</color>
 

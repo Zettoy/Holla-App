@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@color/black"
         android:id="@+id/relayout">
 
         <ImageButton
@@ -19,8 +19,9 @@
             android:layout_height="50dp"
             android:src="@drawable/ic_menu"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
+        android:background="@color/transparent"
             android:id="@+id/menu"/>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -61,7 +62,7 @@
             android:layout_alignParentEnd="true"
             android:src="@drawable/ic_post"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparent"
             android:id="@+id/make_post_btn"
             android:onClick="showMakePostActivity"
             />

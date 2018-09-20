@@ -50,6 +50,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
         startActivity(intent);
     }
+    public void showViewPostActivity(View view){
+        Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
+        startActivity(intent);
+    }
     private void showOverlay() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -4,8 +4,9 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffffff"
+    android:background="@color/colorBackground"
     android:clickable="true"
+    android:onClick="showViewPostActivity"
     android:focusable="true">
 
     <!--<ImageView-->
@@ -24,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:text="@string/default_date"
-        android:textColor="@color/gray"
+        android:textColor="@color/colorSecondary"
         android:textSize="@dimen/post_ui_font_size"
         app:layout_constraintBaseline_toBaselineOf="@+id/usernameTextview"
         app:layout_constraintStart_toEndOf="@id/usernameTextview" />
@@ -37,7 +38,7 @@
         android:layout_marginStart="@dimen/post_ui_margin"
         android:layout_marginTop="@dimen/post_ui_margin"
         android:text="@string/default_username"
-        android:textColor="@color/black"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/post_ui_font_size"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/postContentTextView"
@@ -55,7 +56,7 @@
         android:minLines="1"
         android:padding="0dp"
         android:text="@string/default_post_content"
-        android:textColor="@color/black"
+        android:textColor="@color/colorPrimary"
         android:textSize="@dimen/post_ui_font_size"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/post_ui_margin"
             android:text="[Tap to see more...]"
-            android:textColor="@color/gray"
+            android:textColor="@color/colorSecondary"
             android:textSize="@dimen/post_ui_font_size"
             android:textStyle="italic" />
 
@@ -94,7 +95,7 @@
                 android:id="@+id/comments_likes_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray"
+                android:textColor="@color/colorSecondary"
                 android:textSize="@dimen/post_ui_font_size" />
         </LinearLayout>
     </LinearLayout>
