@@ -12,9 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,6 +21,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,12 +33,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,8 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        // Initialize search bar
-        //initSearchBar();
+
         // Open the autocomplete activity when the button is clicked.
         Button openButton = findViewById(R.id.open_button);
         openButton.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +102,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 openAutocompleteActivity();
             }
         });
-
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         apiClient = new RestAPIClient(getApplicationContext(), this);
         markerPostHashMap = new HashMap<>();
@@ -154,7 +148,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
     }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -228,7 +221,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         showOverlay();
         return false;
     }
-
 
     private void geoLocate() {
         Geocoder geocoder = new Geocoder(MapsActivity.this);
