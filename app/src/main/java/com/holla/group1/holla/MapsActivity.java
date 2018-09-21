@@ -221,9 +221,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Post post = markerPostHashMap.get(marker);
-        setOverlayPost(post);
-        showOverlay();
+        if(markerPostHashMap.containsKey(marker)){
+            Post post = markerPostHashMap.get(marker);
+            setOverlayPost(post);
+            showOverlay();
+        }
         return false;
     }
 
