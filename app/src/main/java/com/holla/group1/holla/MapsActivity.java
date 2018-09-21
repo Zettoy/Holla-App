@@ -16,10 +16,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.AutocompleteFilter;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -42,8 +49,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
-    private EditText searchText;
+    private String searchText;
     private RestAPIClient apiClient;
+    private static final int REQUEST_CODE_AUTOCOMPLETE = 1;
 
 
     public void showMakePostActivity(View view){
@@ -86,14 +94,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
-        // Initialize search bar
-        initSearchBar();
+
+        // Open the autocomplete activity when the button is clicked.
+        Button openButton = findViewById(R.id.open_button);
+        openButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAutocompleteActivity();
+            }
+        });
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         apiClient = new RestAPIClient(getApplicationContext(), this);
         markerPostHashMap = new HashMap<>();
         hideOverlay();
     }
 
+    private void openAutocompleteActivity() {
+        try {
+            // The autocomplete activity requires Google Play Services to be available. The intent
+            // builder checks this and throws an exception if it is not the case.
+            AutocompleteFilter typeFilter = new AutocompleteFilter.Builder()
+                    .setCountry("AU")
+                    .build();
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .setFilter(typeFilter)
+                    .build(this);
+            startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+        } catch (GooglePlayServicesRepairableException e) {
+            // Indicates that Google Play Services is either not installed or not up to date. Prompt
+            // the user to correct the issue.
+            GoogleApiAvailability.getInstance().getErrorDialog(this, e.getConnectionStatusCode(),
+                    0 /* requestCode */).show();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            // Indicates that Google Play Services is not available and the problem is not easily
+            // resolvable.
+            String message = "Google Play Services is not available: " +
+                    GoogleApiAvailability.getInstance().getErrorString(e.errorCode);
+            Log.e(TAG, message);
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Called after the autocomplete activity has finished to return its result.
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check that the result was from the autocomplete widget.
+        if (requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            if (resultCode == RESULT_OK) {
+                // Get the user's selected place from the Intent.
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                Log.i(TAG, "Place Selected: " + place.getName());
+                searchText = (String)place.getName();
+                geoLocate();
+            }
+        }
+    }
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -168,31 +227,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-    private void initSearchBar() {
-        searchText = findViewById(R.id.text);
-
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE
-                        || actionId == EditorInfo.IME_ACTION_SEARCH
-                        || event.getAction() == KeyEvent.KEYCODE_ENTER
-                        || event.getAction() == KeyEvent.ACTION_DOWN) {
-                    // Search for location
-                    geoLocate();
-                }
-                return false;
-            }
-        });
-    }
-
     private void geoLocate() {
         Geocoder geocoder = new Geocoder(MapsActivity.this);
         List<Address> addresses = new ArrayList<>();
 
         try {
             addresses = geocoder.getFromLocationName(
-                    searchText.getText().toString(), 1);
+                    searchText, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
