@@ -3,6 +3,7 @@
     <string name="app_name">Holla</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_make_post">MakePostActivity</string>
+    <string name="open_activity">Enter Location here</string>
 
     <string name="default_username">some_username</string>
     <string name="default_post_content">This is a post...</string>
