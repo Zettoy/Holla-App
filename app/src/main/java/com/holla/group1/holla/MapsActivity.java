@@ -42,25 +42,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
-    private void showOverlay() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
-        ft.show(overlayFragment);
-        ft.commit();
-    }
-
-    private void hideOverlay() {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-        Fragment overlayFragment = getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
-        ft.hide(overlayFragment);
-        ft.commit();
-    }
 
     @Override
     public void onMapClick(LatLng latLng) {
-        hideOverlay();
+        MapsActivityUtilities.hideOverlay(this);
     }
 
     @Override
@@ -82,7 +67,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         apiClient = new RestAPIClient(getApplicationContext(), this);
         markerPostHashMap = new HashMap<>();
-        hideOverlay();
+        MapsActivityUtilities.hideOverlay(this);
     }
 
     public void openAutoCompleteActivity(View view) {
@@ -159,7 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (markerPostHashMap.containsKey(marker)) {
             Post post = markerPostHashMap.get(marker);
             setOverlayPost(post);
-            showOverlay();
+            MapsActivityUtilities.showOverlay(this);
         }
         return false;
     }
