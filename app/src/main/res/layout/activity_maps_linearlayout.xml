@@ -12,14 +12,14 @@
         android:id="@+id/relayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary">
+        android:background="@color/black">
 
         <ImageButton
             android:id="@+id/menu"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparent"
             android:src="@drawable/ic_menu" />
 
         <Button
@@ -41,7 +41,7 @@
             android:layout_height="50dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparent"
             android:onClick="showMakePostActivity"
             android:src="@drawable/ic_post" />
 

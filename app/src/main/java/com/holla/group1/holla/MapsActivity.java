@@ -39,6 +39,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
         startActivity(intent);
     }
+    public void showViewPostActivity(View view){
+        Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
+        startActivity(intent);
+    }
+
 
 
     @Override
@@ -98,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        apiClient.loadFakeTweets(this.getApplicationContext());
+        apiClient.loadFakeTweets();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -143,3 +148,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 }
+

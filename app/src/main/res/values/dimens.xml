@@ -1,4 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
+    <dimen name="post_ui_margin">16dp</dimen>
+    <dimen name="post_ui_half_margin">8dp</dimen>
+    <dimen name="post_ui_font_size">16sp</dimen>
 </resources>

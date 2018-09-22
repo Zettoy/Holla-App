@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 public class PostMapOverlay extends Fragment {
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         // Defines the xml file for the fragment
@@ -23,12 +24,24 @@ public class PostMapOverlay extends Fragment {
         // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
     }
 
-    public void showPost(Post post){
+    public void showPost(Post post) {
 
-        TextView overlayText = getView().findViewById(R.id.post_map_text);
-        //truncate text with hard limit
-        //overlayText.setText(text.substring(0, Math.min(text.length()-1, 100)));
-        overlayText.setText(post.getContent());
+        TextView overlayTextView = getView().findViewById(R.id.postContentTextView);
+        TextView usernameTextView = getView().findViewById(R.id.usernameTextview);
+        TextView dateTextView = getView().findViewById(R.id.dateTextView);
+        TextView commentsLikesTextView = getView().findViewById(R.id.comments_likes_textview);
+        overlayTextView.setText(post.getContent().trim());
+        usernameTextView.setText("@" + post.getUsername());
+        dateTextView.setText(" · " + post.get_timestamp_ago());
+        commentsLikesTextView.setText(String.format("%d comments · %d likes", post.getNum_comments(), post.getNum_likes()));
+        Boolean isTruncated = Utils.isTextViewTruncated(overlayTextView);
+        TextView see_more = getView().findViewById(R.id.see_more);
+        if (isTruncated) {
+            see_more.setVisibility(View.VISIBLE);
+        } else {
+            see_more.setVisibility(View.GONE);
+
+        }
     }
 
 }

@@ -52,6 +52,10 @@
         <activity
             android:name=".MakePostActivity"
             android:label="@string/title_activity_make_post"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ViewPostActivity"
+            android:label="@string/title_activity_view_post"
             android:theme="@style/AppTheme"></activity>
 
         <activity
