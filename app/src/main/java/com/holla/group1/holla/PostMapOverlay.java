@@ -42,7 +42,6 @@ public class PostMapOverlay extends Fragment {
             see_more.setVisibility(View.GONE);
 
         }
-//        Log.d(getTag(), isTrunc.toString());
     }
 
 }
