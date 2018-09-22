@@ -25,4 +25,8 @@ public class MapsActivityUtilities {
         ft.hide(getOverlayFragment(activity));
         ft.commit();
     }
+    public static void setOverlayPost(Post post, FragmentActivity fragmentActivity) {
+        PostMapOverlay overlayFragment = (PostMapOverlay) getOverlayFragment(fragmentActivity);
+        overlayFragment.showPost(post);
+    }
 }

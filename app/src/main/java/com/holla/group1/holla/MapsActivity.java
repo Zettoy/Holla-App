@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.WindowManager;
@@ -134,16 +132,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void setOverlayPost(Post post) {
-        PostMapOverlay overlayFragment = (PostMapOverlay) getSupportFragmentManager().findFragmentById(R.id.post_map_overlay_frag);
-        overlayFragment.showPost(post);
-    }
-
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (markerPostHashMap.containsKey(marker)) {
             Post post = markerPostHashMap.get(marker);
-            setOverlayPost(post);
+            MapsActivityUtilities.setOverlayPost(post, this);
             MapsActivityUtilities.showOverlay(this);
         }
         return false;
