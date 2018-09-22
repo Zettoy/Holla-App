@@ -24,6 +24,7 @@
 
         <Button
             android:id="@+id/open_button"
+            android:onClick="openAutoCompleteActivity"
             android:layout_width="251dp"
             android:layout_height="30dp"
             android:layout_alignParentTop="true"

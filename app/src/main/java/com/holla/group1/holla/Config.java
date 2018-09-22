@@ -7,5 +7,6 @@ public class Config {
     public static final LatLng UNSW =new LatLng(-33.917093, 151.231269);
     public static final LatLng STARTING_LOCATION = UNSW;
     public static final Float STARTING_ZOOM_LEVEL = 16f;
+    public static final Float SEARCH_RESULT_ZOOM_LEVEL = 16f;
 
 }
