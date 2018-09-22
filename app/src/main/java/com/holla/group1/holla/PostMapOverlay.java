@@ -27,7 +27,7 @@ public class PostMapOverlay extends Fragment {
 
         TextView overlayText = getView().findViewById(R.id.post_map_text);
         //truncate text with hard limit
-//        overlayText.setText(text.substring(0, Math.min(text.length()-1, 100)));
+        //overlayText.setText(text.substring(0, Math.min(text.length()-1, 100)));
         overlayText.setText(post.getContent());
     }
 
