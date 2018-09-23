@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,13 +22,13 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 
 public class StartupActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "StartupActivity";
 
-    private GoogleSignInClient googleSignInClient;
     private SignInButton signInButton;
 
     @Override
@@ -37,7 +38,7 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
 
         // TODO: change this to requestIdToken(). Can't do at the moment cause backend doesn't have a client id yet
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().build();
-        googleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleAccountSingleton.mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
@@ -98,7 +99,7 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleSignIn() {
-        Intent signInIntent = googleSignInClient.getSignInIntent();
+        Intent signInIntent = GoogleAccountSingleton.mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -130,7 +131,7 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     private void moveToMap(GoogleSignInAccount account) {
         Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
         mapIntent.putExtra("GoogleAccount", account);
-        startActivity(mapIntent);
+        startActivity(mapIntent); //Our singleton, reluctantly takes care of the client object
     }
 
     @Override
