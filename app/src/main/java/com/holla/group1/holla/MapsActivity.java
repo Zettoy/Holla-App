@@ -4,9 +4,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -77,6 +80,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 
+    public void openNavigationDrawer(View view) {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
 
     /**
      * Called after the autocomplete activity has finished to return its result.
