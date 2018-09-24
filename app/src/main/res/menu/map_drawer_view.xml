@@ -7,6 +7,11 @@
         <menu>
             <group android:menuCategory="container">
                 <item
+                    android:id="@+id/history_itm"
+                    android:icon="@android:drawable/ic_menu_recent_history"
+                    android:title="History"
+                    android:onClick="showHistoryActivity"/>
+                <item
                     android:id="@+id/sign_out_itm"
                     android:icon="@android:drawable/ic_lock_power_off"
                     android:title="Sign out" />
