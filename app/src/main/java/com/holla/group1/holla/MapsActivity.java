@@ -52,6 +52,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    public void showHistoryActivity(MenuItem item) {
+        Intent intent = new Intent(MapsActivity.this, HistoryActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onMapClick(LatLng latLng) {
         MapsActivityUtilities.hideOverlay(this);
