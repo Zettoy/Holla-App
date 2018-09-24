@@ -4,9 +4,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -20,6 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +34,14 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener,
-        RestAPIClient.OnPostsLoadedListener {
+        RestAPIClient.OnPostsLoadedListener,
+        NavigationView.OnNavigationItemSelectedListener,
+        OnCompleteListener<Void> {
 
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
     private RestAPIClient apiClient;
-
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -43,8 +51,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
         startActivity(intent);
     }
-
-
 
     @Override
     public void onMapClick(LatLng latLng) {
@@ -71,12 +77,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         apiClient = new RestAPIClient(getApplicationContext(), this);
         markerPostHashMap = new HashMap<>();
         MapsActivityUtilities.hideOverlay(this);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        //signedInAccount = (GoogleSignInAccount) savedInstanceState.get("GoogleAccount");
+
+        //String target = getIntent().getStringExtra("GoogleClient");
+        //signedInClient = new Gson().fromJson(target, GoogleSignInClient.class);
     }
 
     public void openAutoCompleteActivity(View view) {
         MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 
+    public void openNavigationDrawer(View view) {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
 
     /**
      * Called after the autocomplete activity has finished to return its result.
@@ -136,7 +153,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
     @Override
     public boolean onMarkerClick(Marker marker) {
         if (markerPostHashMap.containsKey(marker)) {
@@ -147,5 +163,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return false;
     }
 
-}
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 
+        if (menuItem.getItemId() == R.id.sign_out_itm) {
+            drawerLayout.closeDrawers();
+            signOut();
+        }
+
+        return true;
+    }
+
+    private void signOut() {
+        if (GoogleAccountSingleton.mGoogleSignInClient != null) {
+            GoogleAccountSingleton.mGoogleSignInClient.signOut().addOnCompleteListener(this, this);
+        }
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<Void> task) {
+        // Google documentation didn't specify how to handle errors
+        Intent startupIntent = new Intent(getBaseContext(), StartupActivity.class);
+        // Prevent the user being able to press back to get back to this activity
+        startupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startupIntent);
+    }
+}

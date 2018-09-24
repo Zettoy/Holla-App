@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Account">
+        <menu>
+            <group android:menuCategory="container">
+                <item
+                    android:id="@+id/sign_out_itm"
+                    android:icon="@android:drawable/ic_lock_power_off"
+                    android:title="Sign out" />
+            </group>
+        </menu>
+    </item>
+</menu>
