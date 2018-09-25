@@ -76,6 +76,11 @@
             android:label="HistoryActivity"
             android:theme="@style/AppTheme"/>
 
+        <activity
+            android:name=".FilterActivity"
+            android:label="FilterActivity"
+            android:theme="@style/AppTheme"/>
+
     </application>
 
 </manifest>
