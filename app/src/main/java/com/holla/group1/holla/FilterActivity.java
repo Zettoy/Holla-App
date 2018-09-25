@@ -7,9 +7,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-public class FilterActivity extends Activity {
+import java.util.ArrayList;
+import java.util.List;
 
-    private String[] tempStrs = {"Free ice cream", "bus delayed", "Society event", "4920 Lecture", "!!! Breaking News !!!"};
+public class FilterActivity extends Activity implements RestAPIClient.OnPostsLoadedListener{
+    //{"Free ice cream", "bus delayed", "Society event", "4920 Lecture", "!!! Breaking News !!!"}
+    private ArrayList<String> contents = new ArrayList<>();
+    private RestAPIClient mClient;
     private SearchView mSearchView;
     private ListView mListView;
 
@@ -17,9 +21,11 @@ public class FilterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
+        mClient = new RestAPIClient(getApplicationContext(), this);
+        mClient.loadFakeTweets();
         mSearchView = findViewById(R.id.searchView);
         mListView = findViewById(R.id.listView);
-        mListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, tempStrs));
+        mListView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, contents));
         mListView.setTextFilterEnabled(true);
 
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -38,5 +44,16 @@ public class FilterActivity extends Activity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onPostsLoaded(List<Post> posts) {
+        loadContents(posts);
+    }
+
+    private void loadContents(List<Post> posts) {
+        for (Post p : posts) {
+            contents.add(p.getContent());
+        }
     }
 }
