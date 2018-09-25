@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterActivity extends Activity implements RestAPIClient.OnPostsLoadedListener{
-    //{"Free ice cream", "bus delayed", "Society event", "4920 Lecture", "!!! Breaking News !!!"}
+
     private ArrayList<String> contents = new ArrayList<>();
     private RestAPIClient mClient;
     private SearchView mSearchView;
