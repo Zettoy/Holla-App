@@ -49,7 +49,10 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onStart() {
         super.onStart();
+        tryLastSignedInAccount();
 
+    }
+    private void tryLastSignedInAccount(){
         // Check if we've already signed in and quickly skip to the map activity
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
@@ -81,8 +84,10 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
         translateUp.setStartDelay(3000);
         translateUp.start();
 
-        float buttonPosY = (logoHeight + whiteSpaceLogoButtons + buttonsHeight);
+//        float buttonPosY = (logoHeight + whiteSpaceLogoButtons + buttonsHeight);
+        float buttonPosY = 0;
         signInButton.setY(buttonPosY);
+
         ObjectAnimator fadeInButton = ObjectAnimator.ofFloat(signInButton, "alpha",  0f, 1f);
         fadeInButton.setDuration(2000);
         fadeInButton.setStartDelay(3500);
@@ -139,3 +144,4 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
         Toast.makeText(this, "Failed to connect to Google.", Toast.LENGTH_SHORT).show();
     }
 }
+
