@@ -1,0 +1,18 @@
+[
+  {
+    "content": "",
+    "created_at_epoch": 1537354304,
+    "id": "135408903472895",
+    "likes": 22,
+    "location": {
+      "coordinates": [
+        -33.919801,
+        151.227446
+      ],
+      "type": "Point"
+    },
+    "location_name": "McDonald's Kingsford",
+    "name": "McDonald's",
+    "username": "McDonalds"
+  }
+]

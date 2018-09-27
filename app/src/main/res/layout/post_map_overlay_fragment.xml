@@ -43,7 +43,7 @@
         android:layout_marginEnd="@dimen/post_ui_margin"
         android:layout_marginStart="@dimen/post_ui_margin"
         android:ellipsize="end"
-        android:maxLines="5"
+        android:maxLines="4"
         android:minLines="1"
         android:padding="0dp"
         android:text="@string/default_post_content"

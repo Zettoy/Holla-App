@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 700px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
+        }
+    </style>
+</head>
+<body>
+<!--The div element for the map -->
+<div id="map"></div>
+<script>
+    // Initialize and add the map
+    function get_data(filepath, callback) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                callback(xhttp.response)
+            }
+        };
+        xhttp.open("GET", filepath, true);
+        xhttp.send();
+    }
+
+    function draw_posts(posts, map){
+        for(var i=0;i<posts.length;i++){
+            var post = posts[i];
+            var pos = {lat: post["coordinates"]["latitude"], lng:post["coordinates"]["longitude"]};
+            var marker = new google.maps.Marker({position: pos,
+                map: map,
+                label: post["content"].substr(0,50)
+            });
+
+        }
+    }
+    function initMap() {
+        // The location of Uluru
+
+        var unsw = {lat: -33.917181, lng:151.231251};
+        var map = new google.maps.Map(
+            document.getElementById('map'), {zoom: 17, center: unsw});
+        // The marker, positioned at Uluru
+        // var marker = new google.maps.Marker({position: uluru, map: map});
+        get_data("posts", function(resp){
+            resp_json = JSON.parse(resp);
+            draw_posts(resp_json["posts"], map);
+        })
+    }
+</script>
+<!--Load the API from the specified URL
+* The async attribute allows the browser to render the page while the API loads
+* The key parameter will contain your own API key (which is not needed for this tutorial)
+* The callback parameter executes the initMap() function
+-->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{MAPS_API_KEY}}&callback=initMap">
+</script>
+</body>
+</html>

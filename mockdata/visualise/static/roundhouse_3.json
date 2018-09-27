@@ -1,0 +1,37 @@
+{
+  "posts": [
+    {
+      "id": 8180521523,
+      "location_name": "UNSW Roundhouse",
+      "coordinates": {
+        "latitude": -33.916480,
+        "longitude": 151.226944
+      },
+      "author": "UNSWRoundhouse",
+      "content": "Who will be crowned The Big Cheese?🍔 Earn bragging rights and be the next BNOC by winning The Big Cheese | Burger Eating Contest (https://www.eventbrite.com.au/e/the-big-cheese-competitor-registration-tickets-49161660851). Sign up now! Competitors will pick up a sweet limited edition Big Cheese t-shirt for competing 👕",
+      "created_at": "1536278194"
+    },
+    {
+      "id": 2122438529,
+      "location_name": "UNSW Roundhouse",
+      "coordinates": {
+        "latitude": -33.916480,
+        "longitude": 151.226944
+      },
+      "author": "UNSWRoundhouse",
+      "content": "Pirate Palooza | Mid-Sem Party is selling fast - get your crew together and jump aboard. Nothing says procrastinate like pirate!\n\nTickets on sale HERE: https://bit.ly/2NE4FZe",
+      "created_at": "1536713031"
+    },
+    {
+      "id": 1376494388,
+      "location_name": "UNSW Roundhouse",
+      "coordinates": {
+        "latitude": -33.916480,
+        "longitude": 151.226944
+      },
+      "author": "UNSWRoundhouse",
+      "content": "Get ahead of the Weekly Trivia game at Unibar ❓Don't water-fail this week 🌊",
+      "created_at": "1536552001"
+    }
+  ]
+}

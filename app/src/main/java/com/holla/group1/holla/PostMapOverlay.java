@@ -26,15 +26,15 @@ public class PostMapOverlay extends Fragment {
 
     public void showPost(Post post) {
 
-        TextView overlayTextView = getView().findViewById(R.id.postContentTextView);
+        TextView contentTextView = getView().findViewById(R.id.postContentTextView);
         TextView usernameTextView = getView().findViewById(R.id.usernameTextview);
         TextView dateTextView = getView().findViewById(R.id.dateTextView);
         TextView commentsLikesTextView = getView().findViewById(R.id.comments_likes_textview);
-        overlayTextView.setText(post.getContent().trim());
+        contentTextView.setText(post.getContent().trim());
         usernameTextView.setText("@" + post.getUsername());
         dateTextView.setText(" · " + post.get_timestamp_ago());
         commentsLikesTextView.setText(String.format("%d comments · %d likes", post.getNum_comments(), post.getNum_likes()));
-        Boolean isTruncated = Utils.isTextViewTruncated(overlayTextView);
+        Boolean isTruncated = Utils.isTextViewTruncated(contentTextView);
         TextView see_more = getView().findViewById(R.id.see_more);
         if (isTruncated) {
             see_more.setVisibility(View.VISIBLE);
