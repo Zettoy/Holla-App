@@ -20,25 +20,30 @@ public class CommentFragment extends Fragment {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
 
+        // Handle nasty people passing in null
         if (getArguments() != null) {
             String commentString = getArguments().getString("comment");
             if (commentString != null) {
                 Comment comment = gson.fromJson(getArguments().getString("comment"), Comment.class);
+
+                // Update the stuff in the fragment
                 TextView messageTxt = (TextView) view.findViewById(R.id.message_txt);
                 messageTxt.setText(comment.getContent());
+
+                TextView usernameTxt = (TextView) view.findViewById(R.id.username_txt);
+                usernameTxt.setText("@" + comment.getUsername());
+
+                TextView timeTxt = (TextView) view.findViewById(R.id.time_txt);
+                timeTxt.setText(comment.getTimestampAgo());
             }
         }
 
         return view;
     }
 
-    // This event is triggered soon after onCreateView().
-    // Any view setup should occur here.  E.g., view lookups and attaching view listeners.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Setup any handles to view objects here
-        // EditText etFoo = (EditText) view.findViewById(R.id.etFoo);
     }
 
 }

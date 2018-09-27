@@ -27,7 +27,8 @@
             android:layout_height="wrap_content"
             android:text="Username"
             android:textAppearance="@android:style/TextAppearance"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/message_txt"

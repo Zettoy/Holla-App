@@ -15,8 +15,9 @@ import com.google.gson.GsonBuilder;
 
 import java.util.List;
 
-public class CommentsFragment extends Fragment {
+import static android.view.View.generateViewId;
 
+public class CommentsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -80,17 +81,17 @@ public class CommentsFragment extends Fragment {
         LinearLayout layout = (LinearLayout) getView();
 
         FragmentTransaction ft = fm.beginTransaction();
-        int i = 0;
+
         for (Comment comment : comments) {
             CommentFragment commentFragment = new CommentFragment();
             Bundle arguments = new Bundle();
             arguments.putString("comment", gson.toJson(comment));
             commentFragment.setArguments(arguments);
             FrameLayout frame = new FrameLayout(getContext());
-            frame.setId(i);
+            int viewId = generateViewId();
+            frame.setId(viewId);
             layout.addView(frame);
-            ft.add(i, commentFragment);
-            i++;
+            ft.add(viewId, commentFragment);
         }
         ft.commit();
     }
