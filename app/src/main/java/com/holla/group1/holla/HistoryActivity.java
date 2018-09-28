@@ -47,22 +47,16 @@ public class HistoryActivity extends AppCompatActivity {
     private void initList() {
         posts = new ArrayList<>();
 
-        String shortContent = "Short post";
-        String longContent =
-                "Long post Long post Long post " +
-                "Long post Long post Long post " +
-                "Long post Long post Long post " +
-                "Long post Long post Long post " +
-                "Long post Long post Long post " +
-                "Long post Long post Long post ";
+        String shortContent = "ゴロゴロ";
+        String longContent = "にゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃん";
 
         for (int i = 0; i < 10; i ++) {
             String content = shortContent;
             if (i % 2 == 0) content = longContent;
 
             Post p = new Post(
-                    new LatLng(33.12345, 130.32342),
-                    content, "User", new DateTime());
+                    new LatLng(-33.868820, 151.209290),
+                    content, "BongoCat", new DateTime());
 
             posts.add(p);
         }
