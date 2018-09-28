@@ -4,28 +4,27 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-            <ImageButton
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@null"
-                    android:src="@drawable/ic_before"
-                    android:onClick="finish"/>
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimaryDark"
+            android:id="@+id/activity_history_toolbar">
 
             <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:text="History"
-                    android:textColor="@color/white"
-                    android:textSize="27sp"
-                    android:layout_centerInParent="true"
-                    android:gravity="center_vertical"/>
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
-    </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

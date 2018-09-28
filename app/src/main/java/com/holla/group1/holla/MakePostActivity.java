@@ -8,8 +8,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -42,17 +45,18 @@ public class MakePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_post);
 
+        Toolbar toolbar = findViewById(R.id.activity_make_post_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationText = findViewById(R.id.location_text);
         post = findViewById(R.id.post_edit_text);
-
-        findViewById(R.id.make_post_close_btn)
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
 
         //TODO: add button delay maybe?
         findViewById(R.id.send_post_btn)
@@ -183,5 +187,15 @@ public class MakePostActivity extends AppCompatActivity {
             Log.e(TAG, "setLocationText: " + e.getMessage());
 
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

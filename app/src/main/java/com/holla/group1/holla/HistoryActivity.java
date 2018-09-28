@@ -1,7 +1,10 @@
 package com.holla.group1.holla;
 
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import com.google.android.gms.maps.model.LatLng;
@@ -18,6 +21,15 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        Toolbar toolbar = findViewById(R.id.activity_history_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+
         initList();
 
         PostAdapter postAdapter = new PostAdapter(
@@ -30,10 +42,6 @@ public class HistoryActivity extends AppCompatActivity {
             listView.setVisibility(View.INVISIBLE);
             findViewById(R.id.post_history_empty).setVisibility(View.VISIBLE);
         }
-    }
-
-    public void finish(View view) {
-        this.finish();
     }
 
     private void initList() {
@@ -59,5 +67,15 @@ public class HistoryActivity extends AppCompatActivity {
             posts.add(p);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
