@@ -17,20 +17,22 @@ public class Post{
     private Integer num_comments = 0;
     private Integer num_likes = 0;
 
-    private GsonBuilder getGSONBuilder(){
+    private static GsonBuilder getGSONBuilder(){
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Post.class, new PostSerializer());
-//        gsonBuilder.registerTypeAdapter(Post.class, new PostDeserializer());
+        gsonBuilder.registerTypeAdapter(Post.class, new PostDeserializer());
         return gsonBuilder;
 
     }
     public static Post fromJSON(String json){
 
-        return null;
+        Gson gson = Post.getGSONBuilder().create();
+        return gson.fromJson(json, Post.class);
     }
 
     public String toJSON(){
-        Gson gson = getGSONBuilder().create();
+        Gson gson = Post.getGSONBuilder().create();
         String json = gson.toJson(this);
         return json;
     }

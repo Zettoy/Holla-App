@@ -49,8 +49,14 @@ public class ViewPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("LOL");
-        getIntent().getExtras();
+        Bundle extras = getIntent().getExtras();
+        String post_json = extras.getString(MapsActivity.VIEW_POST);
+
+        Post post = Post.fromJSON(post_json);
+
+
+
+        getSupportActionBar().setTitle(post.getUsername());
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {

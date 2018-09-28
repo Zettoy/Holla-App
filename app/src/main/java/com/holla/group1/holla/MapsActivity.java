@@ -38,7 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         NavigationView.OnNavigationItemSelectedListener,
         OnCompleteListener<Void> {
 
-    public final String VIEW_POST = "view post";
+    public static final String VIEW_POST = "view post";
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
