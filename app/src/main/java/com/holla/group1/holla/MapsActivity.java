@@ -38,10 +38,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         NavigationView.OnNavigationItemSelectedListener,
         OnCompleteListener<Void> {
 
+    public final String VIEW_POST = "view post";
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
     private RestAPIClient apiClient;
+    private Post focusedPost = null;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -49,7 +51,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     public void showViewPostActivity(View view){
         Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
-        startActivity(intent);
+        if(focusedPost != null){
+            intent.putExtra(VIEW_POST, focusedPost.toJSON());
+            startActivity(intent);
+        }
     }
 
     public void showHistoryActivity(MenuItem item) {
@@ -65,6 +70,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapClick(LatLng latLng) {
         MapsActivityUtilities.hideOverlay(this);
+        focusedPost = null;
     }
 
     @Override
@@ -167,6 +173,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public boolean onMarkerClick(Marker marker) {
         if (markerPostHashMap.containsKey(marker)) {
             Post post = markerPostHashMap.get(marker);
+            focusedPost = post;
             MapsActivityUtilities.setOverlayPost(post, this);
             MapsActivityUtilities.showOverlay(this);
         }
