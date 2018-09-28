@@ -57,7 +57,7 @@ public class ViewPostActivity extends AppCompatActivity {
 
 
 
-        getSupportActionBar().setTitle(post.getUsername());
+        getSupportActionBar().setTitle("Post by " + post.getUsername());
         TextView contentTextView = findViewById(R.id.postContentTextView);
         contentTextView.setText(post.getContent());
 
