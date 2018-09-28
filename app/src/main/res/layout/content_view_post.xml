@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ViewPostActivity"
-    tools:showIn="@layout/activity_view_post">
+    tools:showIn="@layout/activity_view_post"
+    android:background="@color/orange"
+    >
 
+
+    <!--This will be replaced with a fragment hopefully...-->
+    <TextView
+        android:id="@+id/postContentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/post_ui_margin"
+        android:layout_marginEnd="@dimen/post_ui_margin"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/post_ui_font_size"
+        />
 </android.support.constraint.ConstraintLayout>

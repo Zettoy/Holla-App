@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -57,6 +58,8 @@ public class ViewPostActivity extends AppCompatActivity {
 
 
         getSupportActionBar().setTitle(post.getUsername());
+        TextView contentTextView = findViewById(R.id.postContentTextView);
+        contentTextView.setText(post.getContent());
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +71,7 @@ public class ViewPostActivity extends AppCompatActivity {
 //        });
 
         // Hardcoded test comments (please replace me with real comments)
-//        drawHardcodedComments();
+        drawHardcodedComments();
     }
 
 }
