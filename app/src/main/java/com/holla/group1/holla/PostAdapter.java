@@ -1,6 +1,7 @@
 package com.holla.group1.holla;
 
 import android.content.Context;
+import android.location.Geocoder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,16 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import com.google.android.gms.maps.model.LatLng;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.util.List;
 
 public class PostAdapter extends ArrayAdapter<Post> {
     private int layoutId;
+    private Context context;
 
     public PostAdapter(Context context, int layoutId, List<Post> list) {
         super(context, layoutId, list);
         this.layoutId = layoutId;
+        this.context = context;
     }
 
     @NonNull
@@ -30,57 +35,38 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView content = view.findViewById(R.id.post_history_content);
         content.setText(post.getContent());
 
-        TextView location = view.findViewById(R.id.post_history_location);
-        location.setText(post.getLocation().toString());
+        TextView username = view.findViewById(R.id.post_history_username);
+        String usernameText = "@" + post.getUsername();
+        username.setText(usernameText);
 
         TextView time = view.findViewById(R.id.post_history_time);
         time.setText(timeToString(post.getCreation_time()));
 
+        TextView commentLike = view.findViewById(R.id.post_history_comment_like);
+        String commentLikeText = commentLikeToString(post);
+        commentLike.setText(commentLikeText);
+
+        TextView location = view.findViewById(R.id.post_history_location);
+        location.setText(latlngToAddress(post.getLocation()));
+
+
         return view;
     }
 
+    private String commentLikeToString(Post post) {
+        return post.getNum_comments() + " comments · " + post.getNum_likes() + " likes";
+    }
+
     private String timeToString(DateTime time) {
-        String month = "";
+        int year = time.getYear();
+        int month = time.getMonthOfYear();
+        int day = time.getDayOfMonth();
 
-        switch (time.getMonthOfYear()) {
-            case 1:
-                month = "Jan";
-                break;
-            case 2:
-                month = "Feb";
-                break;
-            case 3:
-                month = "Mar";
-                break;
-            case 4:
-                month = "Apr";
-                break;
-            case 5:
-                month = "May";
-                break;
-            case 6:
-                month = "June";
-                break;
-            case 7:
-                month = "July";
-                break;
-            case 8:
-                month = "Aug";
-                break;
-            case 9:
-                month = "Sept";
-                break;
-            case 10:
-                month = "Oct";
-                break;
-            case 11:
-                month = "Nov";
-                break;
-            case 12:
-                month = "Dec";
-                break;
-        }
+        return " · " + year + "/" + month + "/" + day;
+    }
 
-        return time.getDayOfMonth() + " " + month;
+    private String latlngToAddress(LatLng latLng) {
+        //TODO: return address
+        return " from シドニー";
     }
 }
