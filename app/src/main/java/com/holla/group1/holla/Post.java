@@ -1,10 +1,15 @@
 package com.holla.group1.holla;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.joda.time.DateTime;
 
-public class Post {
+public class Post{
     private String content;
     private LatLng location;
     private String username;
@@ -12,6 +17,25 @@ public class Post {
     private Integer num_comments = 0;
     private Integer num_likes = 0;
 
+    private static GsonBuilder getGSONBuilder(){
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Post.class, new PostSerializer());
+        gsonBuilder.registerTypeAdapter(Post.class, new PostDeserializer());
+        return gsonBuilder;
+
+    }
+    public static Post fromJSON(String json){
+
+        Gson gson = Post.getGSONBuilder().create();
+        return gson.fromJson(json, Post.class);
+    }
+
+    public String toJSON(){
+        Gson gson = Post.getGSONBuilder().create();
+        String json = gson.toJson(this);
+        return json;
+    }
     public Post(LatLng location, String content, String username, DateTime creation_time) {
         this.content = content;
         this.location = location;
@@ -20,22 +44,18 @@ public class Post {
 
     }
 
+
+
     public Integer getNum_comments() {
 
         return num_comments;
     }
 
-    public void setNum_comments(Integer num_comments) {
-        this.num_comments = num_comments;
-    }
 
     public Integer getNum_likes() {
         return num_likes;
     }
 
-    public void setNum_likes(Integer num_likes) {
-        this.num_likes = num_likes;
-    }
 
     public LatLng getLocation() {
         return location;
