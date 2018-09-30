@@ -10,7 +10,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appbar_post">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -21,20 +22,59 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <include layout="@layout/content_view_post" />
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <fragment
-            android:id="@+id/fragment_comments"
-            android:name="com.holla.group1.holla.CommentsFragment"
+            android:id="@+id/frg_comment_panel"
+            android:name="com.holla.group1.holla.CommentPanelFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            />
 
-    </ScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/frg_comment_panel">
+
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrl_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:clipToPadding="false">
+
+                    <include layout="@layout/content_view_post" />
+
+                    <fragment
+                        android:id="@+id/fragment_comments"
+                        android:name="com.holla.group1.holla.CommentsFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                app:srcCompat="@drawable/drop_shadow" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
 </LinearLayout>
 

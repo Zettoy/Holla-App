@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -77,4 +78,8 @@ public class ViewPostActivity extends AppCompatActivity {
         drawHardcodedComments();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
 }
