@@ -38,7 +38,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         NavigationView.OnNavigationItemSelectedListener,
         OnCompleteListener<Void> {
 
-    public static final String VIEW_POST = "view post";
     private final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private HashMap<Marker, Post> markerPostHashMap;
@@ -52,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void showViewPostActivity(View view){
         Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
         if(focusedPost != null){
-            intent.putExtra(VIEW_POST, focusedPost.toJSON());
+            intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, focusedPost.toJSON());
             startActivity(intent);
         }
     }
@@ -103,6 +102,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openAutoCompleteActivity(View view) {
+//        Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
+//        startActivity(intent);
         MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 

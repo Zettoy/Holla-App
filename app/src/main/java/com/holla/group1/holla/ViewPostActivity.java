@@ -1,13 +1,8 @@
 package com.holla.group1.holla;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
@@ -19,6 +14,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class ViewPostActivity extends AppCompatActivity {
+    public static final String BUNDLED_POST_JSON = "post JSON";
+
     private void drawHardcodedComments(){
 
         List<Comment> testComments = new ArrayList<>();
@@ -47,22 +44,26 @@ public class ViewPostActivity extends AppCompatActivity {
         CommentsFragment commentsFragment = (CommentsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_comments);
         commentsFragment.addComments(testComments);
     }
+    private void drawPost(Post post){
+
+        getSupportActionBar().setTitle("Post by " + post.getUsername());
+        TextView contentTextView = findViewById(R.id.postContentTextView);
+        contentTextView.setText(post.getContent());
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Bundle extras = getIntent().getExtras();
-        String post_json = extras.getString(MapsActivity.VIEW_POST);
-
+        String post_json = extras.getString(BUNDLED_POST_JSON);
         Post post = Post.fromJSON(post_json);
+        drawPost(post);
 
 
 
-        getSupportActionBar().setTitle("Post by " + post.getUsername());
-        TextView contentTextView = findViewById(R.id.postContentTextView);
-        contentTextView.setText(post.getContent());
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -80,9 +81,5 @@ public class ViewPostActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-
-        ScrollView scrollView = (ScrollView) findViewById(R.id.scrl_content);
-        CommentPanelFragment commentPanelFragment = (CommentPanelFragment) getSupportFragmentManager().findFragmentById(R.id.frg_comment_panel);
-        Log.d("Holla", "Height " + commentPanelFragment.getView().getHeight());
     }
 }
