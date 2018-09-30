@@ -5,8 +5,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.support.v4.app.Fragment;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,4 +77,12 @@ public class ViewPostActivity extends AppCompatActivity {
         drawHardcodedComments();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        ScrollView scrollView = (ScrollView) findViewById(R.id.scrl_content);
+        CommentPanelFragment commentPanelFragment = (CommentPanelFragment) getSupportFragmentManager().findFragmentById(R.id.frg_comment_panel);
+        Log.d("Holla", "Height " + commentPanelFragment.getView().getHeight());
+    }
 }
