@@ -1,11 +1,8 @@
 package com.holla.group1.holla;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -16,6 +13,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class ViewPostActivity extends AppCompatActivity {
+    public static final String BUNDLED_POST_JSON = "post JSON";
+
     private void drawHardcodedComments(){
 
         List<Comment> testComments = new ArrayList<>();
@@ -51,7 +50,7 @@ public class ViewPostActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Bundle extras = getIntent().getExtras();
-        String post_json = extras.getString(MapsActivity.VIEW_POST);
+        String post_json = extras.getString(BUNDLED_POST_JSON);
 
         Post post = Post.fromJSON(post_json);
 
