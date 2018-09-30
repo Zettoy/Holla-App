@@ -35,33 +35,46 @@
             android:layout_alignParentBottom="true"
             />
 
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/scrl_content"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/frg_comment_panel">
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="vertical"
-                android:clipToPadding="false">
+            <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scrl_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-                <include layout="@layout/content_view_post" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    android:clipToPadding="false">
 
-                <fragment
-                    android:id="@+id/fragment_comments"
-                    android:name="com.holla.group1.holla.CommentsFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </ScrollView>
+                    <include layout="@layout/content_view_post" />
+
+                    <fragment
+                        android:id="@+id/fragment_comments"
+                        android:name="com.holla.group1.holla.CommentsFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_alignParentBottom="true"
+                app:srcCompat="@drawable/drop_shadow" />
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
-
-
-
 
 </LinearLayout>
 
