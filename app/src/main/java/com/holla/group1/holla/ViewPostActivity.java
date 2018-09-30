@@ -43,22 +43,26 @@ public class ViewPostActivity extends AppCompatActivity {
         CommentsFragment commentsFragment = (CommentsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_comments);
         commentsFragment.addComments(testComments);
     }
+    private void drawPost(Post post){
+
+        getSupportActionBar().setTitle("Post by " + post.getUsername());
+        TextView contentTextView = findViewById(R.id.postContentTextView);
+        contentTextView.setText(post.getContent());
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_post);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         Bundle extras = getIntent().getExtras();
         String post_json = extras.getString(BUNDLED_POST_JSON);
-
         Post post = Post.fromJSON(post_json);
+        drawPost(post);
 
 
 
-        getSupportActionBar().setTitle("Post by " + post.getUsername());
-        TextView contentTextView = findViewById(R.id.postContentTextView);
-        contentTextView.setText(post.getContent());
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
