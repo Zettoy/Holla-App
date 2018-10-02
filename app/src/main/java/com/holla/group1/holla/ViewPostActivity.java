@@ -105,11 +105,13 @@ public class ViewPostActivity extends AppCompatActivity {
     class CommentSubmitClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (replaceText) {
+            if (!replaceText) {
                 Button commentSubmitButton = findViewById(R.id.btn_submit);
                 EditText commentEditText = findViewById(R.id.edt_comment);
                 submitComment(commentEditText.getText().toString());
                 commentEditText.setText("");
+                hideKeyboard(v);
+                commentEditText.clearFocus();
             }
         }
     }
