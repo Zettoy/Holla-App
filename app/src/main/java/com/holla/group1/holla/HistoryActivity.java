@@ -1,25 +1,41 @@
 package com.holla.group1.holla;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.google.android.gms.maps.model.LatLng;
 import org.joda.time.DateTime;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
     private List<Post> posts;
+    private ReadPostTask task;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        posts = new ArrayList<>();
+        task = new ReadPostTask();
+        listView = findViewById(R.id.post_history_list);
 
         Toolbar toolbar = findViewById(R.id.activity_history_toolbar);
         setSupportActionBar(toolbar);
@@ -30,37 +46,14 @@ public class HistoryActivity extends AppCompatActivity {
             actionBar.setDisplayShowTitleEnabled(false);
         }
 
-        initList();
+        task.execute(HistoryActivity.this);
 
-        PostAdapter postAdapter = new PostAdapter(
-                HistoryActivity.this, R.layout.post_history, posts);
-
-        ListView listView = findViewById(R.id.post_history_list);
-        listView.setAdapter(postAdapter);
-
-        if (posts.isEmpty()) {
-            listView.setVisibility(View.INVISIBLE);
-            findViewById(R.id.post_history_empty).setVisibility(View.VISIBLE);
-        }
     }
 
-    private void initList() {
-        posts = new ArrayList<>();
-
-        String shortContent = "ゴロゴロ";
-        String longContent = "にゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃんにゃん";
-
-        for (int i = 0; i < 10; i ++) {
-            String content = shortContent;
-            if (i % 2 == 0) content = longContent;
-
-            Post p = new Post(
-                    new LatLng(-33.868820, 151.209290),
-                    content, "BongoCat", new DateTime());
-
-            posts.add(p);
-        }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        task.cancel(true);
     }
 
     @Override
@@ -71,5 +64,99 @@ public class HistoryActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class ReadPostTask extends AsyncTask<Context, Void, Void> {
+        private Context context;
+
+        @Override
+        protected Void doInBackground(Context... contexts) {
+            context = contexts[0];
+
+            //TODO: backend
+            try {
+                String raw_json = readFile(context);
+                JSONObject obj = new JSONObject(raw_json);
+                JSONArray arr = obj.getJSONArray("posts");
+
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject post_obj = arr.getJSONObject(i);
+                    Integer epoch_timestamp = post_obj.getInt("created_at");
+                    DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
+                    Post new_post = new Post(
+                            new LatLng(
+                                    post_obj.getJSONObject("coordinates").getDouble("latitude"),
+                                    post_obj.getJSONObject("coordinates").getDouble("longitude")
+                            ),
+                            post_obj.getString("content"),
+                            post_obj.getString("author"),
+                            dateTime
+                    );
+                    posts.add(new_post);
+                }
+
+            } catch (Exception e) {
+                Log.e("HistoryActivity", e.toString());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Collections.sort(posts, new Comparator<Post>() {
+                @Override
+                public int compare(Post p1, Post p2) {
+                    DateTime time1 = p1.getCreation_time();
+                    DateTime time2 = p2.getCreation_time();
+
+                    return time2.compareTo(time1);
+                }
+            });
+
+            PostAdapter postAdapter = new PostAdapter(
+                    HistoryActivity.this, R.layout.post_history, posts);
+
+            listView.setAdapter(postAdapter);
+
+            if (posts.isEmpty()) {
+                listView.setVisibility(View.INVISIBLE);
+                findViewById(R.id.post_history_empty).setVisibility(View.VISIBLE);
+
+            } else {
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(context, ViewPostActivity.class);
+                        intent.putExtra(
+                                ViewPostActivity.BUNDLED_POST_JSON, posts.get(position).toJSON());
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
+
+        private String readFile(Context context) throws IOException {
+            InputStream is = context.getResources().openRawResource(R.raw.unsw_6);
+            Writer writer = new StringWriter();
+            char[] buffer = new char[1024];
+            try {
+                Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                int n;
+                while ((n = reader.read(buffer)) != -1) {
+                    writer.write(buffer, 0, n);
+                }
+            } catch (Exception e) {
+                Log.e("HistoryActivity", e.toString());
+            } finally {
+                is.close();
+            }
+            String jsonString = writer.toString();
+            return jsonString;
+        }
+
     }
 }

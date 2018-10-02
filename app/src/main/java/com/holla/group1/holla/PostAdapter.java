@@ -47,7 +47,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         commentLike.setText(commentLikeText);
 
         TextView location = view.findViewById(R.id.post_history_location);
-        location.setText(latlngToAddress(post.getLocation()));
+        location.setText(/*latlngToAddress(post.getLocation())*/"");
 
 
         return view;
@@ -65,8 +65,4 @@ public class PostAdapter extends ArrayAdapter<Post> {
         return " · " + year + "/" + month + "/" + day;
     }
 
-    private String latlngToAddress(LatLng latLng) {
-        //TODO: return address
-        return " from シドニー";
-    }
 }
