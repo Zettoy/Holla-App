@@ -3,6 +3,7 @@ package com.holla.group1.holla;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.*;
@@ -13,11 +14,13 @@ import java.util.List;
 public class PostAdapter extends ArrayAdapter<Post> {
     private int layoutId;
     private Context context;
+    private List<Post> posts;
 
-    public PostAdapter(Context context, int layoutId, List<Post> list) {
-        super(context, layoutId, list);
+    public PostAdapter(Context context, int layoutId, List<Post> posts) {
+        super(context, layoutId, posts);
         this.layoutId = layoutId;
         this.context = context;
+        this.posts = posts;
     }
 
     @NonNull
@@ -58,6 +61,17 @@ public class PostAdapter extends ArrayAdapter<Post> {
             @Override
             public void onClick(View v) {
                 showDialog();
+            }
+        });
+
+        final int id = position;
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ViewPostActivity.class);
+                intent.putExtra(
+                        ViewPostActivity.BUNDLED_POST_JSON, posts.get(id).toJSON());
+                context.startActivity(intent);
             }
         });
 
