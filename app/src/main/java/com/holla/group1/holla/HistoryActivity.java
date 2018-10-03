@@ -124,18 +124,6 @@ public class HistoryActivity extends AppCompatActivity {
             if (posts.isEmpty()) {
                 listView.setVisibility(View.INVISIBLE);
                 findViewById(R.id.post_history_empty).setVisibility(View.VISIBLE);
-
-            } else {
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(context, ViewPostActivity.class);
-                        intent.putExtra(
-                                ViewPostActivity.BUNDLED_POST_JSON, posts.get(position).toJSON());
-                        startActivity(intent);
-                    }
-                });
             }
         }
 
