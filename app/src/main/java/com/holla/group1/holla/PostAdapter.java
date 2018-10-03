@@ -1,19 +1,13 @@
 package com.holla.group1.holla;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.location.Geocoder;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import com.google.android.gms.maps.model.LatLng;
+import android.view.*;
+import android.widget.*;
 import org.joda.time.DateTime;
-
-import java.io.IOException;
 import java.util.List;
 
 public class PostAdapter extends ArrayAdapter<Post> {
@@ -30,27 +24,83 @@ public class PostAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Post post = getItem(position);
-        View view = LayoutInflater.from(getContext()).inflate(layoutId, parent, false);
 
-        TextView content = view.findViewById(R.id.post_history_content);
-        content.setText(post.getContent());
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext())
+                    .inflate(layoutId, parent, false);
+            holder = new ViewHolder();
+            holder.content     = convertView.findViewById(R.id.post_history_content);
+            holder.username    = convertView.findViewById(R.id.post_history_username);
+            holder.time        = convertView.findViewById(R.id.post_history_time);
+            holder.commentLike = convertView.findViewById(R.id.post_history_comment_like);
+            holder.location    = convertView.findViewById(R.id.post_history_location);
+            holder.menuButton  = convertView.findViewById(R.id.post_history_menu_button);
+            convertView.setTag(holder);
 
-        TextView username = view.findViewById(R.id.post_history_username);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.content.setText(post.getContent());
+
         String usernameText = "@" + post.getUsername();
-        username.setText(usernameText);
+        holder.username.setText(usernameText);
 
-        TextView time = view.findViewById(R.id.post_history_time);
-        time.setText(timeToString(post.getCreation_time()));
+        holder.time.setText(timeToString(post.getCreation_time()));
 
-        TextView commentLike = view.findViewById(R.id.post_history_comment_like);
         String commentLikeText = commentLikeToString(post);
-        commentLike.setText(commentLikeText);
+        holder.commentLike.setText(commentLikeText);
 
-        TextView location = view.findViewById(R.id.post_history_location);
-        location.setText(/*latlngToAddress(post.getLocation())*/"");
+        holder.location.setText(/*latlngToAddress(post.getLocation())*/"");
 
+        holder.menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
 
-        return view;
+        return convertView;
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String[] items = {"Share", "Delete"}; // Maybe add more features later
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: // "Share"
+                        break;
+
+                    case 1: // "Delete"
+                        final AlertDialog.Builder confirm = new AlertDialog.Builder(context);
+                        confirm.setTitle("Delete");
+                        confirm.setMessage("Are you sure you want to delete this post?");
+                        confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "Yes", Toast.LENGTH_LONG).show();
+                                //TODO: Delete post
+                            }
+                        });
+                        confirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        confirm.setCancelable(true);
+                        confirm.create().show();
+                        break;
+                }
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private String commentLikeToString(Post post) {
@@ -65,4 +115,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
         return " · " + year + "/" + month + "/" + day;
     }
 
+    private static class ViewHolder {
+        TextView content;
+        TextView username;
+        TextView time;
+        TextView commentLike;
+        TextView location;
+        ImageButton menuButton;
+    }
 }
