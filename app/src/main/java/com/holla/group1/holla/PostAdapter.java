@@ -30,27 +30,36 @@ public class PostAdapter extends ArrayAdapter<Post> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Post post = getItem(position);
-        View view = LayoutInflater.from(getContext()).inflate(layoutId, parent, false);
 
-        TextView content = view.findViewById(R.id.post_history_content);
-        content.setText(post.getContent());
+        ViewHolder holder;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext())
+                    .inflate(layoutId, parent, false);
+            holder = new ViewHolder();
+            holder.content     = convertView.findViewById(R.id.post_history_content);
+            holder.username    = convertView.findViewById(R.id.post_history_username);
+            holder.time        = convertView.findViewById(R.id.post_history_time);
+            holder.commentLike = convertView.findViewById(R.id.post_history_comment_like);
+            holder.location    = convertView.findViewById(R.id.post_history_location);
+            convertView.setTag(holder);
 
-        TextView username = view.findViewById(R.id.post_history_username);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        holder.content.setText(post.getContent());
+
         String usernameText = "@" + post.getUsername();
-        username.setText(usernameText);
+        holder.username.setText(usernameText);
 
-        TextView time = view.findViewById(R.id.post_history_time);
-        time.setText(timeToString(post.getCreation_time()));
+        holder.time.setText(timeToString(post.getCreation_time()));
 
-        TextView commentLike = view.findViewById(R.id.post_history_comment_like);
         String commentLikeText = commentLikeToString(post);
-        commentLike.setText(commentLikeText);
+        holder.commentLike.setText(commentLikeText);
 
-        TextView location = view.findViewById(R.id.post_history_location);
-        location.setText(/*latlngToAddress(post.getLocation())*/"");
+        holder.location.setText(/*latlngToAddress(post.getLocation())*/"");
 
-
-        return view;
+        return convertView;
     }
 
     private String commentLikeToString(Post post) {
@@ -65,4 +74,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         return " · " + year + "/" + month + "/" + day;
     }
 
+    private static class ViewHolder {
+        TextView content;
+        TextView username;
+        TextView time;
+        TextView commentLike;
+        TextView location;
+    }
 }
