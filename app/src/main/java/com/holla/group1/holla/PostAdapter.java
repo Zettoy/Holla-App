@@ -1,19 +1,13 @@
 package com.holla.group1.holla;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.location.Geocoder;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import com.google.android.gms.maps.model.LatLng;
+import android.view.*;
+import android.widget.*;
 import org.joda.time.DateTime;
-
-import java.io.IOException;
 import java.util.List;
 
 public class PostAdapter extends ArrayAdapter<Post> {
@@ -41,6 +35,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
             holder.time        = convertView.findViewById(R.id.post_history_time);
             holder.commentLike = convertView.findViewById(R.id.post_history_comment_like);
             holder.location    = convertView.findViewById(R.id.post_history_location);
+            holder.menuButton  = convertView.findViewById(R.id.post_history_menu_button);
             convertView.setTag(holder);
 
         } else {
@@ -59,7 +54,53 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         holder.location.setText(/*latlngToAddress(post.getLocation())*/"");
 
+        holder.menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+
         return convertView;
+    }
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        String[] items = {"Share", "Delete"}; // Maybe add more features later
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0: // "Share"
+                        break;
+
+                    case 1: // "Delete"
+                        final AlertDialog.Builder confirm = new AlertDialog.Builder(context);
+                        confirm.setTitle("Delete");
+                        confirm.setMessage("Are you sure you want to delete this post?");
+                        confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "Yes", Toast.LENGTH_LONG).show();
+                                //TODO: Delete post
+                            }
+                        });
+                        confirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        confirm.setCancelable(true);
+                        confirm.create().show();
+                        break;
+                }
+            }
+        });
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private String commentLikeToString(Post post) {
@@ -80,5 +121,6 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView time;
         TextView commentLike;
         TextView location;
+        ImageButton menuButton;
     }
 }
