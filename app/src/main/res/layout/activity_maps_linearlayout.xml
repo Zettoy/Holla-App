@@ -32,8 +32,8 @@
 
                     <ImageButton
                             android:id="@+id/menu"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
+                            android:layout_width="@dimen/topbar_height"
+                            android:layout_height="@dimen/topbar_height"
                             android:layout_gravity="start"
                             android:background="@color/transparent"
                             android:onClick="openNavigationDrawer"
@@ -45,11 +45,10 @@
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:background="@drawable/while_border"
+                            android:background="#fff"
                             android:onClick="openAutoCompleteActivity"
-                            android:text="@string/open_activity"
-                            android:textColor="@color/black"
-                            android:textAllCaps="false"/>
+                            android:textAllCaps="false"
+                            android:text="@string/search_hint"/>
 
                     <ImageButton
                             android:id="@+id/make_post_btn"
