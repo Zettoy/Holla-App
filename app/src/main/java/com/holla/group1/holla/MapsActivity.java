@@ -1,19 +1,23 @@
 package com.holla.group1.holla;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.*;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.*;
 import android.widget.Toast;
 
 import com.google.android.gms.location.places.Place;
@@ -28,10 +32,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback,
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleMap.OnMarkerClickListener,
         GoogleMap.OnMapClickListener,
         RestAPIClient.OnPostsLoadedListener,
@@ -43,6 +48,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private HashMap<Marker, Post> markerPostHashMap;
     private RestAPIClient apiClient;
     private Post focusedPost = null;
+
+    private Context context = MapsActivity.this;
+    private MapsActivity activity = this;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -82,6 +90,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_linearlayout);
 //        setContentView(R.layout.activity_maps);
+
+        Toolbar toolbar = findViewById(R.id.activity_maps_toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
+
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        setupViewPager(viewPager);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -99,6 +120,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //String target = getIntent().getStringExtra("GoogleClient");
         //signedInClient = new Gson().fromJson(target, GoogleSignInClient.class);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MapFragment(), "Map");
+        adapter.addFragment(new FeedFragment(), "Feed");
+        viewPager.setAdapter(adapter);
     }
 
     public void openAutoCompleteActivity(View view) {
@@ -206,5 +234,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Prevent the user being able to press back to get back to this activity
         startupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startupIntent);
+    }
+
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }
