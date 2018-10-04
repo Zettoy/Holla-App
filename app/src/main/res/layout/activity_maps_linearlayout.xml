@@ -45,15 +45,17 @@
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_weight="1"
-                            android:background="#fff"
+                            android:background="@drawable/while_border"
                             android:onClick="openAutoCompleteActivity"
                             android:textAllCaps="false"
+                            android:textColor="@color/black"
                             android:text="@string/search_hint"/>
 
                     <ImageButton
                             android:id="@+id/make_post_btn"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
+                            android:layout_gravity="center_vertical"
                             android:background="@color/transparent"
                             android:onClick="showMakePostActivity"
                             android:src="@drawable/ic_post" />
@@ -99,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
-                tools:layout="@layout/post_map_overlay_fragment" />﻿
+                tools:layout="@layout/post_map_overlay_fragment" />
 
             <!--android:layout_alignParentTop="false"-->
             <!--android:layout_centerHorizontal="true"-->
