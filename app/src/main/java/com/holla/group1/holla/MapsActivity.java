@@ -102,9 +102,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void openAutoCompleteActivity(View view) {
-//        Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
-//        startActivity(intent);
-        MapSearch.openAutocompleteActivity(MapsActivity.this);
+        Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
+        startActivity(intent);
+//        MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 
     public void openNavigationDrawer(View view) {
