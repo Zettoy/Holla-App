@@ -54,6 +54,7 @@ public class MultiSearchActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
+        mViewPager.setCurrentItem(1);
     }
 
 
