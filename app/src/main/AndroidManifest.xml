@@ -79,8 +79,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MultiSearchActivity"
-            android:label="@string/title_activity_multi_search"
-            android:theme="@style/AppTheme"></activity>
+            android:label=""
+            android:theme="@style/AppTheme">
+
+        </activity>
+        <!--android:label="@string/title_activity_multi_search"-->
     </application>
 
 </manifest>
