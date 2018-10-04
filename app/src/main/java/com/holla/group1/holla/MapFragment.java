@@ -33,14 +33,6 @@ public class MapFragment extends Fragment implements
     private RestAPIClient apiClient;
     private Post focusedPost = null;
 
-    public void showViewPostActivity(View view){
-        Intent intent = new Intent(getContext(), ViewPostActivity.class);
-        if(focusedPost != null){
-            intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, focusedPost.toJSON());
-            startActivity(intent);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, parent, false);
