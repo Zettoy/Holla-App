@@ -2,7 +2,6 @@ package com.holla.group1.holla;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -37,9 +36,26 @@ public class MultiSearchActivity extends AppCompatActivity implements SearchView
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-
+    private static final int TAB_PEOPLE = 0;
+    private static final int TAB_PLACES = 1;
+    private static final int TAB_POSTS = 2;
     public boolean onQueryTextChange(String s) {
-        Log.d(TAG, s);
+        if (mViewPager != null) {
+            Integer cur = mViewPager.getCurrentItem();
+            switch (cur) {
+                case TAB_PEOPLE:
+                    Log.d(TAG, "People");
+                    break;
+
+                case TAB_PLACES:
+                    Log.d(TAG, "Places");
+                    break;
+
+                case TAB_POSTS:
+                    Log.d(TAG, "Posts");
+                    break;
+            }
+        }
         return false;
     }
 
