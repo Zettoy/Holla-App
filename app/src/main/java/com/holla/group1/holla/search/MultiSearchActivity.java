@@ -100,7 +100,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             Integer cur = mViewPager.getCurrentItem();
             switch (cur) {
                 case TAB_PEOPLE:
-                    Log.d(TAG, "People");
+                    Log.d(TAG, "People!");
                     break;
 
                 case TAB_PLACES:
