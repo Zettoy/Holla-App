@@ -263,7 +263,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if(position == TAB_PLACES){
-               LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance(30);
+               LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance(1);
                return loc_frag;
             }else {
 

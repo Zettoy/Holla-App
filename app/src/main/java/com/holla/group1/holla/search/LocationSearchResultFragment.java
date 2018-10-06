@@ -68,10 +68,13 @@ public class LocationSearchResultFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                LinearLayoutManager linearLayoutManager= new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                recyclerView.setLayoutManager(linearLayoutManager);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+            recyclerView.setHasFixedSize(true);
             recyclerView.setAdapter(new MyLocationSearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener));
         }
         return view;
