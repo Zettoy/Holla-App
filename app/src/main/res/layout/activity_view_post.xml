@@ -60,7 +60,7 @@
                     android:orientation="vertical"
                     android:clipToPadding="false">
 
-                    <include layout="@layout/content_view_post" />
+                    <include layout="@layout/content_post" />
 
                     <fragment
                         android:id="@+id/fragment_comments"

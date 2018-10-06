@@ -29,10 +29,10 @@ public class PostMapOverlay extends Fragment {
 
     public void showPost(Post post) {
 
-        TextView contentTextView = getView().findViewById(R.id.postContentTextView);
-        TextView usernameTextView = getView().findViewById(R.id.usernameTextview);
-        TextView dateTextView = getView().findViewById(R.id.dateTextView);
-        TextView commentsLikesTextView = getView().findViewById(R.id.comments_likes_textview);
+        TextView contentTextView = getView().findViewById(R.id.post_content);
+        TextView usernameTextView = getView().findViewById(R.id.post_username);
+        TextView dateTextView = getView().findViewById(R.id.post_time);
+        TextView commentsLikesTextView = getView().findViewById(R.id.post_comment_like);
         contentTextView.setText(post.getContent().trim());
         usernameTextView.setText("@" + post.getUsername());
         dateTextView.setText(" · " + post.get_timestamp_ago());
