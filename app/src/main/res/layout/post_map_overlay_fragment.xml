@@ -9,85 +9,15 @@
     android:onClick="showViewPostActivity"
     android:focusable="true">
 
-
-    <TextView
-        android:id="@+id/dateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:text="@string/default_date"
-        android:textColor="@color/colorSecondary"
-        android:textSize="@dimen/post_ui_font_size"
-        app:layout_constraintBaseline_toBaselineOf="@+id/usernameTextview"
-        app:layout_constraintStart_toEndOf="@id/usernameTextview" />
-
-    <TextView
-        android:id="@+id/usernameTextview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/post_ui_half_margin"
-        android:layout_marginStart="@dimen/post_ui_margin"
-        android:layout_marginTop="@dimen/post_ui_margin"
-        android:text="@string/default_username"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/post_ui_font_size"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/postContentTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/postContentTextView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/post_ui_margin"
-        android:layout_marginStart="@dimen/post_ui_margin"
-        android:ellipsize="end"
-        android:maxLines="4"
-        android:minLines="1"
-        android:padding="0dp"
-        android:text="@string/default_post_content"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/post_ui_font_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usernameTextview" />
-
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postContentTextView">
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
 
-        <TextView
-            android:id="@+id/see_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/post_ui_margin"
-            android:text="[Tap to see more...]"
-            android:textColor="@color/colorSecondary"
-            android:textSize="@dimen/post_ui_font_size"
-            android:textStyle="italic" />
+        <include layout="@layout/content_post" />
 
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/comments_likes_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondary"
-                android:textSize="@dimen/post_ui_font_size" />
-        </LinearLayout>
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
