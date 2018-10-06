@@ -1,11 +1,9 @@
-package com.holla.group1.holla;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.holla.group1.holla.post;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.holla.group1.holla.util.DateTimeFormatter;
 
 import org.joda.time.DateTime;
 

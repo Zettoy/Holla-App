@@ -9,7 +9,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
+
+import com.holla.group1.holla.comment.Comment;
+import com.holla.group1.holla.comment.CommentsFragment;
+import com.holla.group1.holla.post.Post;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

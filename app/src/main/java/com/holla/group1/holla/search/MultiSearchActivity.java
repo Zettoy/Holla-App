@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.search;
 
 import android.Manifest;
 import android.app.SearchManager;
@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.R;
 
 public class MultiSearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,

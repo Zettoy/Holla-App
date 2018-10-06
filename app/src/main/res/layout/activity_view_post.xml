@@ -31,7 +31,7 @@
 
         <fragment
             android:id="@+id/frg_comment_panel"
-            android:name="com.holla.group1.holla.CommentPanelFragment"
+            android:name="com.holla.group1.holla.comment.CommentPanelFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -64,7 +64,7 @@
 
                     <fragment
                         android:id="@+id/fragment_comments"
-                        android:name="com.holla.group1.holla.CommentsFragment"
+                        android:name="com.holla.group1.holla.comment.CommentsFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clickable="true"
