@@ -74,7 +74,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // for ActivityCompat#requestPermissions for more location_name.
             return;
         }
         mFusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -146,13 +146,17 @@ public class MultiSearchActivity extends AppCompatActivity implements
         List<LocationSearchResult.Item> items = new ArrayList<>();
         for (AutocompletePrediction x : response) {
 //            Log.d(TAG, x.getFullText(null).toString());
-            items.add(new LocationSearchResult.Item("", x.getFullText(null).toString(), ""));
+            LocationSearchResult.Item item = new LocationSearchResult.Item(x.getPlaceId(), x.getFullText(null).toString());
+            items.add(item);
         }
         response.release();
+        displayLocationSearchResults(items);
+
+    }
+    private void displayLocationSearchResults(List<LocationSearchResult.Item> list){
         SectionsPagerAdapter adapter = (SectionsPagerAdapter) mViewPager.getAdapter();
         LocationSearchResultFragment fragment = (LocationSearchResultFragment) adapter.getCurrentFragment();
-        fragment.showResults(items);
-
+        fragment.showResults(list);
     }
 
 

@@ -35,8 +35,8 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+//        holder.mIdView.setText(mValues.get(position).place_id);
+        holder.mContentView.setText(mValues.get(position).location_name);
         holder.mContentView.setTextColor(holder.mView.getResources().getColorStateList(R.color.search_results));
 
 

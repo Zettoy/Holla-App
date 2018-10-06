@@ -38,7 +38,7 @@ public class RestAPIClient {
     }
 
     public void loadTweets() {
-        String url = "https://holla-alpha.herokuapp.com/posts/search/location";
+        String url = "https://holla-alpha.herokuapp.com/posts/search/coordinates";
 //        String url = "https://jsonplaceholder.typicode.com/users";
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET, url, null,
@@ -51,7 +51,7 @@ public class RestAPIClient {
                                 JSONObject post_obj = response.getJSONObject(i);
                                 String timestamp_iso8601 = post_obj.getString("date");
                                 DateTime dateTime = new DateTime(timestamp_iso8601);
-                                JSONArray coords = post_obj.getJSONObject("location").getJSONArray("coordinates");
+                                JSONArray coords = post_obj.getJSONObject("coordinates").getJSONArray("coordinates");
                                 LatLng loc = new LatLng(
                                         coords.getDouble(0),
                                         coords.getDouble(1)

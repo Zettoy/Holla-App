@@ -1,5 +1,7 @@
 package com.holla.group1.holla.search;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Helper class for providing sample content for user interfaces created by
  * Android template wizards.
@@ -10,36 +12,22 @@ public class LocationSearchResult {
 
 
 
-    private static Item createDummyItem(int position) {
-        return new Item(String.valueOf(position), "Item " + position, makeDetails(position));
-    }
 
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
-    }
 
-    /**
-     * A dummy item representing a piece of content.
-     */
     public static class Item {
-        public final String id;
-        public final String content;
-        public final String details;
+        public final String location_name;
+        //https://developers.google.com/places/android-sdk/place-id
+        //https://developers.google.com/places/android-sdk/place-details
+        public final String place_id;
 
-        public Item(String id, String content, String details) {
-            this.id = id;
-            this.content = content;
-            this.details = details;
+        public Item(String place_id, String location_name) {
+            this.location_name = location_name;
+            this.place_id = place_id;
         }
 
         @Override
         public String toString() {
-            return content;
+            return this.location_name;
         }
     }
 }
