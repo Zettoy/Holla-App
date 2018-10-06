@@ -1,7 +1,11 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.util;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
+import com.holla.group1.holla.PostMapOverlay;
+import com.holla.group1.holla.R;
+import com.holla.group1.holla.post.Post;
 
 public class MapFragmentUtilities {
     private static Fragment getOverlayFragment(Fragment fragment) {

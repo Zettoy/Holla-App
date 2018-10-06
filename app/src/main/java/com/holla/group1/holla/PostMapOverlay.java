@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.holla.group1.holla.post.Post;
+import com.holla.group1.holla.util.Utils;
+
 public class PostMapOverlay extends Fragment {
 
 

@@ -18,6 +18,11 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.post.Post;
+import com.holla.group1.holla.search.MapSearch;
+import com.holla.group1.holla.search.MultiSearchActivity;
+import com.holla.group1.holla.signin.GoogleAccountSingleton;
+import com.holla.group1.holla.signin.StartupActivity;
 
 import java.util.ArrayList;
 import java.util.List;

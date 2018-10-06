@@ -58,7 +58,7 @@
             android:label="@string/title_activity_view_post"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".StartupActivity"
+            android:name=".signin.StartupActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:noHistory="true"
@@ -78,7 +78,7 @@
             android:label="FilterActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".MultiSearchActivity"
+            android:name=".search.MultiSearchActivity"
             android:label=""
             android:theme="@style/AppTheme">
 

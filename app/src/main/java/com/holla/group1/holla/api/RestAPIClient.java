@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.api;
 
 
 import android.content.Context;
@@ -9,7 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.JsonArray;
+import com.holla.group1.holla.R;
+import com.holla.group1.holla.post.Post;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;

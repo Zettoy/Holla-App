@@ -1,7 +1,6 @@
 package com.holla.group1.holla;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -18,6 +17,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.holla.group1.holla.api.RestAPIClient;
+import com.holla.group1.holla.post.Post;
+import com.holla.group1.holla.util.MapFragmentUtilities;
 
 import java.util.HashMap;
 import java.util.List;

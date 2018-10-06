@@ -7,6 +7,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.holla.group1.holla.api.RestAPIClient;
+import com.holla.group1.holla.post.Post;
+
 import java.util.ArrayList;
 import java.util.List;
 

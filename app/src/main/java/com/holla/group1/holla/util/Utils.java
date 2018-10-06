@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.util;
 
 import android.text.Layout;
 import android.widget.TextView;

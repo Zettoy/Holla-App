@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.comment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.holla.group1.holla.R;
 
 import java.util.List;
 

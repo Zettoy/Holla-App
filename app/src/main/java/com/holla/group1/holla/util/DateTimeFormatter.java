@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.util;
 
 import org.joda.time.DateTime;
 import org.joda.time.Period;

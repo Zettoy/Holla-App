@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.signin;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 

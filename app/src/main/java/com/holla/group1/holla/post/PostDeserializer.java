@@ -1,4 +1,4 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.post;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonDeserializationContext;
@@ -9,7 +9,6 @@ import com.google.gson.JsonObject;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class PostDeserializer implements JsonDeserializer<Post> {
     public Post deserialize(JsonElement postJSON, Type typeOfSrc, JsonDeserializationContext context)

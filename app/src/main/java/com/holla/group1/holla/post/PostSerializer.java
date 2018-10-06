@@ -1,8 +1,7 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.post;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 

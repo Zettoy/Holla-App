@@ -1,10 +1,14 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.search;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -20,7 +24,23 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-public class MultiSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.AutocompletePrediction;
+import com.google.android.gms.location.places.AutocompletePredictionBufferResponse;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.R;
+
+public class MultiSearchActivity extends AppCompatActivity implements
+        SearchView.OnQueryTextListener,
+        OnCompleteListener<AutocompletePredictionBufferResponse>,
+        OnFailureListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -31,21 +51,95 @@ public class MultiSearchActivity extends AppCompatActivity implements SearchView
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private static final String TAG = "MultiSearchActivity";
+    private static final int TAB_PEOPLE = 0;
+    private static final int TAB_PLACES = 1;
+    private static final int TAB_POSTS = 2;
+    protected GeoDataClient mGeoDataClient;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private FusedLocationProviderClient mFusedLocationClient;
 
-    public boolean onQueryTextChange(String s) {
-        Log.d(TAG, s);
-        return false;
+    private void search_by_location(final String query) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(
+                new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Location> task) {
+
+                        Location loc = task.getResult();
+                        LatLngBounds.Builder builder = LatLngBounds.builder().include(new LatLng(loc.getLatitude(), loc.getLongitude()));
+                        LatLngBounds dynamic_bounds = builder.build();
+
+                        LatLngBounds syd_cbd_bounds = new LatLngBounds(new LatLng(
+                                -33.880208, 151.188317
+
+                        ), new LatLng(-33.857112, 151.218716));
+                        Task<AutocompletePredictionBufferResponse> prediction_task = mGeoDataClient.getAutocompletePredictions(query, dynamic_bounds, null);
+                        prediction_task.addOnCompleteListener(MultiSearchActivity.this);
+                        prediction_task.addOnFailureListener(MultiSearchActivity.this);
+                    }
+                }
+        );
+
+    }
+
+    private void handleSearchQuery(String query) {
+        if (mViewPager != null) {
+            Integer cur = mViewPager.getCurrentItem();
+            switch (cur) {
+                case TAB_PEOPLE:
+                    Log.d(TAG, "People");
+                    break;
+
+                case TAB_PLACES:
+                    search_by_location(query);
+
+                    break;
+
+                case TAB_POSTS:
+                    Log.d(TAG, "Posts");
+                    break;
+            }
+        }
+
     }
 
     public boolean onQueryTextSubmit(String s) {
+        handleSearchQuery(s);
         return false;
     }
+
+    public boolean onQueryTextChange(String s) {
+        return false;
+    }
+
+    @Override
+    public void onFailure(@NonNull Exception e) {
+        ;
+    }
+
+    @Override
+    public void onComplete(@NonNull Task<AutocompletePredictionBufferResponse> task) {
+        AutocompletePredictionBufferResponse response = task.getResult();
+        for (AutocompletePrediction x : response) {
+            Log.d(TAG, x.getFullText(null).toString());
+        }
+        response.release();
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +163,8 @@ public class MultiSearchActivity extends AppCompatActivity implements SearchView
 
 
         mViewPager.setCurrentItem(1);
+        mGeoDataClient = Places.getGeoDataClient(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
 
