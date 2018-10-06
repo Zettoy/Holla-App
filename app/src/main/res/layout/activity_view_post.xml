@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ViewPostActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -33,18 +35,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:focusableInTouchMode="true"
             />
 
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/frg_comment_panel">
+            android:layout_above="@id/frg_comment_panel"
+            android:clickable="true"
+            android:focusableInTouchMode="true">
 
             <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/scrl_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusableInTouchMode="true"
                 >
 
                 <LinearLayout
@@ -59,7 +66,9 @@
                         android:id="@+id/fragment_comments"
                         android:name="com.holla.group1.holla.CommentsFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"/>
                 </LinearLayout>
 
             </ScrollView>
