@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.holla.group1.holla.comment.Comment;
@@ -55,7 +57,9 @@ public class ViewPostActivity extends AppCompatActivity {
 
     private void drawPost(Post post){
         getSupportActionBar().setTitle("Post by " + post.getUsername());
-        TextView contentTextView = findViewById(R.id.postContentTextView);
+        TextView contentTextView = findViewById(R.id.post_content);
+        contentTextView.setMaxLines(Integer.MAX_VALUE);
+        contentTextView.setEllipsize(null);
         contentTextView.setText(post.getContent());
     }
 

@@ -36,12 +36,12 @@ public class PostAdapter extends ArrayAdapter<Post> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(layoutId, parent, false);
             holder = new ViewHolder();
-            holder.content     = convertView.findViewById(R.id.post_history_content);
-            holder.username    = convertView.findViewById(R.id.post_history_username);
-            holder.time        = convertView.findViewById(R.id.post_history_time);
-            holder.commentLike = convertView.findViewById(R.id.post_history_comment_like);
-            holder.location    = convertView.findViewById(R.id.post_history_location);
-            holder.menuButton  = convertView.findViewById(R.id.post_history_menu_button);
+            holder.content     = convertView.findViewById(R.id.post_content);
+            holder.username    = convertView.findViewById(R.id.post_username);
+            holder.time        = convertView.findViewById(R.id.post_time);
+            holder.commentLike = convertView.findViewById(R.id.post_comment_like);
+            holder.location    = convertView.findViewById(R.id.post_location);
+            holder.menuButton  = convertView.findViewById(R.id.post_menu_button);
             convertView.setTag(holder);
 
         } else {

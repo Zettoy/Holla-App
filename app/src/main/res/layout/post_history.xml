@@ -2,82 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@drawable/while_border">
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="@dimen/post_ui_margin"
-            android:layout_marginEnd="@dimen/post_ui_margin"
+              android:background="@drawable/while_border"
             android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/post_history_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_username"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/post_ui_font_size"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/post_history_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_date"
-                android:textColor="@color/colorSecondary"
-                android:textSize="@dimen/post_ui_font_size"/>
-
-            <TextView
-                android:id="@+id/post_history_location"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorSecondary"
-                android:textSize="@dimen/post_ui_font_size"
-                android:text="location"
-                android:layout_weight="1"/>
-
-            <ImageButton
-                android:id="@+id/post_history_menu_button"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@null"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                android:src="@drawable/ic_arrow_down"
-
-                android:layout_gravity="center_vertical"/>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/post_history_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="4"
-            android:minLines="1"
-            android:text="@string/default_post_content"
-            android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/post_ui_font_size"/>
-
-        <TextView
-            android:id="@+id/post_history_comment_like"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/post_ui_half_margin"
-            android:textColor="@color/colorSecondary"
-            android:textSize="@dimen/post_ui_font_size"
-            android:text="comment"/>
-
-
-    </LinearLayout>
+    <include layout="@layout/content_post" />
 
 </LinearLayout>
