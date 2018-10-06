@@ -36,11 +36,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.search.dummy.DummyContent;
 
 public class MultiSearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
         OnCompleteListener<AutocompletePredictionBufferResponse>,
-        OnFailureListener {
+        OnFailureListener,
+        LocationSearchResultFragment.OnListFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -123,6 +125,11 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
     public boolean onQueryTextChange(String s) {
         return false;
+    }
+
+    @Override
+    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+
     }
 
     @Override
@@ -255,7 +262,13 @@ public class MultiSearchActivity extends AppCompatActivity implements
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if(position == TAB_PLACES){
+               LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance(30);
+               return loc_frag;
+            }else {
+
+                return PlaceholderFragment.newInstance(position + 1);
+            }
         }
 
         @Override
