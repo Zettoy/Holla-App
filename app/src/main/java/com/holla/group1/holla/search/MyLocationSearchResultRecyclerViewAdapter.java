@@ -10,21 +10,17 @@ import android.widget.TextView;
 
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.search.LocationSearchResultFragment.OnListFragmentInteractionListener;
-import com.holla.group1.holla.search.dummy.DummyContent.DummyItem;
+//import com.holla.group1.holla.search.dummy.Content.Item;
+import com.holla.group1.holla.search.LocationSearchResult.Item;
 
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MyLocationSearchResultRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private List<Item> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyLocationSearchResultRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyLocationSearchResultRecyclerViewAdapter(List<Item> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -56,6 +52,11 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
         });
     }
 
+    public void changeDataList(List<Item> items){
+        this.mValues = items;
+        this.notifyDataSetChanged();
+
+    }
     @Override
     public int getItemCount() {
         return mValues.size();
@@ -65,7 +66,7 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public Item mItem;
 
         public ViewHolder(View view) {
             super(view);

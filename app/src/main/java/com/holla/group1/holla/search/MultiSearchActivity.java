@@ -36,13 +36,15 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.holla.group1.holla.R;
-import com.holla.group1.holla.search.dummy.DummyContent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiSearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
         OnCompleteListener<AutocompletePredictionBufferResponse>,
         OnFailureListener,
-        LocationSearchResultFragment.OnListFragmentInteractionListener{
+        LocationSearchResultFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -124,11 +126,12 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     public boolean onQueryTextChange(String s) {
+        handleSearchQuery(s);
         return false;
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(LocationSearchResult.Item item) {
 
     }
 
@@ -140,10 +143,15 @@ public class MultiSearchActivity extends AppCompatActivity implements
     @Override
     public void onComplete(@NonNull Task<AutocompletePredictionBufferResponse> task) {
         AutocompletePredictionBufferResponse response = task.getResult();
+        List<LocationSearchResult.Item> items = new ArrayList<>();
         for (AutocompletePrediction x : response) {
-            Log.d(TAG, x.getFullText(null).toString());
+//            Log.d(TAG, x.getFullText(null).toString());
+            items.add(new LocationSearchResult.Item("", x.getFullText(null).toString(), ""));
         }
         response.release();
+        SectionsPagerAdapter adapter = (SectionsPagerAdapter) mViewPager.getAdapter();
+        LocationSearchResultFragment fragment = (LocationSearchResultFragment) adapter.getCurrentFragment();
+        fragment.showResults(items);
 
     }
 
@@ -253,22 +261,35 @@ public class MultiSearchActivity extends AppCompatActivity implements
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private Fragment mCurrentFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+        }
+
+        public Fragment getCurrentFragment() {
+            return mCurrentFragment;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if(position == TAB_PLACES){
-               LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance(1);
-               return loc_frag;
-            }else {
+            if (position == TAB_PLACES) {
+                LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance();
+                return loc_frag;
+            } else {
 
                 return PlaceholderFragment.newInstance(position + 1);
             }
+        }
+
+        @Override
+        public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            if (getCurrentFragment() != object) {
+                mCurrentFragment = (Fragment) object;
+            }
+            super.setPrimaryItem(container, position, object);
         }
 
         @Override

@@ -11,10 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.holla.group1.holla.R;
-import com.holla.group1.holla.search.dummy.DummyContent;
-import com.holla.group1.holla.search.dummy.DummyContent.DummyItem;
+import com.holla.group1.holla.search.LocationSearchResult.Item;
 
 import java.util.ArrayList;
+import java.util.List;
+
+//import com.holla.group1.holla.search.dummy.DummyContent;
+//import com.holla.group1.holla.search.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -22,13 +25,14 @@ import java.util.ArrayList;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class LocationSearchResultFragment extends Fragment {
+public class LocationSearchResultFragment extends Fragment{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private MyLocationSearchResultRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -39,10 +43,10 @@ public class LocationSearchResultFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static LocationSearchResultFragment newInstance(int columnCount) {
+    public static LocationSearchResultFragment newInstance() {
         LocationSearchResultFragment fragment = new LocationSearchResultFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
+//        args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
 
 
@@ -68,14 +72,16 @@ public class LocationSearchResultFragment extends Fragment {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
             if (mColumnCount <= 1) {
-                LinearLayoutManager linearLayoutManager= new LinearLayoutManager(context);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(linearLayoutManager);
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setHasFixedSize(true);
-            recyclerView.setAdapter(new MyLocationSearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            List<Item> empty_set = new ArrayList<>();
+            this.adapter =  new MyLocationSearchResultRecyclerViewAdapter(empty_set, mListener);
+            recyclerView.setAdapter(this.adapter);
         }
         return view;
     }
@@ -87,9 +93,8 @@ public class LocationSearchResultFragment extends Fragment {
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
 
-//            ArrayList<DummyItem> list = new ArrayList<DummyItem>();
+//            ArrayList<Item> list = new ArrayList<Item>();
 //            MyLocationSearchResultRecyclerViewAdapter adapter = new MyLocationSearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener);
-
 
 
         } else {
@@ -104,6 +109,18 @@ public class LocationSearchResultFragment extends Fragment {
         mListener = null;
     }
 
+    public void showResults(List<Item> items) {
+
+//        List<Item> items = new ArrayList<>();
+//        items.add(new Item(
+//                "\uD83D\uDCCD", "Item 0", ""
+//        ));
+        if(adapter != null){
+            adapter.changeDataList(items);
+        }
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -116,6 +133,6 @@ public class LocationSearchResultFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Item item);
     }
 }
