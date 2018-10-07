@@ -42,10 +42,7 @@ public class Post{
 
     }
 
-
-
     public Integer getNum_comments() {
-
         return num_comments;
     }
 
@@ -53,7 +50,7 @@ public class Post{
         this.num_likes++;
     }
 
-    public void subtractNum_likes() {
+    public void subNum_likes() {
         this.num_likes--;
     }
 

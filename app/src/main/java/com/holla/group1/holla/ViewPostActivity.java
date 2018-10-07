@@ -18,7 +18,6 @@ import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.comment.CommentsFragment;
 import com.holla.group1.holla.post.Post;
 import com.like.LikeButton;
-import com.like.OnAnimationEndListener;
 import com.like.OnLikeListener;
 
 import java.text.DateFormat;
@@ -28,7 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ViewPostActivity extends AppCompatActivity {
+public class ViewPostActivity extends AppCompatActivity implements OnLikeListener{
     public static final String BUNDLED_POST_JSON = "post JSON";
     private boolean replaceText = true;
 
@@ -81,17 +80,7 @@ public class ViewPostActivity extends AppCompatActivity {
         drawPost(post);
 
         LikeButton likeButton = findViewById(R.id.heart_button);
-        likeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                post.addNum_likes();
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                post.subtractNum_likes();
-            }
-        });
+        likeButton.setOnLikeListener(this);
 
         Button commentSubmitButton = findViewById(R.id.btn_submit);
         commentSubmitButton.setOnClickListener(new CommentSubmitClick());
@@ -132,15 +121,16 @@ public class ViewPostActivity extends AppCompatActivity {
         super.onStart();
     }
 
-//    @Override
-//    public void liked(LikeButton likeButton) {
-//        Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
-//    }
+    @Override
+    public void liked(LikeButton likeButton) {
+        Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
 
-//    @Override
-//    public void unLiked(LikeButton likeButton) {
-//        Toast.makeText(this, "Disliked!", Toast.LENGTH_SHORT).show();
- //   }
+    }
+
+    @Override
+    public void unLiked(LikeButton likeButton) {
+        Toast.makeText(this, "Disliked!", Toast.LENGTH_SHORT).show();
+    }
 
     class CommentSubmitClick implements View.OnClickListener {
         @Override
