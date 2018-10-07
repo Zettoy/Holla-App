@@ -62,6 +62,13 @@
 
                     <include layout="@layout/content_post" />
 
+                    <com.like.LikeButton
+                        app:icon_type="heart"
+                        app:icon_size="25dp"
+                        android:id="@+id/heart_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
                     <fragment
                         android:id="@+id/fragment_comments"
                         android:name="com.holla.group1.holla.comment.CommentsFragment"
@@ -69,6 +76,7 @@
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:focusableInTouchMode="true"/>
+
                 </LinearLayout>
 
             </ScrollView>

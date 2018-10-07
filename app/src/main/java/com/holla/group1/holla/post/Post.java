@@ -42,18 +42,21 @@ public class Post{
 
     }
 
-
-
     public Integer getNum_comments() {
-
         return num_comments;
     }
 
+    public void addNum_likes() {
+        this.num_likes++;
+    }
+
+    public void subNum_likes() {
+        this.num_likes--;
+    }
 
     public Integer getNum_likes() {
         return num_likes;
     }
-
 
     public LatLng getLocation() {
         return location;
