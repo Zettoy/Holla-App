@@ -272,12 +272,12 @@ public class MultiSearchActivity extends AppCompatActivity implements
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private Fragment mCurrentFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
+        private Fragment mCurrentFragment;
         public Fragment getCurrentFragment() {
             return mCurrentFragment;
         }
