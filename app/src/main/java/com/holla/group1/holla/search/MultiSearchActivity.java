@@ -1,8 +1,10 @@
 package com.holla.group1.holla.search;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.R;
 
 import java.util.ArrayList;
@@ -55,6 +58,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private static final String TAG = "MultiSearchActivity";
+
     private static final int TAB_PEOPLE = 0;
     private static final int TAB_PLACES = 1;
     private static final int TAB_POSTS = 2;
@@ -132,7 +136,10 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(LocationSearchResult.Item item) {
-
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(MapsActivity.EXTRA_PLACE_ID, item.place_id);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override

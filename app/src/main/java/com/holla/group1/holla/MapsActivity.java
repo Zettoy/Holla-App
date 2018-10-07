@@ -1,5 +1,6 @@
 package com.holla.group1.holla;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.*;
 
 import com.google.android.gms.location.places.Place;
@@ -32,6 +34,10 @@ public class MapsActivity extends AppCompatActivity implements
         OnCompleteListener<Void> {
 
     private final String TAG = "MapsActivity";
+
+    public static final int MAP_MOVE_LOCATION = 1;
+
+    public static final String EXTRA_PLACE_ID = "place id";
 
     private MapFragment mapFragment;
 
@@ -98,7 +104,10 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void openAutoCompleteActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, MapsActivity.MAP_MOVE_LOCATION);
+
+
+
 //        MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 
@@ -114,10 +123,14 @@ public class MapsActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode, resultCode, data);
 
         // Check that the result was from the autocomplete widget.
-        if (requestCode == MapSearch.REQUEST_CODE_AUTOCOMPLETE && resultCode == RESULT_OK) {
-            // Get the user's selected place from the Intent.
-            Place place = PlaceAutocomplete.getPlace(this, data);
-            MapSearch.geoLocate((String) place.getName(), mapFragment.getmMap(), this);
+//        if (requestCode == MapSearch.REQUEST_CODE_AUTOCOMPLETE && resultCode == RESULT_OK) {
+//            // Get the user's selected place from the Intent.
+//            Place place = PlaceAutocomplete.getPlace(this, data);
+//            MapSearch.geoLocate((String) place.getName(), mapFragment.getmMap(), this);
+//        }
+        if ( requestCode == MAP_MOVE_LOCATION && resultCode == Activity.RESULT_OK){
+            String place_id = data.getStringExtra(EXTRA_PLACE_ID);
+            Log.d(TAG, place_id);
         }
     }
 
