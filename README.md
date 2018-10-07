@@ -18,9 +18,15 @@ POST /posts/create
 required : all but location_name
 ### body expect cookies : (cookies should identify user etc. google oauth, facebook login)
 
-## GET LOCATION SEARCH
-GET /posts/search/location
-### body expects json : (currently no parameters such as location taken, just outputs list of posts)
+## POST LOCATION SEARCH
+POST /posts/search/location
+### body expects json :
+{
+  "location" : {
+	"type" : "Point",
+	"coordinates":[-33.912383,151.223480]
+  }
+}
 
 sample response : 
 
@@ -36,6 +42,7 @@ sample response :
             ],
             "type": "Point"
         },
-        "location_name": "UNSW Roundhouse"
+        "location_name": "UNSW Roundhouse",
+	"distance": 500
     }]
    
