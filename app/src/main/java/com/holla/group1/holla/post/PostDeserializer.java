@@ -16,7 +16,7 @@ public class PostDeserializer implements JsonDeserializer<Post> {
         try
         {
             JsonObject obj = postJSON.getAsJsonObject();
-            JsonElement loc_elem = obj.get("location");
+            JsonElement loc_elem = obj.get("coordinates");
             Double longitude = loc_elem.getAsJsonObject().get("longitude").getAsDouble();
             Double latitude = loc_elem.getAsJsonObject().get("latitude").getAsDouble();
             LatLng location = new LatLng(latitude, longitude );

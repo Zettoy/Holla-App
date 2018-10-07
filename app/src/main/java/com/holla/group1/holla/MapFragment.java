@@ -112,6 +112,12 @@ public class MapFragment extends Fragment implements
         drawPostsOnMap(posts);
     }
 
+    public void setMapLocation(LatLng location){
+        if(mMap != null){
+
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, Config.SEARCH_RESULT_ZOOM_LEVEL));
+        }
+    }
     private void drawPostsOnMap(List<Post> posts) {
         for (Post p : posts) {
             MarkerOptions markerOptions = new MarkerOptions();

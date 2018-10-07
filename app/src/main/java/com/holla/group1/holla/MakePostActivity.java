@@ -118,7 +118,7 @@ public class MakePostActivity extends AppCompatActivity {
             locationJSONObj.put("type", "Point");
             locationJSONObj.put("coordinates", coordinateArray);
 
-            content.put("location", locationJSONObj);
+            content.put("coordinates", locationJSONObj);
             content.put("location_name", null);
             content.put("content", post.getText());
 

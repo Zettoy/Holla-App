@@ -1,8 +1,10 @@
 package com.holla.group1.holla.search;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -35,12 +37,17 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiSearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
         OnCompleteListener<AutocompletePredictionBufferResponse>,
-        OnFailureListener {
+        OnFailureListener,
+        LocationSearchResultFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -51,6 +58,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private static final String TAG = "MultiSearchActivity";
+
     private static final int TAB_PEOPLE = 0;
     private static final int TAB_PLACES = 1;
     private static final int TAB_POSTS = 2;
@@ -70,7 +78,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+            // for ActivityCompat#requestPermissions for more location_name.
             return;
         }
         mFusedLocationClient.getLastLocation().addOnCompleteListener(
@@ -100,7 +108,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             Integer cur = mViewPager.getCurrentItem();
             switch (cur) {
                 case TAB_PEOPLE:
-                    Log.d(TAG, "People");
+                    Log.d(TAG, "People!");
                     break;
 
                 case TAB_PLACES:
@@ -122,7 +130,16 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     public boolean onQueryTextChange(String s) {
+        handleSearchQuery(s);
         return false;
+    }
+
+    @Override
+    public void onListFragmentInteraction(LocationSearchResult.Item item) {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(MapsActivity.EXTRA_PLACE_ID, item.place_id);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
@@ -133,11 +150,20 @@ public class MultiSearchActivity extends AppCompatActivity implements
     @Override
     public void onComplete(@NonNull Task<AutocompletePredictionBufferResponse> task) {
         AutocompletePredictionBufferResponse response = task.getResult();
+        List<LocationSearchResult.Item> items = new ArrayList<>();
         for (AutocompletePrediction x : response) {
-            Log.d(TAG, x.getFullText(null).toString());
+//            Log.d(TAG, x.getFullText(null).toString());
+            LocationSearchResult.Item item = new LocationSearchResult.Item(x.getPlaceId(), x.getFullText(null).toString());
+            items.add(item);
         }
         response.release();
+        displayLocationSearchResults(items);
 
+    }
+    private void displayLocationSearchResults(List<LocationSearchResult.Item> list){
+        SectionsPagerAdapter adapter = (SectionsPagerAdapter) mViewPager.getAdapter();
+        LocationSearchResultFragment fragment = (LocationSearchResultFragment) adapter.getCurrentFragment();
+        fragment.showResults(list);
     }
 
 
@@ -251,11 +277,30 @@ public class MultiSearchActivity extends AppCompatActivity implements
             super(fm);
         }
 
+        private Fragment mCurrentFragment;
+        public Fragment getCurrentFragment() {
+            return mCurrentFragment;
+        }
+
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position == TAB_PLACES) {
+                LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance();
+                return loc_frag;
+            } else {
+
+                return PlaceholderFragment.newInstance(position + 1);
+            }
+        }
+
+        @Override
+        public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            if (getCurrentFragment() != object) {
+                mCurrentFragment = (Fragment) object;
+            }
+            super.setPrimaryItem(container, position, object);
         }
 
         @Override
