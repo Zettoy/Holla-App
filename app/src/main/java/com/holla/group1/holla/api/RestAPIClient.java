@@ -2,24 +2,22 @@ package com.holla.group1.holla.api;
 
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonArray;
-
-import com.google.android.gms.maps.model.LatLng;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.post.Post;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +28,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import android.os.Handler;
 
 public class RestAPIClient {
     public static String TAG = "RestAPIClient";
@@ -42,12 +39,11 @@ public class RestAPIClient {
         this.mListener = listener;
     }
 
-    private void parsePostsResponse(JsonArray response){
+    private void parsePostsResponse(JsonArray response) {
         ArrayList<Post> posts = new ArrayList<>();
         for (JsonElement jsonElement : response) {
-            try{
-//                JsonObject post_obj = response.getJsonObject(i);
-                JsonObject jsonObject =  jsonElement.getAsJsonObject();
+            try {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String timestamp_iso8601 = jsonObject.get("date").getAsString();
                 DateTime dateTime = new DateTime(timestamp_iso8601);
                 JsonArray coords = jsonObject.get("location").getAsJsonObject().get("coordinates").getAsJsonArray();
@@ -62,13 +58,13 @@ public class RestAPIClient {
                 );
                 String content = jsonObject.get("content").getAsString();
                 String username = "default_username";
-                if(jsonObject.has("author")){
+                if (jsonObject.has("author")) {
                     username = jsonObject.get("author").getAsString();
                 }
                 posts.add(
-                        new Post(loc, content,username, dateTime)
+                        new Post(loc, content, username, dateTime)
                 );
-            }catch (Exception e){
+            } catch (Exception e) {
                 Log.e(TAG, e.toString());
 
             }
@@ -86,7 +82,7 @@ public class RestAPIClient {
         coords.add(location.latitude);
         coords.add(location.longitude);
         location_obj.addProperty("type", "Point");
-        location_obj.add("coordinates", coords );
+        location_obj.add("coordinates", coords);
         request_body.add("location", location_obj);
         Log.d(TAG, request_body.toString());
         MyJsonArrayRequest request = new MyJsonArrayRequest(
@@ -128,45 +124,45 @@ public class RestAPIClient {
     }
 
     public void loadFakeTweets() {
-//        Runnable runnable = new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    //fake network latency
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    String raw_json = readFile(context, R.raw.unsw_6);
-//                    JsonObject obj = new JsonObject(raw_json);
-//                    JSONArray arr = obj.getJSONArray("posts");
-//                    ArrayList<Post> posts = new ArrayList<>();
-//                    for (int i = 0; i < arr.length(); i++) {
-//                        JsonObject post_obj = arr.getJsonObject(i);
-//                        Integer epoch_timestamp = post_obj.getInt("created_at");
-//                        DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
-//                        Post new_post = new Post(
-//                                new LatLng(
-//                                        post_obj.getJsonObject("coordinates").getDouble("latitude"),
-//                                        post_obj.getJsonObject("coordinates").getDouble("longitude")
-//                                ),
-//                                post_obj.getString("content"),
-//                                post_obj.getString("author"),
-//                                dateTime
-//                        );
-//                        posts.add(new_post);
-//                    }
-//                    mListener.onPostsLoaded(posts);
-//                } catch (Exception e) {
-//                    Log.e(TAG, e.toString());
-//                }
-//
-//
-//            }
-//        };
-//        Handler mainHandler = new Handler(this.context.getMainLooper());
-//        mainHandler.post(runnable);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //fake network latency
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    String raw_json = readFile(context, R.raw.unsw_6);
+                    JSONObject obj = new JSONObject(raw_json);
+                    JSONArray arr = obj.getJSONArray("posts");
+                    ArrayList<Post> posts = new ArrayList<>();
+                    for (int i = 0; i < arr.length(); i++) {
+                        JSONObject post_obj = arr.getJSONObject(i);
+                        Integer epoch_timestamp = post_obj.getInt("created_at");
+                        DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
+                        Post new_post = new Post(
+                                new LatLng(
+                                        post_obj.getJSONObject("coordinates").getDouble("latitude"),
+                                        post_obj.getJSONObject("coordinates").getDouble("longitude")
+                                ),
+                                post_obj.getString("content"),
+                                post_obj.getString("author"),
+                                dateTime
+                        );
+                        posts.add(new_post);
+                    }
+                    mListener.onPostsLoaded(posts);
+                } catch (Exception e) {
+                    Log.e(TAG, e.toString());
+                }
+
+
+            }
+        };
+        Handler mainHandler = new Handler(this.context.getMainLooper());
+        mainHandler.post(runnable);
 
     }
 
