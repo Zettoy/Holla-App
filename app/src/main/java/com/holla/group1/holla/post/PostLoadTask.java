@@ -3,6 +3,9 @@ package com.holla.group1.holla.post;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.holla.group1.holla.R;
 import org.joda.time.DateTime;
@@ -11,14 +14,20 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public abstract class PostLoadTask extends AsyncTask<Void, Void, Void> {
     protected WeakReference<Context> context;
+    protected WeakReference<View> view;
+    protected WeakReference<ListView> listView;
     protected List<Post> posts;
 
-    public PostLoadTask(Context context, List<Post> posts) {
+    public PostLoadTask(Context context, View view, ListView listView, List<Post> posts) {
         this.context = new WeakReference<>(context);
+        this.view = new WeakReference<>(view);
+        this.listView = new WeakReference<>(listView);
         this.posts = posts;
     }
 
@@ -52,6 +61,34 @@ public abstract class PostLoadTask extends AsyncTask<Void, Void, Void> {
 
         return null;
     }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
+        View view = this.view.get();
+        ListView listView = this.listView.get();
+
+        Collections.sort(posts, new Comparator<Post>() {
+            @Override
+            public int compare(Post p1, Post p2) {
+                DateTime time1 = p1.getCreation_time();
+                DateTime time2 = p2.getCreation_time();
+
+                return time2.compareTo(time1);
+            }
+        });
+
+        if (posts.isEmpty()) {
+            listView.setVisibility(View.INVISIBLE);
+            view.findViewById(R.id.post_list_empty).setVisibility(View.VISIBLE);
+
+        } else {
+            listView.setAdapter(setPostAdapter());
+        }
+    }
+
+    protected abstract PostAdapter setPostAdapter();
 
     private String readFile() throws IOException {
         Context context = this.context.get();
