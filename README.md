@@ -16,7 +16,6 @@ POST /posts/create
 	  "content" : "Get ahead of the Weekly Trivia game at Unibar ❓Don't water-fail this week 🌊t"
 	}
 required : all but location_name
-### body expect cookies : (cookies should identify user etc. google oauth, facebook login)
 
 ## POST LOCATION SEARCH
 POST /posts/search/location
@@ -45,4 +44,32 @@ sample response :
         "location_name": "UNSW Roundhouse",
 	"distance": 500
     }]
+    
+## COMMENT CREATION
+POST /comments/create
+
+### body expects json :
+	{ 
+  	"post" : "5bba12f6053a101f009c7c11",
+  	"content" : "Trivia sux !!!"
+	}
+	
+## COMMENT SEARCH BY POST
+POST /comments/search/post
+### body expects json :
+	{
+	"post" : "5bba12f6053a101f009c7c11"
+	}
+
+sample response : 
+
+	[
+	    {
+		"id": "5bbb1bb8cd4cd02d68930614",
+		"content": "Get ahead of the Weekly Trivia game at Unibar ❓Don't water-fail this week 🌊t",
+		"author": "UNSWroundhouse",
+		"date": "2018-10-08T08:56:24.446Z",
+		"post": "5bba12f6053a101f009c7c11"
+	    }
+	]
    
