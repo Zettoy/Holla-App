@@ -1,4 +1,4 @@
-package com.holla.group1.holla.util;
+package com.holla.group1.holla;
 
 import android.app.AlertDialog;
 import android.content.Context;

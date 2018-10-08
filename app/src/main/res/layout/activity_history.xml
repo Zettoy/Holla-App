@@ -29,7 +29,7 @@
     <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.holla.group1.holla.util.HistoryFragment"
+        android:name="com.holla.group1.holla.HistoryFragment"
         android:id="@+id/post_list_fragment"
         tools:layout="@layout/fragment_post_list"/>
 
