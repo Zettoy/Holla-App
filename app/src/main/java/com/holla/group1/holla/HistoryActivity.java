@@ -1,6 +1,8 @@
 package com.holla.group1.holla;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -10,11 +12,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.holla.group1.holla.post.Post;
 
+import com.holla.group1.holla.post.PostAdapter;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -118,8 +121,8 @@ public class HistoryActivity extends AppCompatActivity {
                 }
             });
 
-            PostAdapter postAdapter = new PostAdapter(
-                    HistoryActivity.this, R.layout.post_history, posts);
+            PostAdapter postAdapter = new HistoryPostAdapter(
+                    HistoryActivity.this, R.layout.post_in_list, posts);
 
             listView.setAdapter(postAdapter);
 
@@ -148,5 +151,51 @@ public class HistoryActivity extends AppCompatActivity {
             return jsonString;
         }
 
+        private class HistoryPostAdapter extends PostAdapter {
+
+            public HistoryPostAdapter(Context context, int layoutId, List<Post> posts) {
+                super(context, layoutId, posts);
+            }
+
+            @Override
+            protected void showDialog() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+                String[] items = {"Share", "Delete"}; // Maybe add more features later
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: // "Share"
+                                break;
+
+                            case 1: // "Delete"
+                                final AlertDialog.Builder confirm = new AlertDialog.Builder(context);
+                                confirm.setTitle("Delete");
+                                confirm.setMessage("Are you sure you want to delete this post?");
+                                confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Toast.makeText(context, "Yes", Toast.LENGTH_LONG).show();
+                                        //TODO: Delete post
+                                    }
+                                });
+                                confirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
+                                confirm.setCancelable(true);
+                                confirm.create().show();
+                                break;
+                        }
+                    }
+                });
+                builder.setCancelable(true);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        }
     }
 }

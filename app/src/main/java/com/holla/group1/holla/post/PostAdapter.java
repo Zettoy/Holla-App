@@ -1,20 +1,19 @@
-package com.holla.group1.holla;
+package com.holla.group1.holla.post;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.*;
 import android.widget.*;
 
-import com.holla.group1.holla.post.Post;
+import com.holla.group1.holla.R;
+import com.holla.group1.holla.ViewPostActivity;
 
 import org.joda.time.DateTime;
 import java.util.List;
 
-public class PostAdapter extends ArrayAdapter<Post> {
+public abstract class PostAdapter extends ArrayAdapter<Post> {
     private int layoutId;
     private Context context;
     private List<Post> posts;
@@ -81,44 +80,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         return convertView;
     }
 
-    private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        String[] items = {"Share", "Delete"}; // Maybe add more features later
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0: // "Share"
-                        break;
-
-                    case 1: // "Delete"
-                        final AlertDialog.Builder confirm = new AlertDialog.Builder(context);
-                        confirm.setTitle("Delete");
-                        confirm.setMessage("Are you sure you want to delete this post?");
-                        confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(context, "Yes", Toast.LENGTH_LONG).show();
-                                //TODO: Delete post
-                            }
-                        });
-                        confirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                        confirm.setCancelable(true);
-                        confirm.create().show();
-                        break;
-                }
-            }
-        });
-        builder.setCancelable(true);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
+    protected abstract void showDialog();
 
     private String commentLikeToString(Post post) {
         return post.getNum_comments() + " comments · " + post.getNum_likes() + " likes";
