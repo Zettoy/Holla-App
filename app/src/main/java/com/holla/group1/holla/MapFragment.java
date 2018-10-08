@@ -116,6 +116,8 @@ public class MapFragment extends Fragment implements
         if(mMap != null){
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, Config.SEARCH_RESULT_ZOOM_LEVEL));
+            //TODO: load new posts in this location
+            apiClient.getPostsAtLocation(location, 1000);
         }
     }
     private void drawPostsOnMap(List<Post> posts) {

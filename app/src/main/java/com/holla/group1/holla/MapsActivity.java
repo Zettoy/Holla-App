@@ -27,6 +27,7 @@ import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.search.MultiSearchActivity;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
@@ -145,9 +146,10 @@ public class MapsActivity extends AppCompatActivity implements
                 if (task.isSuccessful()) {
                     PlaceBufferResponse response = task.getResult();
                     Place place = response.get(0);
+                    //this should depend on whether map view or list view is showing
                     if(mapFragment!=null){
                         mapFragment.setMapLocation(place.getLatLng());
-                        //TODO: load new posts in this location
+
                     }
                 }
             }
