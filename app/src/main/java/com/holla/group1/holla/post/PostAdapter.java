@@ -1,8 +1,6 @@
 package com.holla.group1.holla.post;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,7 +9,6 @@ import android.widget.*;
 
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.ViewPostActivity;
-import com.holla.group1.holla.post.Post;
 
 import org.joda.time.DateTime;
 import java.util.List;

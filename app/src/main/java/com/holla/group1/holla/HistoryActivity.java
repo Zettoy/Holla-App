@@ -122,7 +122,7 @@ public class HistoryActivity extends AppCompatActivity {
             });
 
             PostAdapter postAdapter = new HistoryPostAdapter(
-                    HistoryActivity.this, R.layout.post_history, posts);
+                    HistoryActivity.this, R.layout.post_in_list, posts);
 
             listView.setAdapter(postAdapter);
 

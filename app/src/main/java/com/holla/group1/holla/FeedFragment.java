@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.post.PostAdapter;
@@ -105,7 +105,7 @@ public class FeedFragment extends Fragment {
             });
 
             PostAdapter postAdapter = new FeedPostAdapter(
-                    context, R.layout.post_history, posts);
+                    context, R.layout.post_in_list, posts);
 
             listView.setAdapter(postAdapter);
 
