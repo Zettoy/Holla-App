@@ -9,23 +9,30 @@
             android:background="@color/white"
             android:gravity="center_horizontal"
             android:visibility="invisible"
-            android:id="@+id/feed_empty">
+            android:id="@+id/post_list_empty">
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Empty Feed"
+                android:text="Empty"
                 android:layout_marginStart="10dp"
                 android:textSize="25sp"/>
 
     </LinearLayout>
 
-    <ListView
-            android:id="@+id/feed_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/post_list_swipe_refresh">
 
-    </ListView>
+        <ListView
+                android:id="@+id/post_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        </ListView>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

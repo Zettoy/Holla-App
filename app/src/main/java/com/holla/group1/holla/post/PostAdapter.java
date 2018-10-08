@@ -1,6 +1,8 @@
 package com.holla.group1.holla.post;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -80,7 +82,24 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
         return convertView;
     }
 
-    protected abstract void showDialog();
+    protected abstract String[] setItems();
+
+    protected abstract void onOptionItemSelected(int which);
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        builder.setItems(setItems(), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onOptionItemSelected(which);
+            }
+        });
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
     private String commentLikeToString(Post post) {
         return post.getNum_comments() + " comments · " + post.getNum_likes() + " likes";
