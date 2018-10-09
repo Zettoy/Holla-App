@@ -56,7 +56,6 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
-        startActivity(intent);
         startActivityForResult(intent, CREATE_POST_ACTIVITY);
     }
 
