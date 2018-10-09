@@ -14,6 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 
+import com.holla.group1.holla.api.LikePostRequest;
+import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.comment.CommentsFragment;
 import com.holla.group1.holla.post.Post;
@@ -27,9 +29,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ViewPostActivity extends AppCompatActivity implements OnLikeListener{
+public class ViewPostActivity extends AppCompatActivity implements OnLikeListener, LikePostRequest.OnLikeResponseListener{
     public static final String BUNDLED_POST_JSON = "post JSON";
     private boolean replaceText = true;
+
+
 
     private void drawHardcodedComments(){
         List<Comment> testComments = new ArrayList<>();
@@ -97,6 +101,8 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
 //            }
 //        });
 
+
+
         // Hardcoded test comments (please replace me with real comments)
         drawHardcodedComments();
     }
@@ -122,7 +128,20 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     }
 
     @Override
+    public void onLikeRequestFailure(Exception ex) {
+
+    }
+
+    @Override
+    public void onLikeRequestSuccess(String postID) {
+
+    }
+
+    @Override
     public void liked(LikeButton likeButton) {
+        LikePostRequest likePostRequest = new LikePostRequest(this);
+        likePostRequest.setListener(this);
+        likePostRequest.likePost("asdf");
         Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
 
     }
