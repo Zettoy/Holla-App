@@ -35,6 +35,10 @@ public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
                     new String(
                             response.data,
                             HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+            // TODO: Temp fix until I tell Josh to return a jsonarray on success for comment posting
+            if (!jsonString.startsWith("[")) {
+                jsonString = "[" + jsonString + "]";
+            }
             return Response.success(
                     new JsonParser().parse(jsonString).getAsJsonArray(), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {

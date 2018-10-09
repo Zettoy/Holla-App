@@ -8,6 +8,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -48,12 +49,14 @@ public class MapsActivity extends AppCompatActivity implements
     public static final int MAP_MOVE_LOCATION = 1;
     public static final String EXTRA_PLACE_ID = "place id";
     private final String TAG = "MapsActivity";
+    private final int CREATE_POST_ACTIVITY = 1284;
+
     protected GeoDataClient mGeoDataClient;
     private MapFragment mapFragment;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, CREATE_POST_ACTIVITY);
     }
 
     public void showViewPostActivity(View view) {
@@ -101,10 +104,6 @@ public class MapsActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
 
         mGeoDataClient = Places.getGeoDataClient(this);
-        //signedInAccount = (GoogleSignInAccount) savedInstanceState.get("GoogleAccount");
-
-        //String target = getIntent().getStringExtra("GoogleClient");
-        //signedInClient = new Gson().fromJson(target, GoogleSignInClient.class);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannels();
     }
@@ -163,6 +162,10 @@ public class MapsActivity extends AppCompatActivity implements
         if (requestCode == MAP_MOVE_LOCATION && resultCode == Activity.RESULT_OK) {
             String place_id = data.getStringExtra(EXTRA_PLACE_ID);
             handle_map_location_change_request(place_id);
+        }
+
+        if (requestCode == CREATE_POST_ACTIVITY) {
+            mapFragment.refreshPosts();
         }
     }
     private void handle_map_location_change_request(String place_id){
