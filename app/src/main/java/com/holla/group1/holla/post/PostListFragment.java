@@ -63,9 +63,12 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
             }
         }, 1000);
 
+        /*
         posts.clear();
         readPostsFromBackend();
         exchangeViewIfNeeded();
+        swipeRefreshLayout.setRefreshing(false);
+        */
     }
 
     private void exchangeViewIfNeeded() {
