@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "908598873439",
+    "firebase_url": "https://organic-gecko-215107.firebaseio.com",
+    "project_id": "organic-gecko-215107",
+    "storage_bucket": "organic-gecko-215107.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908598873439:android:927bdb3594085d57",
+        "android_client_info": {
+          "package_name": "com.holla.group1.holla"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "908598873439-f8h5ei758gi369o5edrvteu6d9o0mmbc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.holla.group1.holla",
+            "certificate_hash": "dc58722b6814504928cf30eae3df08456eeb6992"
+          }
+        },
+        {
+          "client_id": "908598873439-fkntl8nopu4kcc7m65ng6ajuvpp89hih.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdoRLbGJA5KWuGEVO6U0HAg4lWACbn9I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "908598873439-fkntl8nopu4kcc7m65ng6ajuvpp89hih.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
