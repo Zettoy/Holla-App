@@ -54,11 +54,6 @@ public class RestAPIClient {
                 String timestamp_iso8601 = jsonObject.get("date").getAsString();
                 DateTime dateTime = new DateTime(timestamp_iso8601);
                 JsonArray coords = jsonObject.get("location").getAsJsonObject().get("coordinates").getAsJsonArray();
-                // change this back when backend is fixed to return [latitude, longitude]
-//                LatLng loc = new LatLng(
-//                        coords.get(0).getAsDouble(),
-//                        coords.get(1).getAsDouble()
-//                );
                 LatLng loc = new LatLng(
                         coords.get(0).getAsDouble(),
                         coords.get(1).getAsDouble()
@@ -78,8 +73,6 @@ public class RestAPIClient {
             }
         }
         mListener.onPostsLoaded(posts);
-
-
     }
 
     private void parseCommentsResponse(JsonArray response) {
@@ -98,7 +91,6 @@ public class RestAPIClient {
                 comments.add(new Comment(content, username, timestamp_iso8601));
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
-
             }
         }
 
@@ -129,7 +121,6 @@ public class RestAPIClient {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 }
 
@@ -152,7 +143,6 @@ public class RestAPIClient {
                     @Override
                     public void onResponse(JsonArray response) {
                         parseCommentsResponse(response);
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -230,7 +220,6 @@ public class RestAPIClient {
                         // Handling errors OMEGALUL
                     }
                 }
-
         );
 
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
@@ -240,43 +229,41 @@ public class RestAPIClient {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                try {
-                    //fake network latency
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            try {
+                //fake network latency
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                String raw_json = readFile(context, R.raw.unsw_6);
+                JSONObject obj = new JSONObject(raw_json);
+                JSONArray arr = obj.getJSONArray("posts");
+                ArrayList<Post> posts = new ArrayList<>();
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject post_obj = arr.getJSONObject(i);
+                    Integer epoch_timestamp = post_obj.getInt("created_at");
+                    DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
+                    Post new_post = new Post("testid",
+                            new LatLng(
+                                    post_obj.getJSONObject("coordinates").getDouble("latitude"),
+                                    post_obj.getJSONObject("coordinates").getDouble("longitude")
+                            ),
+                            post_obj.getString("content"),
+                            post_obj.getString("author"),
+                            dateTime
+                    );
+                    posts.add(new_post);
                 }
-                try {
-                    String raw_json = readFile(context, R.raw.unsw_6);
-                    JSONObject obj = new JSONObject(raw_json);
-                    JSONArray arr = obj.getJSONArray("posts");
-                    ArrayList<Post> posts = new ArrayList<>();
-                    for (int i = 0; i < arr.length(); i++) {
-                        JSONObject post_obj = arr.getJSONObject(i);
-                        Integer epoch_timestamp = post_obj.getInt("created_at");
-                        DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
-                        Post new_post = new Post("testid",
-                                new LatLng(
-                                        post_obj.getJSONObject("coordinates").getDouble("latitude"),
-                                        post_obj.getJSONObject("coordinates").getDouble("longitude")
-                                ),
-                                post_obj.getString("content"),
-                                post_obj.getString("author"),
-                                dateTime
-                        );
-                        posts.add(new_post);
-                    }
-                    mListener.onPostsLoaded(posts);
-                } catch (Exception e) {
-                    Log.e(TAG, e.toString());
-                }
-
-
+                mListener.onPostsLoaded(posts);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
             }
         };
+
         Handler mainHandler = new Handler(this.context.getMainLooper());
         mainHandler.post(runnable);
-
     }
 
     private String readFile(Context context, int file_id) throws IOException {

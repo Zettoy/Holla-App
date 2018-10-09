@@ -101,57 +101,11 @@ public class MakePostActivity extends AppCompatActivity {
             apiClient.createPost(new LatLng(location.getLatitude(), location.getLongitude()), "testboy", post.getText().toString());
             Toast.makeText(this, "Post has been sent.", Toast.LENGTH_LONG).show();
             return true;
-
         } else {
             Toast.makeText(this, "Empty Post", Toast.LENGTH_LONG).show();
-
         }
 
         return false;
-    }
-
-    private void postRequest() {
-        String url = "https://holla-alpha.herokuapp.com/posts/create";
-        JSONObject content = new JSONObject();
-
-        try {
-            JSONObject locationJSONObj = new JSONObject();
-            JSONArray  coordinateArray = new JSONArray();
-
-            coordinateArray.put(location.getLatitude());
-            coordinateArray.put(location.getLongitude());
-
-            locationJSONObj.put("type", "Point");
-            locationJSONObj.put("coordinates", coordinateArray);
-
-            content.put("coordinates", locationJSONObj);
-            content.put("location_name", null);
-            content.put("content", post.getText());
-
-        } catch (JSONException e) {
-            Log.e(TAG, "postRequest: " + e.getMessage());
-
-        }
-
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.POST, url, content,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, error.toString());
-
-                    }
-                }
-        );
-
-        RequestQueueSingleton.getInstance(this).addToRequestQueue(request);
     }
 
     private void getLocation() {
