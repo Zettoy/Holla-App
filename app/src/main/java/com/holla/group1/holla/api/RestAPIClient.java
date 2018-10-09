@@ -8,6 +8,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,6 +18,7 @@ import com.holla.group1.holla.post.Post;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -73,6 +75,9 @@ public class RestAPIClient {
 
 
     }
+
+
+
 
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
         String url = "https://holla-alpha.herokuapp.com/posts/search/location";
