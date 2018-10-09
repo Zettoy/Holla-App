@@ -38,6 +38,7 @@ public class RestAPIClient {
     private Context context;
     private OnPostsLoadedListener mListener;
     private OnCommentsLoadedListener mCommentsListener;
+    private OnCommentSubmittedListener mCommentSubmittedListener;
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -199,7 +200,9 @@ public class RestAPIClient {
                     @Override
                     public void onResponse(JsonArray response) {
                         // Just assume that like we are good boys and it worked
-                        Toast.makeText(context, "Comment submitted.", Toast.LENGTH_SHORT).show();
+                        if (mCommentSubmittedListener != null) {
+                            mCommentSubmittedListener.onCommentSubmitted();
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -276,11 +279,19 @@ public class RestAPIClient {
         return jsonString;
     }
 
+    public void setOnCommentSubmittedListener(OnCommentSubmittedListener onCommentSubmittedListener) {
+        this.mCommentSubmittedListener = onCommentSubmittedListener;
+    }
+
     public interface OnPostsLoadedListener {
         void onPostsLoaded(List<Post> posts);
     }
 
     public interface OnCommentsLoadedListener {
         void onCommentsLoaded(List<Comment> comments);
+    }
+
+    public interface OnCommentSubmittedListener {
+        void onCommentSubmitted();
     }
 }

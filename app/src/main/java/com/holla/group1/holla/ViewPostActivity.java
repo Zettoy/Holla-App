@@ -1,6 +1,7 @@
 package com.holla.group1.holla;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,7 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ViewPostActivity extends AppCompatActivity implements OnLikeListener, LikePostRequest.OnLikeResponseListener, RestAPIClient.OnCommentsLoadedListener {
+public class ViewPostActivity extends AppCompatActivity implements OnLikeListener, LikePostRequest.OnLikeResponseListener, RestAPIClient.OnCommentsLoadedListener, RestAPIClient.OnCommentSubmittedListener {
     public static final String BUNDLED_POST_JSON = "post JSON";
     private boolean replaceText = true;
     private RestAPIClient apiClient;
@@ -56,6 +57,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         post = Post.fromJSON(post_json);
 
         apiClient = new RestAPIClient(this, null, this);
+        apiClient.setOnCommentSubmittedListener(this);
         apiClient.getCommentsFromPostID(post.getId());
 
         drawPost(post);
@@ -101,7 +103,6 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         likePostRequest.setListener(this);
         likePostRequest.likePost("asdf");
         Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -113,6 +114,17 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     public void onCommentsLoaded(List<Comment> comments) {
         CommentsFragment commentsFragment = (CommentsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_comments);
         commentsFragment.addComments(comments);
+    }
+
+    @Override
+    public void onCommentSubmitted() {
+        Toast.makeText(this, "Comment submitted.", Toast.LENGTH_SHORT).show();
+
+        // Literally just restart the activity cause we're lazy
+        Intent intent = new Intent(this, ViewPostActivity.class);
+        intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, post.toJSON());
+        startActivity(intent);
+        finish();
     }
 
     class CommentSubmitClick implements View.OnClickListener {
