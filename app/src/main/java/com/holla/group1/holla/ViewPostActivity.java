@@ -113,7 +113,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     @Override
     public void onCommentsLoaded(List<Comment> comments) {
         CommentsFragment commentsFragment = (CommentsFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_comments);
-        commentsFragment.addComments(comments);
+        commentsFragment.setComments(comments);
     }
 
     @Override
@@ -121,10 +121,11 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         Toast.makeText(this, "Comment submitted.", Toast.LENGTH_SHORT).show();
 
         // Literally just restart the activity cause we're lazy
-        Intent intent = new Intent(this, ViewPostActivity.class);
+        /*Intent intent = new Intent(this, ViewPostActivity.class);
         intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, post.toJSON());
         startActivity(intent);
-        finish();
+        finish();*/
+        apiClient.getCommentsFromPostID(post.getId());
     }
 
     class CommentSubmitClick implements View.OnClickListener {
