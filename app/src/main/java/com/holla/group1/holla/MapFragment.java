@@ -79,7 +79,7 @@ public class MapFragment extends Fragment implements
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 100000);
+        refreshPosts();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
@@ -133,6 +133,10 @@ public class MapFragment extends Fragment implements
             Marker marker = mMap.addMarker(markerOptions);
             markerPostHashMap.put(marker, p);
         }
+    }
+
+    public void refreshPosts() {
+        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 100000);
     }
 
     public GoogleMap getmMap() {
