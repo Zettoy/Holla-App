@@ -121,6 +121,9 @@ public class MapFragment extends Fragment implements
         }
     }
     private void drawPostsOnMap(List<Post> posts) {
+        mMap.clear();
+        markerPostHashMap.clear();
+
         for (Post p : posts) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(p.getLocation());
