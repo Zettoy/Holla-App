@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.post.Post;
 
 import org.joda.time.DateTime;
@@ -35,10 +36,12 @@ public class RestAPIClient {
     public static String TAG = "RestAPIClient";
     private Context context;
     private OnPostsLoadedListener mListener;
+    private OnCommentsLoadedListener mCommentsListener;
 
-    public RestAPIClient(Context ctx, OnPostsLoadedListener listener) {
+    public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
         this.mListener = listener;
+        this.mCommentsListener = commentsListener;
     }
 
     private void parsePostsResponse(JsonArray response) {
@@ -59,12 +62,13 @@ public class RestAPIClient {
                         coords.get(0).getAsDouble()
                 );
                 String content = jsonObject.get("content").getAsString();
+                String postId = jsonObject.get("id").getAsString();
                 String username = "default_username";
                 if (jsonObject.has("author")) {
                     username = jsonObject.get("author").getAsString();
                 }
                 posts.add(
-                        new Post(loc, content, username, dateTime)
+                        new Post(postId, loc, content, username, dateTime)
                 );
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
@@ -76,7 +80,28 @@ public class RestAPIClient {
 
     }
 
+    private void parseCommentsResponse(JsonArray response) {
+        ArrayList<Comment> comments = new ArrayList<>();
 
+        for (JsonElement jsonElement : response) {
+            try {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String timestamp_iso8601 = jsonObject.get("date").getAsString();
+                String content = jsonObject.get("content").getAsString();
+                String username = "default_username";
+                if (jsonObject.has("author")) {
+                    username = jsonObject.get("author").getAsString();
+                }
+
+                comments.add(new Comment(content, username, timestamp_iso8601));
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+
+            }
+        }
+
+        mCommentsListener.onCommentsLoaded(comments);
+    }
 
 
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
@@ -98,7 +123,6 @@ public class RestAPIClient {
                     @Override
                     public void onResponse(JsonArray response) {
                         parsePostsResponse(response);
-
                     }
                 },
                 new Response.ErrorListener() {
@@ -128,6 +152,67 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getCommentsFromPostID(String postID) {
+        String url = "https://holla-alpha.herokuapp.com/comments/search/post";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("post", postID);
+
+        Log.d(TAG, request_body.toString());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parseCommentsResponse(response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void createComment() {
+        String url = "https://holla-alpha.herokuapp.com/comments/create";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("post", "5bba12f6053a101f009c7c11");
+        request_body.addProperty("user", "5bba12f6053a101f009c7c11");
+        request_body.addProperty("content", "What a lovely post. I very much enjoyed it. I especially liked the part with the words and the place it was posted. The time it was made was also very superb.");
+
+        Log.d(TAG, request_body.toString());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+
+        );
+
+        //RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void loadFakeTweets() {
         Runnable runnable = new Runnable() {
             @Override
@@ -147,7 +232,7 @@ public class RestAPIClient {
                         JSONObject post_obj = arr.getJSONObject(i);
                         Integer epoch_timestamp = post_obj.getInt("created_at");
                         DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
-                        Post new_post = new Post(
+                        Post new_post = new Post("testid",
                                 new LatLng(
                                         post_obj.getJSONObject("coordinates").getDouble("latitude"),
                                         post_obj.getJSONObject("coordinates").getDouble("longitude")
@@ -192,5 +277,9 @@ public class RestAPIClient {
 
     public interface OnPostsLoadedListener {
         void onPostsLoaded(List<Post> posts);
+    }
+
+    public interface OnCommentsLoadedListener {
+        void onCommentsLoaded(List<Comment> comments);
     }
 }

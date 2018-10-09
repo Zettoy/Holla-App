@@ -7,7 +7,8 @@ import com.holla.group1.holla.util.DateTimeFormatter;
 
 import org.joda.time.DateTime;
 
-public class Post{
+public class Post {
+    private String id;
     private String content;
     private LatLng location;
     private String username;
@@ -34,12 +35,16 @@ public class Post{
         String json = gson.toJson(this);
         return json;
     }
-    public Post(LatLng location, String content, String username, DateTime creation_time) {
+    public Post(String id, LatLng location, String content, String username, DateTime creation_time) {
         this.content = content;
         this.location = location;
         this.creation_time = creation_time;
         this.username = username;
+        this.id = id;
+    }
 
+    public String getId() {
+        return id;
     }
 
     public Integer getNum_comments() {
