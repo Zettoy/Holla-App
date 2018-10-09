@@ -1,7 +1,12 @@
 package com.holla.group1.holla;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -100,6 +105,27 @@ public class MapsActivity extends AppCompatActivity implements
 
         //String target = getIntent().getStringExtra("GoogleClient");
         //signedInClient = new Gson().fromJson(target, GoogleSignInClient.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannels();
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private void createNotificationChannels() {
+        String channelId = getResources().getString(R.string.notification_channel_comment);
+        String channelName = "Comment";
+        NotificationChannel channelComment =
+                new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+
+        channelId = getResources().getString(R.string.notification_channel_usertag);
+        channelName = "UserTag";
+        NotificationChannel channelUserTag =
+                new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH);
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.createNotificationChannel(channelComment);
+            manager.createNotificationChannel(channelUserTag);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {

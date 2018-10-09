@@ -1,0 +1,55 @@
+package com.holla.group1.holla.service;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
+
+import com.holla.group1.holla.R;
+
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
+    private static final String TAG = "FBTEST";
+
+    @Override
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        super.onMessageReceived(remoteMessage);
+
+        Log.d(TAG, "Received From: " + remoteMessage.getFrom());
+
+        // Check if message contains a data payload.
+        if (remoteMessage.getData().size() > 0) {
+            Log.d(TAG, "Received Message data payload: " + remoteMessage.getData());
+        }
+
+        // Check if message contains a notification payload.
+        if (remoteMessage.getNotification() != null) {
+            Log.d(TAG, "Received Message Notification Body: " + remoteMessage.getNotification().getBody());
+        }
+
+        String message = remoteMessage.getNotification().getBody();
+        // Add channel check
+        String channelId = getResources().getString(R.string.notification_channel_comment);
+        sendNotification(message, channelId);
+    }
+
+    /**
+     * Create and show a simple notification containing the received FCM message.
+     *
+     * @param messageBody FCM message body received.
+     */
+    private void sendNotification(String messageBody, String channelId) {
+        Notification notification =
+                new NotificationCompat.Builder(this, channelId)
+                .setContentTitle(messageBody)
+                .setContentText("Test")
+                .setSmallIcon(R.drawable.ic_locate)
+                .setAutoCancel(true)
+                .build();
+
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (manager != null) manager.notify(1, notification);
+    }
+}
