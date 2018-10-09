@@ -24,7 +24,7 @@ public class FilterActivity extends Activity implements RestAPIClient.OnPostsLoa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
-        mClient = new RestAPIClient(getApplicationContext(), this);
+        mClient = new RestAPIClient(getApplicationContext(), this, null);
         mClient.loadFakeTweets();
         mSearchView = findViewById(R.id.searchView);
         mListView = findViewById(R.id.listView);

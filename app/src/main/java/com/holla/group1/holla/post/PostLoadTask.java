@@ -43,7 +43,7 @@ public abstract class PostLoadTask extends AsyncTask<Void, Void, Void> {
                 JSONObject post_obj = arr.getJSONObject(i);
                 Integer epoch_timestamp = post_obj.getInt("created_at");
                 DateTime dateTime = new DateTime(epoch_timestamp * 1000L);
-                Post new_post = new Post(
+                Post new_post = new Post("testid",
                         new LatLng(
                                 post_obj.getJSONObject("coordinates").getDouble("latitude"),
                                 post_obj.getJSONObject("coordinates").getDouble("longitude")

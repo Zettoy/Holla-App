@@ -39,7 +39,7 @@ public class MapFragment extends Fragment implements
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, parent, false);
 
-        apiClient = new RestAPIClient(getContext(), this);
+        apiClient = new RestAPIClient(getContext(), this, null);
         markerPostHashMap = new HashMap<>();
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -63,7 +63,6 @@ public class MapFragment extends Fragment implements
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        apiClient.loadFakeTweets();
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -80,6 +79,7 @@ public class MapFragment extends Fragment implements
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
+        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 100000);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
@@ -110,6 +110,8 @@ public class MapFragment extends Fragment implements
     @Override
     public void onPostsLoaded(List<Post> posts) {
         drawPostsOnMap(posts);
+        //apiClient.createComment();
+        //apiClient.getCommentsFromPostID("5bba12f6053a101f009c7c11");
     }
 
     public void setMapLocation(LatLng location){
@@ -121,9 +123,13 @@ public class MapFragment extends Fragment implements
         }
     }
     private void drawPostsOnMap(List<Post> posts) {
+        mMap.clear();
+        markerPostHashMap.clear();
+
         for (Post p : posts) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(p.getLocation());
+            //markerOptions.position(new LatLng(30, 150));
             Marker marker = mMap.addMarker(markerOptions);
             markerPostHashMap.put(marker, p);
         }

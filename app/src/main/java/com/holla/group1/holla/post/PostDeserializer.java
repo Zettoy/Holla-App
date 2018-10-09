@@ -23,8 +23,9 @@ public class PostDeserializer implements JsonDeserializer<Post> {
             String content = obj.get("content").getAsString();
             String username = obj.get("username").getAsString();
             Long creation_epoch = obj.get("created_at").getAsLong();
+            String postId = obj.get("id").getAsString();
 
-            return new Post(location, content, username, new DateTime(creation_epoch * 1000L));
+            return new Post(postId, location, content, username, new DateTime(creation_epoch * 1000L));
         }
         catch (Exception e)
         {

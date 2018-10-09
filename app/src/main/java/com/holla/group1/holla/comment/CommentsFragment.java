@@ -32,43 +32,6 @@ public class CommentsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Get the comments list that was passed in
-        /*GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        List<Comment> comments = gson.fromJson(getArguments().getString("comments"), new TypeToken<List<Comment>>(){}.getType());
-
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-
-        for (Comment comment : comments) {
-            CommentFragment commentFragment = new CommentFragment();
-            Bundle arguments = new Bundle();
-            //Gson commentGson = builder.create();
-            arguments.putString("comment", gson.toJson(comment));
-            commentFragment.setArguments(arguments);
-            ft.add(R.id.comment_frag_container, commentFragment);
-        }
-
-        ft.commit();*/
-
-
-
-        //Test time (now)
-        /*TimeZone timeZone = TimeZone.getTimeZone("UTC");
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-        dateFormat.setTimeZone(timeZone);
-        String isoString = dateFormat.format(new Date());
-
-        Comment testComment = new Comment("Here is some test content, it is really cool ain't it.", "TestBoy", isoString);
-
-        Bundle arguments = new Bundle();
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        arguments.putString("comment", gson.toJson(testComment));
-        fragTwo.setArguments(arguments);
-
-        ft.add(R.id.comment_frag_container, fragTwo);
-        ft.commit();*/
     }
 
     public void addComments(List<Comment> comments) {
