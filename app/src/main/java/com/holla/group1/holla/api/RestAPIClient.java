@@ -60,8 +60,8 @@ public class RestAPIClient {
 //                        coords.get(1).getAsDouble()
 //                );
                 LatLng loc = new LatLng(
-                        coords.get(1).getAsDouble(),
-                        coords.get(0).getAsDouble()
+                        coords.get(0).getAsDouble(),
+                        coords.get(1).getAsDouble()
                 );
                 String content = jsonObject.get("content").getAsString();
                 String postId = jsonObject.get("id").getAsString();
@@ -105,7 +105,6 @@ public class RestAPIClient {
         mCommentsListener.onCommentsLoaded(comments);
     }
 
-
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
         String url = "https://holla-alpha.herokuapp.com/posts/search/location";
         JsonObject request_body = new JsonObject();
@@ -135,22 +134,6 @@ public class RestAPIClient {
                 }
 
         );
-//        JsonObjectRequest request = new JsonObjectRequest(
-//                Request.Method.GET, url, null,
-//                new Response.Listener<JsonObject>() {
-//                    @Override
-//                    public void onResponse(JsonObject response) {
-//                        parsePostsResponse(response);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.d(TAG, error.toString());
-//
-//                    }
-//                }
-//        );
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
@@ -204,6 +187,42 @@ public class RestAPIClient {
                             mCommentSubmittedListener.onCommentSubmitted();
                         }
                     }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void createPost(LatLng location, String user, String content) {
+        String url = "https://holla-alpha.herokuapp.com/posts/create";
+        JsonObject request_body = new JsonObject();
+
+        JsonObject location_obj = new JsonObject();
+        JsonArray coords = new JsonArray();
+        coords.add(location.latitude);
+        coords.add(location.longitude);
+        location_obj.addProperty("type", "Point");
+        location_obj.add("coordinates", coords);
+        request_body.add("location", location_obj);
+        request_body.addProperty("user", user);
+        request_body.addProperty("content", content);
+
+        Log.d(TAG, request_body.toString());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {                    }
                 },
                 new Response.ErrorListener() {
                     @Override

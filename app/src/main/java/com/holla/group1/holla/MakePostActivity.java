@@ -24,9 +24,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.holla.group1.holla.api.RequestQueueSingleton;
+import com.holla.group1.holla.api.RestAPIClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +43,8 @@ public class MakePostActivity extends AppCompatActivity {
     private Location location;
     private TextView locationText;
     private EditText post;
+
+    private RestAPIClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,7 @@ public class MakePostActivity extends AppCompatActivity {
         // Automatically pop up keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
+        apiClient = new RestAPIClient(this, null, null);
     }
 
     @Override
@@ -92,7 +97,8 @@ public class MakePostActivity extends AppCompatActivity {
     private boolean sendPost() {
         //TODO: add more condition checking
         if (post.getText().length() > 0) {
-            postRequest();
+            //postRequest();
+            apiClient.createPost(new LatLng(location.getLatitude(), location.getLongitude()), "testboy", post.getText().toString());
             Toast.makeText(this, "Post has been sent.", Toast.LENGTH_LONG).show();
             return true;
 
