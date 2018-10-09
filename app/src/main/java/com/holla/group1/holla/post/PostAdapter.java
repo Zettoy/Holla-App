@@ -82,17 +82,17 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
         return convertView;
     }
 
-    protected abstract String[] setItems();
+    protected abstract String[] onCreateMenuItems();
 
-    protected abstract void onOptionItemSelected(int which);
+    protected abstract void onMenuOptionItemSelected(int which);
 
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setItems(setItems(), new DialogInterface.OnClickListener() {
+        builder.setItems(onCreateMenuItems(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                onOptionItemSelected(which);
+                onMenuOptionItemSelected(which);
             }
         });
         builder.setCancelable(true);
