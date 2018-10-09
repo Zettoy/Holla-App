@@ -33,6 +33,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     public static final String BUNDLED_POST_JSON = "post JSON";
     private boolean replaceText = true;
     private RestAPIClient apiClient;
+    private Post post;
 
     private void drawPost(Post post){
         getSupportActionBar().setTitle("Post by " + post.getUsername());
@@ -52,7 +53,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
 
         Bundle extras = getIntent().getExtras();
         String post_json = extras.getString(BUNDLED_POST_JSON);
-        Post post = Post.fromJSON(post_json);
+        post = Post.fromJSON(post_json);
 
         apiClient = new RestAPIClient(this, null, this);
         apiClient.getCommentsFromPostID(post.getId());
@@ -70,7 +71,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     }
 
     private void submitComment(String commentStr) {
-        // TODO: Send to backend
+        apiClient.createComment(post.getId(), "testgirl", commentStr);
         // TODO: Handle errors
     }
 

@@ -4,6 +4,7 @@ package com.holla.group1.holla.api;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -181,12 +182,12 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
-    public void createComment() {
+    public void createComment(String postId, String user, String content) {
         String url = "https://holla-alpha.herokuapp.com/comments/create";
         JsonObject request_body = new JsonObject();
-        request_body.addProperty("post", "5bba12f6053a101f009c7c11");
-        request_body.addProperty("user", "5bba12f6053a101f009c7c11");
-        request_body.addProperty("content", "What a lovely post. I very much enjoyed it. I especially liked the part with the words and the place it was posted. The time it was made was also very superb.");
+        request_body.addProperty("post", postId);
+        request_body.addProperty("user", user);
+        request_body.addProperty("content", content);
 
         Log.d(TAG, request_body.toString());
 
@@ -197,20 +198,20 @@ public class RestAPIClient {
                 new Response.Listener<JsonArray>() {
                     @Override
                     public void onResponse(JsonArray response) {
-                        parsePostsResponse(response);
-
+                        // Just assume that like we are good boys and it worked
+                        Toast.makeText(context, "Comment submitted.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        // Handling errors OMEGALUL
                     }
                 }
 
         );
 
-        //RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
     public void loadFakeTweets() {
