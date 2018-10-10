@@ -78,7 +78,7 @@ public class HistoryFragment extends PostListFragment {
             }
 
         } catch (Exception e) {
-            Log.e("HistoryActivity", e.toString());
+            Log.e("HistoryFragment", e.toString());
         }
     }
 
