@@ -20,12 +20,12 @@ required : all but location_name
 ## POST LOCATION SEARCH
 POST /posts/search/location
 ### body expects json :
-{
-  "location" : {
-	"type" : "Point",
-	"coordinates":[-33.912383,151.223480]
-  }
-}
+	{
+	  "location" : {
+		"type" : "Point",
+		"coordinates":[-33.912383,151.223480]
+	  }
+	}
 
 sample response : 
 
@@ -51,6 +51,24 @@ POST /posts/search/postid
 	{ 
   	"id" : "5bba12f6053a101f009c7c11"
 	}
+sample response:
+[
+
+    {
+        "id": "5bbc9f31c97bed00134516bf",
+        "content": "test my by",
+        "author": "UNSWroundhouse",
+        "date": "2018-10-09T12:29:37.209Z",
+        "location": {
+            "coordinates": [
+                -33.859998,
+                151.1999827
+            ],
+            "type": "Point"
+        },
+        "location_name": ""
+    }
+]
 	
 ## POST SEARCH BY USER ID
 POST /posts/search/userid
@@ -59,6 +77,24 @@ POST /posts/search/userid
 	{ 
   	"id" : "5b92a535e44fa8130cb5cf4e"
 	}
+sample response (distance is not given when searching by id):
+[
+
+    {
+        "id": "5bbc9f31c97bed00134516bf",
+        "content": "test my by",
+        "author": "UNSWroundhouse",
+        "date": "2018-10-09T12:29:37.209Z",
+        "location": {
+            "coordinates": [
+                -33.859998,
+                151.1999827
+            ],
+            "type": "Point"
+        },
+        "location_name": ""
+    }
+]
 ## COMMENT CREATION
 POST /comments/create
 
@@ -67,23 +103,7 @@ POST /comments/create
   	"post" : "5bba12f6053a101f009c7c11",
   	"content" : "Trivia sux !!!"
 	}
-sample response (distance is not given when searching by id):
-	[
-		{
-		"id": "5bbca564c97bed00134516c3",
-		"content": "Don't forget to fill out your myexperience surveys.",
-		"author": "UNSWroundhouse",
-		"date": "2018-10-09T12:56:04.759Z",
-		"location": {
-		    "coordinates": [
-			-33.9164809,
-			151.2319983
-		    ],
-		    "type": "Point"
-		},
-		"location_name": ""
-		}
-	]
+
 ## COMMENT SEARCH BY POST
 POST /comments/search/post
 ### body expects json :
