@@ -36,7 +36,12 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_startup);
 
         // TODO: change this to requestIdToken(). Can't do at the moment cause backend doesn't have a client id yet
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestId().build();
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestId().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
+                .build();
         GoogleAccountSingleton.mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         signInButton = (SignInButton) findViewById(R.id.sign_in_button);
@@ -121,7 +126,7 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
+            String idToken = account.getIdToken();
             // Move onto the map activity
             // Note, we don't validate this with the backend as we will be providing the
             // id token with all our user specific api calls

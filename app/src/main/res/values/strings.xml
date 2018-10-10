@@ -10,7 +10,7 @@
     <string name="default_date">2d</string>
     <string name="title_activity_view_post">ViewPostActivity</string>
 
-
+    <string name="server_client_id">952484101484-qiflvqdhkckrs2sfg4fq0qc0mb7fiot7.apps.googleusercontent.com</string>
     <string name="search_title">Search</string>
     <string name="search_hint">Search for people, places and posts...</string>
     <string name="tab_text_1">People</string>
