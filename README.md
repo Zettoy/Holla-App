@@ -44,7 +44,21 @@ sample response :
         "location_name": "UNSW Roundhouse",
 	"distance": 500
     }]
-    
+## POST SEARCH BY POST ID
+POST /posts/search/postid
+
+### body expects json :
+	{ 
+  	"id" : "5bba12f6053a101f009c7c11"
+	}
+	
+## POST SEARCH BY USER ID
+POST /posts/search/userid
+
+### body expects json :
+	{ 
+  	"id" : "5b92a535e44fa8130cb5cf4e"
+	}
 ## COMMENT CREATION
 POST /comments/create
 
@@ -53,7 +67,23 @@ POST /comments/create
   	"post" : "5bba12f6053a101f009c7c11",
   	"content" : "Trivia sux !!!"
 	}
-	
+sample response (distance is not given when searching by id):
+	[
+		{
+		"id": "5bbca564c97bed00134516c3",
+		"content": "Don't forget to fill out your myexperience surveys.",
+		"author": "UNSWroundhouse",
+		"date": "2018-10-09T12:56:04.759Z",
+		"location": {
+		    "coordinates": [
+			-33.9164809,
+			151.2319983
+		    ],
+		    "type": "Point"
+		},
+		"location_name": ""
+		}
+	]
 ## COMMENT SEARCH BY POST
 POST /comments/search/post
 ### body expects json :
