@@ -63,12 +63,12 @@ public class RestAPIClient {
                 String content = jsonObject.get("content").getAsString();
                 String postId = jsonObject.get("id").getAsString();
                 String username = "default_username";
+                String locationStr = jsonObject.get("location_name").getAsString();
                 if (jsonObject.has("author")) {
                     username = jsonObject.get("author").getAsString();
                 }
-                posts.add(
-                        new Post(postId, loc, content, username, dateTime)
-                );
+
+                posts.add(new Post(postId, loc, content, username, dateTime, locationStr));
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
 
@@ -255,7 +255,8 @@ public class RestAPIClient {
                             ),
                             post_obj.getString("content"),
                             post_obj.getString("author"),
-                            dateTime
+                            dateTime,
+                            "location"
                     );
                     posts.add(new_post);
                 }

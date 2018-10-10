@@ -42,6 +42,15 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         contentTextView.setMaxLines(Integer.MAX_VALUE);
         contentTextView.setEllipsize(null);
         contentTextView.setText(post.getContent());
+
+        TextView usernameTxt = findViewById(R.id.post_username);
+        usernameTxt.setText(post.getFormattedUsername());
+        TextView timeTxt = findViewById(R.id.post_time);
+        timeTxt.setText(post.getFormattedTimestampAgo());
+        TextView commentLikeTxt = findViewById(R.id.post_comment_like);
+        commentLikeTxt.setText(post.commentLikeToString());
+        TextView locationTxt = findViewById(R.id.post_location);
+        locationTxt.setText(post.getLocationStr());
     }
 
     @Override

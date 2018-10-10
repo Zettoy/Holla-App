@@ -51,15 +51,14 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
         holder.content.setText(post.getContent());
 
-        String usernameText = "@" + post.getUsername();
-        holder.username.setText(usernameText);
+        holder.username.setText(post.getFormattedUsername());
 
         holder.time.setText(timeToString(post.getCreation_time()));
 
-        String commentLikeText = commentLikeToString(post);
+        String commentLikeText = post.commentLikeToString();
         holder.commentLike.setText(commentLikeText);
 
-        holder.location.setText(/*latlngToAddress(post.getLocation())*/"");
+        holder.location.setText(post.getLocationStr());
 
         holder.menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,10 +98,6 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private String commentLikeToString(Post post) {
-        return post.getNum_comments() + " comments · " + post.getNum_likes() + " likes";
     }
 
     private String timeToString(DateTime time) {
