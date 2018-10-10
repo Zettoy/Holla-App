@@ -5,16 +5,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.ListView;
 
-public class ProfileActivity extends AppCompatActivity {
-    private HistoryFragment historyFragment;
-    private ListView historyPostListView;
+public class HistoryActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_history);
 
         Toolbar toolbar = findViewById(R.id.activity_history_toolbar);
         setSupportActionBar(toolbar);
@@ -24,11 +21,6 @@ public class ProfileActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
         }
-
-        historyFragment = (HistoryFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.history_post_list_fragment);
-
-        historyPostListView = historyFragment.getListView();
 
     }
 
