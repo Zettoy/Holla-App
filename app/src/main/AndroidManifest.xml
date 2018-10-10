@@ -70,8 +70,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HistoryActivity"
-            android:label="HistoryActivity"
+            android:name=".ProfileActivity"
+            android:label="ProfileActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".FilterActivity"

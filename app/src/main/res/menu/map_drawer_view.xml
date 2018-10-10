@@ -7,10 +7,10 @@
         <menu>
             <group android:menuCategory="container">
                 <item
-                    android:id="@+id/history_itm"
-                    android:icon="@android:drawable/ic_menu_recent_history"
-                    android:title="History"
-                    android:onClick="showHistoryActivity"/>
+                    android:id="@+id/profile_itm"
+                    android:icon="@drawable/ic_profile"
+                    android:title="Profile"
+                    android:onClick="showProfileActivity"/>
                 <item
                     android:id="@+id/filter_itm"
                     android:icon="@android:drawable/ic_search_category_default"

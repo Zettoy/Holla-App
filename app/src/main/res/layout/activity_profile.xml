@@ -19,7 +19,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="History"
+                    android:text="Profile"
                     style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"/>
 
         </android.support.v7.widget.Toolbar>
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:name="com.holla.group1.holla.HistoryFragment"
-        android:id="@+id/post_list_fragment"
+        android:id="@+id/history_post_list_fragment"
         tools:layout="@layout/fragment_post_list"/>
 
 </LinearLayout>

@@ -78,7 +78,7 @@ public class HistoryFragment extends PostListFragment {
             }
 
         } catch (Exception e) {
-            Log.e("HistoryActivity", e.toString());
+            Log.e("HistoryFragment", e.toString());
         }
     }
 
@@ -94,7 +94,7 @@ public class HistoryFragment extends PostListFragment {
                 writer.write(buffer, 0, n);
             }
         } catch (Exception e) {
-            Log.e("FeedFragment", e.toString());
+            Log.e("HistoryFragment", e.toString());
         } finally {
             is.close();
         }
