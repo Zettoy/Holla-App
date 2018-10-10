@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -17,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.post.Post;
+import com.holla.group1.holla.signin.GoogleAccountSingleton;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -107,6 +109,7 @@ public class RestAPIClient {
         location_obj.addProperty("type", "Point");
         location_obj.add("coordinates", coords);
         request_body.add("location", location_obj);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
         Log.d(TAG, request_body.toString());
         MyJsonArrayRequest request = new MyJsonArrayRequest(
                 Request.Method.POST,
@@ -132,6 +135,7 @@ public class RestAPIClient {
         String url = "https://holla-alpha.herokuapp.com/comments/search/post";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("post", postID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
 
         Log.d(TAG, request_body.toString());
 
@@ -156,12 +160,12 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
-    public void createComment(String postId, String user, String content) {
+    public void createComment(String postId, String content) {
         String url = "https://holla-alpha.herokuapp.com/comments/create";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("post", postId);
-        request_body.addProperty("user", user);
         request_body.addProperty("content", content);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
 
         Log.d(TAG, request_body.toString());
 
@@ -190,7 +194,7 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
-    public void createPost(LatLng location, String user, String content) {
+    public void createPost(LatLng location, String content) {
         String url = "https://holla-alpha.herokuapp.com/posts/create";
         JsonObject request_body = new JsonObject();
 
@@ -201,8 +205,8 @@ public class RestAPIClient {
         location_obj.addProperty("type", "Point");
         location_obj.add("coordinates", coords);
         request_body.add("location", location_obj);
-        request_body.addProperty("user", user);
         request_body.addProperty("content", content);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
 
         Log.d(TAG, request_body.toString());
 

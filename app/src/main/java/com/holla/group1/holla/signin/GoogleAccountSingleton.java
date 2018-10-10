@@ -1,5 +1,6 @@
 package com.holla.group1.holla.signin;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
 // Can't pass the sign in client through intents or convert it to json and then pass it
@@ -8,6 +9,7 @@ public class GoogleAccountSingleton {
 
     //private static GoogleAccountSingleton mInstance = null;
     public static GoogleSignInClient mGoogleSignInClient = null; // Don't really need much but the sign in client atm
+    public static GoogleSignInAccount mGoogleSignInAccount = null;
 
     /*private GoogleAccountSingleton() {
 
