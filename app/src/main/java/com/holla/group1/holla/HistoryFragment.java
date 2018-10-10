@@ -72,7 +72,8 @@ public class HistoryFragment extends PostListFragment {
                         ),
                         post_obj.getString("content"),
                         post_obj.getString("author"),
-                        dateTime
+                        dateTime,
+                        post_obj.getString("location_name")
                 );
                 getPosts().add(new_post);
             }

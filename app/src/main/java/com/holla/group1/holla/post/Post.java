@@ -15,6 +15,7 @@ public class Post {
     private DateTime creation_time;
     private Integer num_comments = 0;
     private Integer num_likes = 0;
+    private String locationStr;
 
     private static GsonBuilder getGSONBuilder(){
 
@@ -35,12 +36,13 @@ public class Post {
         String json = gson.toJson(this);
         return json;
     }
-    public Post(String id, LatLng location, String content, String username, DateTime creation_time) {
+    public Post(String id, LatLng location, String content, String username, DateTime creation_time, String locationStr) {
         this.content = content;
         this.location = location;
         this.creation_time = creation_time;
         this.username = username;
         this.id = id;
+        this.locationStr = locationStr;
     }
 
     public String getId() {
@@ -87,6 +89,10 @@ public class Post {
         this.username = username;
     }
 
+    public String getLocationStr() {
+        return locationStr;
+    }
+
     public String get_timestamp_ago() {
         return DateTimeFormatter.getTimestampAgo(this.creation_time);
     }
@@ -97,5 +103,17 @@ public class Post {
 
     public void setCreation_time(DateTime creation_time) {
         this.creation_time = creation_time;
+    }
+
+    public String commentLikeToString() {
+        return getNum_comments() + " comments · " + getNum_likes() + " likes";
+    }
+
+    public String getFormattedUsername() {
+        return "@" + getUsername();
+    }
+
+    public String getFormattedTimestampAgo() {
+        return " · " + get_timestamp_ago();
     }
 }

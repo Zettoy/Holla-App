@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import java.lang.reflect.Type;
 
 public class PostDeserializer implements JsonDeserializer<Post> {
+
     public Post deserialize(JsonElement postJSON, Type typeOfSrc, JsonDeserializationContext context)
     {
         try
@@ -24,13 +25,16 @@ public class PostDeserializer implements JsonDeserializer<Post> {
             String username = obj.get("username").getAsString();
             Long creation_epoch = obj.get("created_at").getAsLong();
             String postId = obj.get("id").getAsString();
+            String locationStr = obj.get("locationStr").getAsString();
 
-            return new Post(postId, location, content, username, new DateTime(creation_epoch * 1000L));
+            return new Post(postId, location, content, username, new DateTime(creation_epoch * 1000L), locationStr);
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
         return null;
     }
+
 }

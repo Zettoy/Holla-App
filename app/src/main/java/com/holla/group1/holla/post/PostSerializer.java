@@ -15,6 +15,7 @@ public class PostSerializer  implements JsonSerializer<Post> {
         j.addProperty("content", post.getContent());
         j.addProperty("username", post.getUsername());
         j.addProperty("id", post.getId());
+        j.addProperty("locationStr", post.getLocationStr());
         JsonObject location = new JsonObject();
         location.addProperty("latitude", post.getLocation().latitude);
         location.addProperty("longitude", post.getLocation().longitude);
