@@ -54,13 +54,14 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     protected void onStart() {
         super.onStart();
         tryLastSignedInAccount();
-
     }
+
     private void tryLastSignedInAccount(){
         // Check if we've already signed in and quickly skip to the map activity
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        GoogleAccountSingleton.mGoogleSignInAccount = account;
         if (account != null) {
-            moveToMap(account);
+            moveToMap();
         }
     }
 
@@ -126,21 +127,21 @@ public class StartupActivity extends AppCompatActivity implements View.OnClickLi
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            String idToken = account.getIdToken();
+            GoogleAccountSingleton.mGoogleSignInAccount = account;
+
             // Move onto the map activity
             // Note, we don't validate this with the backend as we will be providing the
             // id token with all our user specific api calls
-            moveToMap(account);
+            moveToMap();
         } catch (ApiException e) {
             Toast.makeText(this, "Failed to sign in with the Google Account.", Toast.LENGTH_SHORT).show();
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
 
-    private void moveToMap(GoogleSignInAccount account) {
+    private void moveToMap() {
         Intent mapIntent = new Intent(getBaseContext(), MapsActivity.class);
-        mapIntent.putExtra("GoogleAccount", account);
-        startActivity(mapIntent); //Our singleton, reluctantly takes care of the client object
+        startActivity(mapIntent); //Our singleton, reluctantly takes passing parameters
     }
 
     @Override

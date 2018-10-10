@@ -98,7 +98,7 @@ public class MakePostActivity extends AppCompatActivity {
         //TODO: add more condition checking
         if (post.getText().length() > 0) {
             //postRequest();
-            apiClient.createPost(new LatLng(location.getLatitude(), location.getLongitude()), "testboy", post.getText().toString());
+            apiClient.createPost(new LatLng(location.getLatitude(), location.getLongitude()), post.getText().toString());
             Toast.makeText(this, "Post has been sent.", Toast.LENGTH_LONG).show();
             return true;
         } else {

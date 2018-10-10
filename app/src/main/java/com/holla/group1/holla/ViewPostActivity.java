@@ -73,7 +73,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     }
 
     private void submitComment(String commentStr) {
-        apiClient.createComment(post.getId(), "testgirl", commentStr);
+        apiClient.createComment(post.getId(), commentStr);
         // TODO: Handle errors
     }
 
