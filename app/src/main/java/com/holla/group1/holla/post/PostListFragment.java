@@ -86,6 +86,10 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
         return posts;
     }
 
+    public ListView getListView() {
+        return listView;
+    }
+
     protected abstract void readPostsFromBackend();
 
     protected abstract String[] onCreateMenuItems();
