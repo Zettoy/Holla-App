@@ -2,11 +2,13 @@ package com.holla.group1.holla;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,6 +21,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.search.MultiSearchActivity;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
@@ -64,8 +68,8 @@ public class MapsActivity extends AppCompatActivity implements
         }
     }
 
-    public void showProfileActivity(MenuItem item) {
-        Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
+    public void showHistoryActivity(MenuItem item) {
+        Intent intent = new Intent(MapsActivity.this, HistoryActivity.class);
         startActivity(intent);
     }
 
