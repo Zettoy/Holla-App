@@ -54,7 +54,7 @@ public class FeedFragment extends PostListFragment {
             }
 
         } catch (Exception e) {
-            Log.e("HistoryActivity", e.toString());
+            Log.e("FeedFragment", e.toString());
         }
     }
 
