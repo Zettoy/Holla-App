@@ -160,6 +160,32 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getPostsFromUserID(String userID) {
+        String url = "https://holla-alpha.herokuapp.com/posts/search/userid";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("id", userID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+        Log.d(TAG, request_body.toString());
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+
+        );
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void createComment(String postId, String content) {
         String url = "https://holla-alpha.herokuapp.com/comments/create";
         JsonObject request_body = new JsonObject();

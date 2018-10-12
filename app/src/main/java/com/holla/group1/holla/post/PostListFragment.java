@@ -34,11 +34,25 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
         posts = new ArrayList<>();
         listView = view.findViewById(R.id.post_list);
 
-        task = new PostLoadTask();
-        task.execute();
+        adapter = new PostAdapter(getContext(), R.layout.post_list_item, posts) {
+            @Override
+            protected String[] onCreateMenuItems() {
+                return PostListFragment.this.onCreateMenuItems();
+            }
+
+            @Override
+            protected void onMenuOptionItemSelected(int which) {
+                PostListFragment.this.onMenuOptionItemSelected(which);
+            }
+        };
+        listView.setAdapter(adapter);
 
         swipeRefreshLayout = view.findViewById(R.id.post_list_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setRefreshing(true);
+
+        task = new PostLoadTask();
+        task.execute();
 
         return view;
     }
@@ -51,24 +65,9 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
 
     @Override
     public void onRefresh() {
-        //TODO: backend
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                if (!posts.isEmpty()) {
-                    posts.remove(0);
-                    adapter.notifyDataSetChanged();
-                    exchangeViewIfNeeded();
-                }
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        }, 1000);
-
-        /*
         posts.clear();
-        readPostsFromBackend();
-        exchangeViewIfNeeded();
-        swipeRefreshLayout.setRefreshing(false);
-        */
+        task = new PostLoadTask();
+        task.execute();
     }
 
     private void exchangeViewIfNeeded() {
@@ -80,6 +79,18 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
             listView.setVisibility(View.VISIBLE);
             getView().findViewById(R.id.post_list_empty).setVisibility(View.INVISIBLE);
         }
+    }
+
+    private void sortPostsByTime() {
+        Collections.sort(posts, new Comparator<Post>() {
+            @Override
+            public int compare(Post p1, Post p2) {
+                DateTime time1 = p1.getCreation_time();
+                DateTime time2 = p2.getCreation_time();
+
+                return time2.compareTo(time1);
+            }
+        });
     }
 
     public List<Post> getPosts() {
@@ -108,30 +119,10 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
 
-            Collections.sort(posts, new Comparator<Post>() {
-                @Override
-                public int compare(Post p1, Post p2) {
-                    DateTime time1 = p1.getCreation_time();
-                    DateTime time2 = p2.getCreation_time();
-
-                    return time2.compareTo(time1);
-                }
-            });
-
-            adapter = new PostAdapter(getContext(), R.layout.post_list_item, posts) {
-                @Override
-                protected String[] onCreateMenuItems() {
-                    return PostListFragment.this.onCreateMenuItems();
-                }
-
-                @Override
-                protected void onMenuOptionItemSelected(int which) {
-                    PostListFragment.this.onMenuOptionItemSelected(which);
-                }
-            };
-            listView.setAdapter(adapter);
-
+            sortPostsByTime();
+            adapter.notifyDataSetChanged();
             exchangeViewIfNeeded();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }
