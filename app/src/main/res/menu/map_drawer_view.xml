@@ -17,6 +17,11 @@
                     android:title="Filter"
                     android:onClick="showFilterActivity"/>
                 <item
+                    android:id="@+id/notification_itm"
+                    android:icon="@drawable/ic_notification"
+                    android:title="Notification"
+                    android:onClick="showNotificationActivity"/>
+                <item
                     android:id="@+id/sign_out_itm"
                     android:icon="@android:drawable/ic_lock_power_off"
                     android:title="Sign out" />

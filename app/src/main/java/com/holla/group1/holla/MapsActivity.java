@@ -74,6 +74,11 @@ public class MapsActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    public void showNotificationActivity(MenuItem item) {
+        Intent intent = new Intent(MapsActivity.this, NotificationActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
