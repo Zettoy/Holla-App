@@ -85,6 +85,11 @@
         </activity>
         <!--android:label="@string/title_activity_multi_search"-->
 
+        <activity
+            android:name=".NotificationActivity"
+            android:label="NotificationActivity"
+            android:theme="@style/AppTheme"/>
+
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
