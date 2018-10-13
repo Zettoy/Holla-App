@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginStart="@dimen/post_ui_margin"
+    android:layout_marginEnd="@dimen/post_ui_margin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/notification_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/default_username"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/post_ui_font_size"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/notification_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" tagged/commented you:"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/notification_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:minLines="1"
+            android:text="Tag/Comment content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/post_ui_font_size"/>
+
+</LinearLayout>

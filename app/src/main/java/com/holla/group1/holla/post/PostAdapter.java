@@ -29,7 +29,7 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Post post = getItem(position);
 
         ViewHolder holder;
@@ -67,13 +67,12 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
             }
         });
 
-        final int id = position;
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewPostActivity.class);
                 intent.putExtra(
-                        ViewPostActivity.BUNDLED_POST_JSON, posts.get(id).toJSON());
+                        ViewPostActivity.BUNDLED_POST_JSON, posts.get(position).toJSON());
                 context.startActivity(intent);
             }
         });
