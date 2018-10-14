@@ -64,11 +64,19 @@ public class RestAPIClient {
                 String postId = jsonObject.get("id").getAsString();
                 String username = "default_username";
                 String locationStr = jsonObject.get("location_name").getAsString();
+                Integer score = jsonObject.get("score").getAsInt();
                 if (jsonObject.has("author")) {
                     username = jsonObject.get("author").getAsString();
                 }
+                Post post = new Post(postId, loc, content, username, dateTime, locationStr);
+                if(score>0){
+                    Log.d(TAG, String.format("score: %d", score));
+                }
+                post.setNum_likes(score);
 
-                posts.add(new Post(postId, loc, content, username, dateTime, locationStr));
+                Boolean has_liked = jsonObject.get("hasVoted").getAsBoolean();
+                post.has_liked = has_liked;
+                posts.add(post);
             } catch (Exception e) {
                 Log.e(TAG, e.toString());
 
