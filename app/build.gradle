@@ -4,7 +4,7 @@ android {
     signingConfigs {
         config {
             keyAlias 'androiddebugkey'
-            storeFile file('C:/Users/Admin/Desktop/josh_debug.keystore')
+            storeFile file('../josh_debug.keystore')
             keyPassword 'android'
             storePassword 'android'
         }

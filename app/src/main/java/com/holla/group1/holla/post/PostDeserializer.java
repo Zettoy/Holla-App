@@ -27,7 +27,13 @@ public class PostDeserializer implements JsonDeserializer<Post> {
             String postId = obj.get("id").getAsString();
             String locationStr = obj.get("locationStr").getAsString();
 
-            return new Post(postId, location, content, username, new DateTime(creation_epoch * 1000L), locationStr);
+            Integer score = obj.get("score").getAsInt();
+            Boolean has_liked = obj.get("has_liked").getAsBoolean();
+            Post post = new Post(postId, location, content, username, new DateTime(creation_epoch * 1000L), locationStr);
+            post.setNum_likes(score);
+            post.has_liked = has_liked;
+            return post;
+
         }
         catch (Exception e)
         {
