@@ -36,6 +36,16 @@ public class MapFragment extends Fragment implements
     private Post focusedPost = null;
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mMap!=null){
+            refreshPosts();
+            focusedPost = null;
+            MapFragmentUtilities.hideOverlay(this);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map, parent, false);
 
@@ -79,8 +89,9 @@ public class MapFragment extends Fragment implements
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        refreshPosts();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
+        setMapLocationAndLoadPosts(Config.STARTING_LOCATION);
+//        refreshPosts();
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
     }
@@ -114,12 +125,13 @@ public class MapFragment extends Fragment implements
         //apiClient.getCommentsFromPostID("5bba12f6053a101f009c7c11");
     }
 
-    public void setMapLocation(LatLng location){
+
+    public void setMapLocationAndLoadPosts(LatLng location){
         if(mMap != null){
 
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, Config.SEARCH_RESULT_ZOOM_LEVEL));
             //TODO: load new posts in this location
-            apiClient.getPostsAtLocation(location, 1000000000);
+            apiClient.getPostsAtLocation(location, 100000);
         }
     }
     private void drawPostsOnMap(List<Post> posts) {
@@ -134,9 +146,12 @@ public class MapFragment extends Fragment implements
             markerPostHashMap.put(marker, p);
         }
     }
-
     public void refreshPosts() {
-        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 100000);
+        if(mMap!=null){
+            LatLng loc = mMap.getCameraPosition().target;
+            setMapLocationAndLoadPosts(loc);
+        }
+//        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 10000);
     }
 
     public GoogleMap getmMap() {
