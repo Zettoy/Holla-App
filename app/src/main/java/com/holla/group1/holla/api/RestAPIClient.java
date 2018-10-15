@@ -38,7 +38,7 @@ import java.util.List;
 public class RestAPIClient {
     public static String TAG = "RestAPIClient";
     //private static String SERVER_LOCATION = "https://holla-alpha.herokuapp.com";
-    private static String SERVER_LOCATION = "http://188.166.250.144:3000";
+    public final static String SERVER_LOCATION = "http://188.166.250.144:3000";
     private Context context;
     private OnPostsLoadedListener mListener;
     private OnCommentsLoadedListener mCommentsListener;
