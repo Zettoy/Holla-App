@@ -39,6 +39,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.api.SearchUsersRequest;
+import com.holla.group1.holla.search.location.LocationSearchResult;
+import com.holla.group1.holla.search.location.LocationSearchResultFragment;
+import com.holla.group1.holla.search.user.UserSearchResultFragment;
+import com.holla.group1.holla.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +52,8 @@ public class MultiSearchActivity extends AppCompatActivity implements
         SearchView.OnQueryTextListener,
         OnCompleteListener<AutocompletePredictionBufferResponse>,
         OnFailureListener,
-        LocationSearchResultFragment.OnListFragmentInteractionListener {
+        LocationSearchResultFragment.OnListFragmentInteractionListener,
+        UserSearchResultFragment.OnListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -62,6 +68,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
     private static final int TAB_PEOPLE = 0;
     private static final int TAB_PLACES = 1;
     private static final int TAB_POSTS = 2;
+    private static final int DEFAULT_TAB = TAB_PEOPLE;
     protected GeoDataClient mGeoDataClient;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     /**
@@ -69,6 +76,29 @@ public class MultiSearchActivity extends AppCompatActivity implements
      */
     private ViewPager mViewPager;
     private FusedLocationProviderClient mFusedLocationClient;
+
+    private void search_by_username(final String query) {
+        SearchUsersRequest request = new SearchUsersRequest(this);
+        request.setListener(new SearchUsersRequest.ResponseListener() {
+            @Override
+            public void onSearchUsersResponse(List<User> users) {
+
+                Fragment cur_fragment = getCurrentFragment();
+                if(cur_fragment != null) {
+                    UserSearchResultFragment userSearchResultFragment = (UserSearchResultFragment) cur_fragment;
+                    userSearchResultFragment.showResults(users);
+//                    LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
+//                    locationSearchResultFragment.showResults(list);
+                }
+            }
+
+            @Override
+            public void onSearchUsersError(Exception ex) {
+
+            }
+        });
+        request.getUsersByUsername(query);
+    }
 
     private void search_by_location(final String query) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -108,7 +138,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             Integer cur = mViewPager.getCurrentItem();
             switch (cur) {
                 case TAB_PEOPLE:
-                    Log.d(TAG, "People!");
+                    search_by_username(query);
                     break;
 
                 case TAB_PLACES:
@@ -143,6 +173,11 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onListFragmentInteraction(User user) {
+//        finish();
+    }
+
+    @Override
     public void onFailure(@NonNull Exception e) {
         ;
     }
@@ -160,10 +195,24 @@ public class MultiSearchActivity extends AppCompatActivity implements
         displayLocationSearchResults(items);
 
     }
-    private void displayLocationSearchResults(List<LocationSearchResult.Item> list){
+
+    private Fragment getCurrentFragment() {
+
         SectionsPagerAdapter adapter = (SectionsPagerAdapter) mViewPager.getAdapter();
-        LocationSearchResultFragment fragment = (LocationSearchResultFragment) adapter.getCurrentFragment();
-        fragment.showResults(list);
+
+        if (adapter != null) {
+            Fragment fragment = adapter.getCurrentFragment();
+            return fragment;
+        }
+        return null;
+    }
+
+    private void displayLocationSearchResults(List<LocationSearchResult.Item> list) {
+        Fragment cur_fragment = getCurrentFragment();
+        if(cur_fragment != null) {
+            LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
+            locationSearchResultFragment.showResults(list);
+        }
     }
 
 
@@ -188,7 +237,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
-        mViewPager.setCurrentItem(1);
+        mViewPager.setCurrentItem(DEFAULT_TAB);
         mGeoDataClient = Places.getGeoDataClient(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
@@ -273,11 +322,12 @@ public class MultiSearchActivity extends AppCompatActivity implements
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        private Fragment mCurrentFragment;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        private Fragment mCurrentFragment;
         public Fragment getCurrentFragment() {
             return mCurrentFragment;
         }
@@ -289,6 +339,11 @@ public class MultiSearchActivity extends AppCompatActivity implements
             if (position == TAB_PLACES) {
                 LocationSearchResultFragment loc_frag = LocationSearchResultFragment.newInstance();
                 return loc_frag;
+
+            } else if (position == TAB_PEOPLE) {
+                UserSearchResultFragment user_fragment = UserSearchResultFragment.newInstance();
+                return user_fragment;
+
             } else {
 
                 return PlaceholderFragment.newInstance(position + 1);

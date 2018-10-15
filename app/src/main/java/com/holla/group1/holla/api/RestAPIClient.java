@@ -55,6 +55,11 @@ public class RestAPIClient {
         for (JsonElement jsonElement : response) {
             try {
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
+                if(jsonObject.has("error")){
+                    String errorMsg = jsonObject.get("error").getAsString();
+                    Log.e(TAG, String.format("Server error: '%s'. Maybe try logging in and out.", errorMsg));
+                    return;
+                }
                 String timestamp_iso8601 = jsonObject.get("date").getAsString();
                 DateTime dateTime = new DateTime(timestamp_iso8601);
                 JsonArray coords = jsonObject.get("location").getAsJsonObject().get("coordinates").getAsJsonArray();
@@ -71,9 +76,6 @@ public class RestAPIClient {
                     username = jsonObject.get("author").getAsString();
                 }
                 Post post = new Post(postId, loc, content, username, dateTime, locationStr);
-                if(score>0){
-                    Log.d(TAG, String.format("score: %d", score));
-                }
                 post.setNum_likes(score);
 
                 Boolean has_liked = jsonObject.get("hasVoted").getAsBoolean();
@@ -244,7 +246,6 @@ public class RestAPIClient {
         request_body.addProperty("content", content);
         request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
 
-        Log.d(TAG, request_body.toString());
 
         MyJsonArrayRequest request = new MyJsonArrayRequest(
                 Request.Method.POST,

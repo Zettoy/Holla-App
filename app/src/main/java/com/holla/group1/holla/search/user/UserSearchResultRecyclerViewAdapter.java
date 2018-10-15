@@ -1,7 +1,5 @@
-package com.holla.group1.holla.search;
+package com.holla.group1.holla.search.user;
 
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,18 +7,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.holla.group1.holla.R;
-import com.holla.group1.holla.search.LocationSearchResultFragment.OnListFragmentInteractionListener;
-//import com.holla.group1.holla.search.dummy.Content.Item;
-import com.holla.group1.holla.search.LocationSearchResult.Item;
+import com.holla.group1.holla.search.user.UserSearchResultFragment.OnListFragmentInteractionListener;
+import com.holla.group1.holla.user.User;
 
 import java.util.List;
 
-public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adapter<MyLocationSearchResultRecyclerViewAdapter.ViewHolder> {
 
-    private List<Item> mValues;
+public class UserSearchResultRecyclerViewAdapter extends RecyclerView.Adapter<UserSearchResultRecyclerViewAdapter.ViewHolder> {
+
+    private List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyLocationSearchResultRecyclerViewAdapter(List<Item> items, OnListFragmentInteractionListener listener) {
+    public UserSearchResultRecyclerViewAdapter(List<User> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -36,7 +34,7 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
 //        holder.mIdView.setText(mValues.get(position).place_id);
-        holder.mContentView.setText(mValues.get(position).location_name);
+        holder.mContentView.setText(mValues.get(position).username);
         holder.mContentView.setTextColor(holder.mView.getResources().getColorStateList(R.color.search_results));
 
 
@@ -52,7 +50,7 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
         });
     }
 
-    public void changeDataList(List<Item> items){
+    public void changeDataList(List<User> items){
         this.mValues = items;
         this.notifyDataSetChanged();
 
@@ -66,7 +64,7 @@ public class MyLocationSearchResultRecyclerViewAdapter extends RecyclerView.Adap
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Item mItem;
+        public User mItem;
 
         public ViewHolder(View view) {
             super(view);
