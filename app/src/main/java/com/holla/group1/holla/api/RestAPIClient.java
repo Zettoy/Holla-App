@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.comment.Comment;
+import com.holla.group1.holla.notification.Notification;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
 
@@ -44,6 +45,7 @@ public class RestAPIClient {
     private OnPostsLoadedListener mListener;
     private OnCommentsLoadedListener mCommentsListener;
     private OnCommentSubmittedListener mCommentSubmittedListener;
+    private OnNotificationsLoadedListener mNotificationsLoadedListener;
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -110,6 +112,29 @@ public class RestAPIClient {
         }
 
         mCommentsListener.onCommentsLoaded(comments);
+    }
+
+    private void parseNotificationResponse(JsonArray response) {
+        ArrayList<Notification> notifications = new ArrayList<>();
+
+
+        int i = 0;
+        for (JsonElement jsonElement : response) {
+            try {
+                i ++;
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                String timestamp_iso8601 = jsonObject.get("date").getAsString();
+                String content = jsonObject.get("content").getAsString();
+                String from = jsonObject.get("userName").getAsString();
+                String postID = jsonObject.get("post").getAsString();
+
+                notifications.add(new Notification(content, timestamp_iso8601, postID, from));
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        }
+        Log.d(TAG, "parseNotificationResponse: " + i);
+        mNotificationsLoadedListener.onNotificationsLoaded(notifications);
     }
 
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
@@ -355,6 +380,111 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void followUser(String userID) {
+        String url = SERVER_LOCATION + "/follow/followuser";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("followedUser", userID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void unfollowUser(String userID) {
+        String url = SERVER_LOCATION + "/follow/unfollowuser";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("followedUser", userID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void getNotifications() {
+        String url = SERVER_LOCATION + "/notifications/search";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parseNotificationResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                        Log.e("getNotification", "onErrorResponse: " + error.toString());
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void getPostByPostID(String postID) {
+        String url = SERVER_LOCATION + "/posts/search/postid";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("id", postID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                        Log.e("getNotification", "onErrorResponse: " + error.toString());
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void loadFakeTweets() {
         Runnable runnable = new Runnable() {
             @Override
@@ -420,6 +550,10 @@ public class RestAPIClient {
         this.mCommentSubmittedListener = onCommentSubmittedListener;
     }
 
+    public void setOnNotificationLoadedListener(OnNotificationsLoadedListener onNotificationLoadedListener) {
+        this.mNotificationsLoadedListener = onNotificationLoadedListener;
+    }
+
     public interface OnPostsLoadedListener {
         void onPostsLoaded(List<Post> posts);
     }
@@ -430,5 +564,9 @@ public class RestAPIClient {
 
     public interface OnCommentSubmittedListener {
         void onCommentSubmitted();
+    }
+
+    public interface OnNotificationsLoadedListener {
+        void onNotificationsLoaded(List<Notification> notifications);
     }
 }
