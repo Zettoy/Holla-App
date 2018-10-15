@@ -30,7 +30,7 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Post post = getItem(position);
+        final Post post = getItem(position);
 
         ViewHolder holder;
         if (convertView == null) {
@@ -63,7 +63,7 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
         holder.menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                showDialog(post);
             }
         });
 
@@ -82,15 +82,15 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
     protected abstract String[] onCreateMenuItems();
 
-    protected abstract void onMenuOptionItemSelected(int which);
+    protected abstract void onMenuOptionItemSelected(int which, Post currentPost);
 
-    private void showDialog() {
+    private void showDialog(final Post currentPost) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         builder.setItems(onCreateMenuItems(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                onMenuOptionItemSelected(which);
+                onMenuOptionItemSelected(which, currentPost);
             }
         });
         builder.setCancelable(true);

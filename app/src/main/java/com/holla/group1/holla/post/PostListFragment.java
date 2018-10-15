@@ -1,8 +1,6 @@
 package com.holla.group1.holla.post;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.api.RestAPIClient;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -18,20 +17,25 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class PostListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public abstract class PostListFragment extends Fragment implements
+        SwipeRefreshLayout.OnRefreshListener,
+        RestAPIClient.OnPostsLoadedListener {
     private List<Post> posts;
     private ListView listView;
-
-    private PostLoadTask task;
+    private PostAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private PostAdapter adapter;
+    private RestAPIClient apiClient;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list, parent, false);
 
+        apiClient = new RestAPIClient(getContext(), this, null);
+
         posts = new ArrayList<>();
+        readPostsFromBackend();
+
         listView = view.findViewById(R.id.post_list);
 
         adapter = new PostAdapter(getContext(), R.layout.post_list_item, posts) {
@@ -41,8 +45,8 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
             }
 
             @Override
-            protected void onMenuOptionItemSelected(int which) {
-                PostListFragment.this.onMenuOptionItemSelected(which);
+            protected void onMenuOptionItemSelected(int which, Post currentPost) {
+                PostListFragment.this.onMenuOptionItemSelected(which, currentPost);
             }
         };
         listView.setAdapter(adapter);
@@ -51,26 +55,16 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setRefreshing(true);
 
-        task = new PostLoadTask();
-        task.execute();
-
         return view;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        task.cancel(true);
     }
 
     @Override
     public void onRefresh() {
         posts.clear();
-        task = new PostLoadTask();
-        task.execute();
+        readPostsFromBackend();
     }
 
-    private void exchangeViewIfNeeded() {
+    protected void exchangeViewIfNeeded() {
         if (posts.isEmpty()) {
             listView.setVisibility(View.INVISIBLE);
             getView().findViewById(R.id.post_list_empty).setVisibility(View.VISIBLE);
@@ -101,28 +95,27 @@ public abstract class PostListFragment extends Fragment implements SwipeRefreshL
         return listView;
     }
 
+    public PostAdapter getAdapter() {
+        return adapter;
+    }
+
+    public RestAPIClient getApiClient() {
+        return apiClient;
+    }
+
     protected abstract void readPostsFromBackend();
 
     protected abstract String[] onCreateMenuItems();
 
-    protected abstract void onMenuOptionItemSelected(int which);
+    protected abstract void onMenuOptionItemSelected(int which, Post currentPost);
 
-    private class PostLoadTask extends AsyncTask<Void, Void, Void> {
+    @Override
+    public void onPostsLoaded(List<Post> posts) {
+        this.posts.addAll(posts);
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            readPostsFromBackend();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            sortPostsByTime();
-            adapter.notifyDataSetChanged();
-            exchangeViewIfNeeded();
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        sortPostsByTime();
+        adapter.notifyDataSetChanged();
+        exchangeViewIfNeeded();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

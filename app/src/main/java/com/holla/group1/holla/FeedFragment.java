@@ -22,7 +22,7 @@ public class FeedFragment extends PostListFragment {
     }
 
     @Override
-    protected void onMenuOptionItemSelected(int which) {
+    protected void onMenuOptionItemSelected(int which, Post currentPost) {
         switch (which) {
             case 0: // "Share"
                 break;
