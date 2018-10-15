@@ -11,6 +11,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.api.RestAPIClient;
 
+import java.util.Map;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FBTEST";
 
@@ -32,6 +34,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getNotification().getBody();
+
+        Map<String, String> data = remoteMessage.getData();
+        String posdid = data.get("post");
+        String commentid = data.get("comment");
+        Log.d(TAG, "postid: " + posdid);
+        Log.d(TAG, "commentid: " + commentid);
+
         // Add channel check
         String channelId = getResources().getString(R.string.notification_channel_comment);
         sendNotification(title, message, channelId);
