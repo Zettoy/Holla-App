@@ -1,4 +1,4 @@
-package com.holla.group1.holla.search;
+package com.holla.group1.holla.search.location;
 
 import com.google.android.gms.maps.model.LatLng;
 
