@@ -80,6 +80,11 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_linearlayout);
@@ -178,7 +183,7 @@ public class MapsActivity extends AppCompatActivity implements
                     Place place = response.get(0);
                     //this should depend on whether map view or list view is showing
                     if(mapFragment!=null){
-                        mapFragment.setMapLocation(place.getLatLng());
+                        mapFragment.setMapLocationAndLoadPosts(place.getLatLng());
 
                     }
                 }

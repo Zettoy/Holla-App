@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.holla.group1.holla.signin.GoogleAccountSingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,13 +22,17 @@ public class LikePostRequest {
     public void setListener(OnLikeResponseListener listener){
         this.listener = listener;
     }
-    public void likePost(final String postID) {
-        String url = "https://reqres.in/api/register";
+
+    public void sendLikeOrUnlikeRequest(final String postID, Boolean wantsVote) {
+        String url = "https://holla-alpha.herokuapp.com/posts/vote";
+
         JSONObject request_body = new JSONObject();
+
         try {
-//            request_body.put("post_ID", postID);
-            request_body.put("email", "lol@gmail.com");
-            request_body.put("password", "asdf");
+            request_body.put("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+            request_body.put("id", postID);
+            request_body.put("wantsVote", wantsVote);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -40,7 +45,7 @@ public class LikePostRequest {
                     public void onResponse(JSONObject response) {
                         //TODO:
                         if(listener!=null){
-                            listener.onLikeRequestSuccess(postID);
+                            listener.onVoteRequestSuccess(postID);
                         }
                     }
                 },
@@ -48,15 +53,16 @@ public class LikePostRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         if(listener!=null){
-                            listener.onLikeRequestFailure(new Exception(error.toString()));
+                            listener.onVoteRequestFailure(new Exception(error.toString()));
                         }
                     }
                 }
         );
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
+
     public interface OnLikeResponseListener {
-        void onLikeRequestSuccess(String postID);
-        void onLikeRequestFailure(Exception ex);
+        void onVoteRequestSuccess(String postID);
+        void onVoteRequestFailure(Exception ex);
     }
 }

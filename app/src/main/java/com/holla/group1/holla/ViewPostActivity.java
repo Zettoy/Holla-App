@@ -35,7 +35,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     private boolean replaceText = true;
     private RestAPIClient apiClient;
     private Post post;
-
+    private LikeButton likeButton;
     private void drawPost(Post post){
         getSupportActionBar().setTitle("Post by " + post.getUsername());
         TextView contentTextView = findViewById(R.id.post_content);
@@ -52,6 +52,7 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         TextView locationTxt = findViewById(R.id.post_location);
         locationTxt.setText(post.getLocationStr());
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,11 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
 
         drawPost(post);
 
-        LikeButton likeButton = findViewById(R.id.heart_button);
+        likeButton = findViewById(R.id.heart_button);
+//        likeButton.setLiked(true);
+        if(post.has_liked){
+            likeButton.setLiked(true);
+        }
         likeButton.setOnLikeListener(this);
 
         Button commentSubmitButton = findViewById(R.id.btn_submit);
@@ -97,25 +102,44 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
     }
 
     @Override
-    public void onLikeRequestFailure(Exception ex) {
+    public void onVoteRequestFailure(Exception ex) {
 
     }
 
     @Override
-    public void onLikeRequestSuccess(String postID) {
+    public void onVoteRequestSuccess(String postID) {
 
+    }
+
+    private void toggleLike(){
+        if(post != null){
+            LikePostRequest likePostRequest = new LikePostRequest(this);
+            likePostRequest.setListener(this);
+//            likePostRequest.likePost(post.getId());
+            likePostRequest.sendLikeOrUnlikeRequest(post.getId(), !post.has_liked);
+            if(post.has_liked){
+                post.setNum_likes(post.getNum_likes()-1);
+                likeButton.setLiked(false);
+
+            }else{
+                post.setNum_likes(post.getNum_likes()+1);
+                likeButton.setLiked(true);
+            }
+            post.has_liked = !post.has_liked;
+
+            drawPost(post);
+        }
     }
 
     @Override
     public void liked(LikeButton likeButton) {
-        LikePostRequest likePostRequest = new LikePostRequest(this);
-        likePostRequest.setListener(this);
-        likePostRequest.likePost("asdf");
+        toggleLike();
         Toast.makeText(this, "Liked!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void unLiked(LikeButton likeButton) {
+        toggleLike();
         Toast.makeText(this, "Disliked!", Toast.LENGTH_SHORT).show();
     }
 

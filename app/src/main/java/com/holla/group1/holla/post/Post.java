@@ -17,7 +17,9 @@ public class Post {
     private Integer num_likes = 0;
     private String locationStr;
 
-    private static GsonBuilder getGSONBuilder(){
+    public Boolean has_liked = false;
+
+    private static GsonBuilder getGSONBuilder() {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Post.class, new PostSerializer());
@@ -25,24 +27,30 @@ public class Post {
         return gsonBuilder;
 
     }
-    public static Post fromJSON(String json){
+
+    public static Post fromJSON(String json) {
 
         Gson gson = Post.getGSONBuilder().create();
         return gson.fromJson(json, Post.class);
     }
 
-    public String toJSON(){
+    public String toJSON() {
         Gson gson = Post.getGSONBuilder().create();
         String json = gson.toJson(this);
         return json;
     }
-    public Post(String id, LatLng location, String content, String username, DateTime creation_time, String locationStr) {
+
+    public Post(String id, LatLng location,
+                String content, String username,
+                DateTime creation_time, String locationStr){
+//                Integer num_likes) {
         this.content = content;
         this.location = location;
         this.creation_time = creation_time;
         this.username = username;
         this.id = id;
         this.locationStr = locationStr;
+//        this.num_likes = num_likes;
     }
 
     public String getId() {
@@ -53,12 +61,8 @@ public class Post {
         return num_comments;
     }
 
-    public void addNum_likes() {
-        this.num_likes++;
-    }
-
-    public void subNum_likes() {
-        this.num_likes--;
+    public void setNum_likes(Integer num_likes) {
+        this.num_likes = num_likes;
     }
 
     public Integer getNum_likes() {
