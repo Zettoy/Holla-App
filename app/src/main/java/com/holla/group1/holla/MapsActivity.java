@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.search.MultiSearchActivity;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
@@ -49,6 +53,8 @@ public class MapsActivity extends AppCompatActivity implements
 
     protected GeoDataClient mGeoDataClient;
     private MapFragment mapFragment;
+
+    private RestAPIClient apiClient;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -92,6 +98,8 @@ public class MapsActivity extends AppCompatActivity implements
 
         mapFragment = new MapFragment();
 
+        apiClient = new RestAPIClient(MapsActivity.this, null, null);
+
         Toolbar toolbar = findViewById(R.id.activity_maps_toolbar);
         setSupportActionBar(toolbar);
 
@@ -112,6 +120,25 @@ public class MapsActivity extends AppCompatActivity implements
         mGeoDataClient = Places.getGeoDataClient(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannels();
+
+        initUserAccount();
+    }
+
+    private void initUserAccount() {
+        apiClient.getCurrentUserID();
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        apiClient.updateDeviceToken(task.getResult().getToken());
+                    }
+                });
     }
 
     @TargetApi(Build.VERSION_CODES.O)
