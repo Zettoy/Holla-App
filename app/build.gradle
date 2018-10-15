@@ -1,14 +1,6 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'androiddebugkey'
-            storeFile file('../josh_debug.keystore')
-            keyPassword 'android'
-            storePassword 'android'
-        }
-    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.holla.group1.holla"
@@ -26,11 +18,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
-            debuggable true
-        }
-        debug {
-            signingConfig signingConfigs.config
         }
     }
 }
