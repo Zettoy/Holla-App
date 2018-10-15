@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.api.RestAPIClient;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FBTEST";
@@ -29,10 +30,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.d(TAG, "Received Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
 
+        String title = remoteMessage.getNotification().getTitle();
         String message = remoteMessage.getNotification().getBody();
         // Add channel check
         String channelId = getResources().getString(R.string.notification_channel_comment);
-        sendNotification(message, channelId);
+        sendNotification(title, message, channelId);
+    }
+
+    @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+        RestAPIClient apiClient = new RestAPIClient(getApplicationContext(), null, null);
+        apiClient.updateDeviceToken(s);
     }
 
     /**
@@ -40,11 +49,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String messageBody, String channelId) {
+    private void sendNotification(String title, String messageBody, String channelId) {
         Notification notification =
                 new NotificationCompat.Builder(this, channelId)
-                .setContentTitle(messageBody)
-                .setContentText("Test")
+                .setContentTitle(title)
+                .setContentText(messageBody)
                 .setSmallIcon(R.drawable.ic_locate)
                 .setAutoCancel(true)
                 .build();
