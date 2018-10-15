@@ -42,6 +42,7 @@ import com.holla.group1.holla.R;
 import com.holla.group1.holla.api.SearchUsersRequest;
 import com.holla.group1.holla.search.location.LocationSearchResult;
 import com.holla.group1.holla.search.location.LocationSearchResultFragment;
+import com.holla.group1.holla.search.post.PostSearchFragment;
 import com.holla.group1.holla.search.user.UserSearchResultFragment;
 import com.holla.group1.holla.user.User;
 
@@ -77,6 +78,13 @@ public class MultiSearchActivity extends AppCompatActivity implements
     private ViewPager mViewPager;
     private FusedLocationProviderClient mFusedLocationClient;
 
+    private void search_by_post_query(final String query) {
+        Fragment cur_fragment = getCurrentFragment();
+        if(cur_fragment != null) {
+            PostSearchFragment postSearchFragment = (PostSearchFragment) cur_fragment;
+            postSearchFragment.search(query);
+        }
+    }
     private void search_by_username(final String query) {
         SearchUsersRequest request = new SearchUsersRequest(this);
         request.setListener(new SearchUsersRequest.ResponseListener() {
@@ -147,7 +155,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
                     break;
 
                 case TAB_POSTS:
-                    Log.d(TAG, "Posts");
+                    search_by_post_query(query);
                     break;
             }
         }
@@ -344,8 +352,10 @@ public class MultiSearchActivity extends AppCompatActivity implements
                 UserSearchResultFragment user_fragment = UserSearchResultFragment.newInstance();
                 return user_fragment;
 
+            } else if (position == TAB_POSTS) {
+                PostSearchFragment postSearchFragment = new PostSearchFragment();
+                return postSearchFragment;
             } else {
-
                 return PlaceholderFragment.newInstance(position + 1);
             }
         }
