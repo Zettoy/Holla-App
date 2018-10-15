@@ -20,6 +20,7 @@ import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
 
+import com.holla.group1.holla.user.User;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -259,6 +260,68 @@ public class RestAPIClient {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void getCurrentUserID() {
+        String url = SERVER_LOCATION + "/users/search/requestUserID";
+        final JsonObject request_body = new JsonObject();
+
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        Log.d(TAG, request_body.toString());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        try {
+                            JsonObject jsonObject = response.get(0).getAsJsonObject();
+                            User.CURRENT_USER_ID = jsonObject.get("id").getAsString();
+
+                        } catch (Exception e) {
+                            Log.d(TAG, "onResponse: " + e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                        Log.e("getUserID", "onErrorResponse: " + error.toString());
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void updateDeviceToken(String token) {
+        String url = SERVER_LOCATION + "/users/update/deviceToken";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("deviceToken", token);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                        Log.e("updateToken", "onErrorResponse: " + error.toString());
                     }
                 }
         );
