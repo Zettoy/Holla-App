@@ -1,11 +1,12 @@
 package com.holla.group1.holla.search.post;
 
+import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.post.PostListFragment;
 
 public class PostSearchFragment extends PostListFragment {
     @Override
     protected void readPostsFromBackend() {
-
+//        getApiClient();
     }
 
     @Override
@@ -14,8 +15,7 @@ public class PostSearchFragment extends PostListFragment {
     }
 
     @Override
-    protected void onMenuOptionItemSelected(int which) {
+    protected void onMenuOptionItemSelected(int which, Post currentPost) {
 
     }
-
 }
