@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.holla.group1.holla.Config;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
 
 import org.json.JSONException;
@@ -24,7 +25,8 @@ public class LikePostRequest {
     }
 
     public void sendLikeOrUnlikeRequest(final String postID, Boolean wantsVote) {
-        String url = "https://holla-alpha.herokuapp.com/posts/vote";
+//        String url = "https://holla-alpha.herokuapp.com/posts/vote";
+        String url = RestAPIClient.SERVER_LOCATION + "/posts/vote";
 
         JSONObject request_body = new JSONObject();
 
