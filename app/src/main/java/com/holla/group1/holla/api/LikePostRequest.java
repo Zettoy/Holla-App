@@ -30,7 +30,7 @@ public class LikePostRequest {
 
         try {
             request_body.put("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
-            request_body.put("post_ID", postID);
+            request_body.put("id", postID);
             request_body.put("wantsVote", wantsVote);
 
         } catch (JSONException e) {
