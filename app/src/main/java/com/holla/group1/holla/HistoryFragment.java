@@ -2,15 +2,14 @@ package com.holla.group1.holla;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.post.PostListFragment;
+import com.holla.group1.holla.user.User;
 
-import java.util.List;
-
-public class HistoryFragment extends PostListFragment implements RestAPIClient.OnPostsLoadedListener {
+public class HistoryFragment extends PostListFragment {
 
     @Override
     protected String[] onCreateMenuItems() {
@@ -18,7 +17,7 @@ public class HistoryFragment extends PostListFragment implements RestAPIClient.O
     }
 
     @Override
-    protected void onMenuOptionItemSelected(int which) {
+    protected void onMenuOptionItemSelected(int which, final Post currentPost) {
         switch (which) {
             case 0: // "Share"
                 break;
@@ -30,15 +29,13 @@ public class HistoryFragment extends PostListFragment implements RestAPIClient.O
                 confirm.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getContext(), "Yes", Toast.LENGTH_LONG).show();
-                        //TODO: Delete post
+                        deletePost(currentPost);
+                        Toast.makeText(getContext(), "Deleted.", Toast.LENGTH_LONG).show();
                     }
                 });
                 confirm.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                    public void onClick(DialogInterface dialog, int which) {}
                 });
                 confirm.setCancelable(true);
                 confirm.create().show();
@@ -48,12 +45,14 @@ public class HistoryFragment extends PostListFragment implements RestAPIClient.O
 
     @Override
     protected void readPostsFromBackend() {
-        RestAPIClient apiClient = new RestAPIClient(getContext(), this, null);
-        apiClient.getPostsFromUserID(/* TODO: userid */"");
+        Log.d("Userid", "readPostsFromBackend: " + User.CURRENT_USER_ID);
+        getApiClient().getPostsFromUserID(User.CURRENT_USER_ID);
     }
 
-    @Override
-    public void onPostsLoaded(List<Post> posts) {
-        getPosts().addAll(posts);
+    private void deletePost(Post post) {
+        getApiClient().deletePost(post.getId());
+        getPosts().remove(post);
+        getAdapter().notifyDataSetChanged();
+        exchangeViewIfNeeded();
     }
 }
