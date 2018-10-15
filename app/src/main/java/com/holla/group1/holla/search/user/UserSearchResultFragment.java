@@ -1,4 +1,4 @@
-package com.holla.group1.holla.search;
+package com.holla.group1.holla.search.user;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,13 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.holla.group1.holla.R;
-import com.holla.group1.holla.search.LocationSearchResult.Item;
+import com.holla.group1.holla.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import com.holla.group1.holla.search.dummy.DummyContent;
-//import com.holla.group1.holla.search.dummy.DummyContent.DummyItem;
 
 /**
  * A fragment representing a list of Items.
@@ -25,31 +23,26 @@ import java.util.List;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class LocationSearchResultFragment extends Fragment{
+public class UserSearchResultFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private MyLocationSearchResultRecyclerViewAdapter adapter;
+    private UserSearchResultRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public LocationSearchResultFragment() {
+    public UserSearchResultFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static LocationSearchResultFragment newInstance() {
-        LocationSearchResultFragment fragment = new LocationSearchResultFragment();
-        Bundle args = new Bundle();
-//        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-
-
+    public static UserSearchResultFragment newInstance() {
+        UserSearchResultFragment fragment = new UserSearchResultFragment();
         return fragment;
     }
 
@@ -79,8 +72,8 @@ public class LocationSearchResultFragment extends Fragment{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
             recyclerView.setHasFixedSize(true);
-            List<Item> empty_set = new ArrayList<>();
-            this.adapter =  new MyLocationSearchResultRecyclerViewAdapter(empty_set, mListener);
+            List<User> empty_set = new ArrayList<>();
+            this.adapter = new UserSearchResultRecyclerViewAdapter(empty_set, mListener);
             recyclerView.setAdapter(this.adapter);
         }
         return view;
@@ -92,9 +85,6 @@ public class LocationSearchResultFragment extends Fragment{
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
-
-//            ArrayList<Item> list = new ArrayList<Item>();
-//            MyLocationSearchResultRecyclerViewAdapter adapter = new MyLocationSearchResultRecyclerViewAdapter(DummyContent.ITEMS, mListener);
 
 
         } else {
@@ -109,14 +99,14 @@ public class LocationSearchResultFragment extends Fragment{
         mListener = null;
     }
 
-    public void showResults(List<Item> items) {
+    public void showResults(List<User> users) {
 
 //        List<Item> items = new ArrayList<>();
 //        items.add(new Item(
 //                "\uD83D\uDCCD", "Item 0", ""
 //        ));
-        if(adapter != null){
-            adapter.changeDataList(items);
+        if (adapter != null) {
+            adapter.changeDataList(users);
         }
 
     }
@@ -133,6 +123,6 @@ public class LocationSearchResultFragment extends Fragment{
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Item item);
+        void onListFragmentInteraction(User user);
     }
 }
