@@ -117,11 +117,8 @@ public class RestAPIClient {
     private void parseNotificationResponse(JsonArray response) {
         ArrayList<Notification> notifications = new ArrayList<>();
 
-
-        int i = 0;
         for (JsonElement jsonElement : response) {
             try {
-                i ++;
                 JsonObject jsonObject = jsonElement.getAsJsonObject();
                 String timestamp_iso8601 = jsonObject.get("date").getAsString();
                 String content = jsonObject.get("content").getAsString();
@@ -133,7 +130,7 @@ public class RestAPIClient {
                 Log.e(TAG, e.toString());
             }
         }
-        Log.d(TAG, "parseNotificationResponse: " + i);
+
         mNotificationsLoadedListener.onNotificationsLoaded(notifications);
     }
 
