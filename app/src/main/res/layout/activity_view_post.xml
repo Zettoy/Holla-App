@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
@@ -38,8 +38,22 @@
             android:focusableInTouchMode="true"
             />
 
+        <RelativeLayout
+            android:id="@+id/view_post_activity_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                style="@style/Widget.AppCompat.ProgressBar"/>
+
+        </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/view_post_activity_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/frg_comment_panel"

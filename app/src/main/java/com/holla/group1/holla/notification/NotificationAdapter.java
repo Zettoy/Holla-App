@@ -11,8 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.ViewPostActivity;
-import com.holla.group1.holla.comment.Comment;
-import com.holla.group1.holla.post.Post;
 
 import java.util.List;
 
@@ -38,26 +36,26 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
             convertView = LayoutInflater.from(getContext())
                     .inflate(layoutId, parent, false);
             holder = new ViewHolder();
-            holder.content  = convertView.findViewById(R.id.notification_content);
-            holder.username = convertView.findViewById(R.id.notification_username);
-            holder.action   = convertView.findViewById(R.id.notification_action);
+            holder.content = convertView.findViewById(R.id.notification_content);
+            holder.from    = convertView.findViewById(R.id.notification_username);
+            holder.action  = convertView.findViewById(R.id.notification_action);
+            holder.time    = convertView.findViewById(R.id.notification_time);
             convertView.setTag(holder);
 
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Comment comment = notification.getComment();
-
-        holder.content.setText(comment.getContent());
-        holder.username.setText(comment.getUsername());
-        holder.action.setText(notification.getChannel());
+        holder.content.setText(notification.getContent());
+        holder.from.setText("@" + notification.getFrom());
+        holder.action.setText(" commented your post:");
+        holder.time.setText(notification.getTimestampAgo());
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewPostActivity.class);
-                intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, notification.getPost().toJSON());
+                intent.putExtra(ViewPostActivity.BUNDLED_POST_ID, notification.getPostID());
                 context.startActivity(intent);
             }
         });
@@ -67,7 +65,8 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
 
     private static class ViewHolder {
         TextView content;
-        TextView username;
+        TextView from;
         TextView action;
+        TextView time;
     }
 }

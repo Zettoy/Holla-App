@@ -30,8 +30,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ViewPostActivity extends AppCompatActivity implements OnLikeListener, LikePostRequest.OnLikeResponseListener, RestAPIClient.OnCommentsLoadedListener, RestAPIClient.OnCommentSubmittedListener {
+public class ViewPostActivity extends AppCompatActivity implements OnLikeListener, LikePostRequest.OnLikeResponseListener, RestAPIClient.OnCommentsLoadedListener, RestAPIClient.OnCommentSubmittedListener, RestAPIClient.OnPostsLoadedListener {
     public static final String BUNDLED_POST_JSON = "post JSON";
+    public static final String BUNDLED_POST_ID   = "post ID";
     private boolean replaceText = true;
     private RestAPIClient apiClient;
     private Post post;
@@ -62,22 +63,34 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle extras = getIntent().getExtras();
-        String post_json = extras.getString(BUNDLED_POST_JSON);
-        post = Post.fromJSON(post_json);
-
-        apiClient = new RestAPIClient(this, null, this);
+        apiClient = new RestAPIClient(this, this, this);
         apiClient.setOnCommentSubmittedListener(this);
-        apiClient.getCommentsFromPostID(post.getId());
-
-        drawPost(post);
 
         likeButton = findViewById(R.id.heart_button);
-//        likeButton.setLiked(true);
-        if(post.has_liked){
-            likeButton.setLiked(true);
-        }
         likeButton.setOnLikeListener(this);
+
+        Bundle extras = getIntent().getExtras();
+        String postID = extras.getString(BUNDLED_POST_ID);
+
+        if (postID != null) {
+            getSupportActionBar().setTitle("Loading...");
+
+            apiClient.getPostByPostID(postID);
+            apiClient.getCommentsFromPostID(postID);
+
+            findViewById(R.id.view_post_activity_main).setVisibility(View.INVISIBLE);
+            findViewById(R.id.view_post_activity_mask).setVisibility(View.VISIBLE);
+
+        } else {
+            String post_json = extras.getString(BUNDLED_POST_JSON);
+            post = Post.fromJSON(post_json);
+
+            apiClient.getCommentsFromPostID(post.getId());
+
+            drawPost(post);
+
+            if(post.has_liked) likeButton.setLiked(true);
+        }
 
         Button commentSubmitButton = findViewById(R.id.btn_submit);
         commentSubmitButton.setOnClickListener(new CommentSubmitClick());
@@ -159,6 +172,16 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
         startActivity(intent);
         finish();*/
         apiClient.getCommentsFromPostID(post.getId());
+    }
+
+    @Override
+    public void onPostsLoaded(List<Post> posts) {
+        post = posts.get(0);
+        drawPost(post);
+        if(post.has_liked) likeButton.setLiked(true);
+
+        findViewById(R.id.view_post_activity_main).setVisibility(View.VISIBLE);
+        findViewById(R.id.view_post_activity_mask).setVisibility(View.INVISIBLE);
     }
 
     class CommentSubmitClick implements View.OnClickListener {
