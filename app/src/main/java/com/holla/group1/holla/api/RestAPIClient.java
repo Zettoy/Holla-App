@@ -37,6 +37,8 @@ import java.util.List;
 
 public class RestAPIClient {
     public static String TAG = "RestAPIClient";
+    //private static String SERVER_LOCATION = "https://holla-alpha.herokuapp.com";
+    private static String SERVER_LOCATION = "http://188.166.250.144:3000";
     private Context context;
     private OnPostsLoadedListener mListener;
     private OnCommentsLoadedListener mCommentsListener;
@@ -108,7 +110,7 @@ public class RestAPIClient {
     }
 
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
-        String url = "https://holla-alpha.herokuapp.com/posts/search/location";
+        String url = SERVER_LOCATION + "/posts/search/location";
         JsonObject request_body = new JsonObject();
         JsonObject location_obj = new JsonObject();
         JsonArray coords = new JsonArray();
@@ -140,7 +142,7 @@ public class RestAPIClient {
     }
 
     public void getCommentsFromPostID(String postID) {
-        String url = "https://holla-alpha.herokuapp.com/comments/search/post";
+        String url = SERVER_LOCATION + "/comments/search/post";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("post", postID);
         request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
@@ -169,7 +171,7 @@ public class RestAPIClient {
     }
 
     public void getPostsFromUserID(String userID) {
-        String url = "https://holla-alpha.herokuapp.com/posts/search/userid";
+        String url = SERVER_LOCATION + "/posts/search/userid";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("id", userID);
         request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
@@ -195,7 +197,7 @@ public class RestAPIClient {
     }
 
     public void createComment(String postId, String content) {
-        String url = "https://holla-alpha.herokuapp.com/comments/create";
+        String url = SERVER_LOCATION + "/comments/create";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("post", postId);
         request_body.addProperty("content", content);
@@ -229,7 +231,7 @@ public class RestAPIClient {
     }
 
     public void createPost(LatLng location, String content) {
-        String url = "https://holla-alpha.herokuapp.com/posts/create";
+        String url = SERVER_LOCATION + "/posts/create";
         JsonObject request_body = new JsonObject();
 
         JsonObject location_obj = new JsonObject();
