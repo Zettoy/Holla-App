@@ -168,7 +168,9 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     public boolean onQueryTextChange(String s) {
-        handleSearchQuery(s);
+        if(!(getCurrentFragment() instanceof PostSearchFragment)){
+            handleSearchQuery(s);
+        }
         return false;
     }
 
