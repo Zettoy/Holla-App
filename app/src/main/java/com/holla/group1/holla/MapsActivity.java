@@ -65,7 +65,7 @@ public class MapsActivity extends AppCompatActivity implements
         Intent intent = new Intent(MapsActivity.this, ViewPostActivity.class);
         Post focusedPost = mapFragment.getFocusedPost();
         if (focusedPost != null) {
-            intent.putExtra(ViewPostActivity.BUNDLED_POST_JSON, focusedPost.toJSON());
+            intent.putExtra(ViewPostActivity.BUNDLED_POST_ID, focusedPost.getId());
             startActivity(intent);
         }
     }

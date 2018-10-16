@@ -11,8 +11,8 @@ import android.widget.*;
 
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.ViewPostActivity;
+import com.holla.group1.holla.util.Utils;
 
-import org.joda.time.DateTime;
 import java.util.List;
 
 public abstract class PostAdapter extends ArrayAdapter<Post> {
@@ -53,7 +53,7 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
         holder.username.setText(post.getFormattedUsername());
 
-        holder.time.setText(timeToString(post.getCreation_time()));
+        holder.time.setText(" · " + post.get_timestamp_ago());
 
         String commentLikeText = post.commentLikeToString();
         holder.commentLike.setText(commentLikeText);
@@ -72,7 +72,7 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, ViewPostActivity.class);
                 intent.putExtra(
-                        ViewPostActivity.BUNDLED_POST_JSON, posts.get(position).toJSON());
+                        ViewPostActivity.BUNDLED_POST_ID, posts.get(position).getId());
                 context.startActivity(intent);
             }
         });
@@ -97,14 +97,6 @@ public abstract class PostAdapter extends ArrayAdapter<Post> {
 
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private String timeToString(DateTime time) {
-        int year = time.getYear();
-        int month = time.getMonthOfYear();
-        int day = time.getDayOfMonth();
-
-        return " · " + year + "/" + month + "/" + day;
     }
 
     private static class ViewHolder {
