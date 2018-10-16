@@ -6,6 +6,12 @@ import com.holla.group1.holla.post.PostListFragment;
 import java.util.List;
 
 public class PostSearchFragment extends PostListFragment {
+    @Override
+    protected void exchangeViewIfNeeded() {
+        //PostListFragment.exchangeViewIfNeeded seems to throw an exception...
+//        super.exchangeViewIfNeeded();
+    }
+
     private String query = "";
     public void search(String query){
         this.query = query;
