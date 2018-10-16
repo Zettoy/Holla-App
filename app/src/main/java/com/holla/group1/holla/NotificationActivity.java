@@ -104,6 +104,8 @@ public class NotificationActivity extends AppCompatActivity implements
 
     @Override
     public void onNotificationsLoaded(List<Notification> notifications) {
+        if (notifications == null) return;
+
         this.notifications.addAll(notifications);
         sortNotificationsByTime();
         adapter.notifyDataSetChanged();

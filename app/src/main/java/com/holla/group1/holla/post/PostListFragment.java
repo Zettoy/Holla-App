@@ -111,8 +111,9 @@ public abstract class PostListFragment extends Fragment implements
 
     @Override
     public void onPostsLoaded(List<Post> posts) {
-        this.posts.addAll(posts);
+        if (posts == null) return;
 
+        this.posts.addAll(posts);
         sortPostsByTime();
         adapter.notifyDataSetChanged();
         exchangeViewIfNeeded();
