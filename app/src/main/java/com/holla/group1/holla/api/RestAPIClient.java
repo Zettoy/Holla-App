@@ -505,8 +505,7 @@ public class RestAPIClient {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Handling errors OMEGALUL
-                        Log.e("getNotification", "onErrorResponse: " + error.toString());
+                        mListener.onPostsLoaded(null);
                     }
                 }
         );

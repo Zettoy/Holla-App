@@ -3,6 +3,7 @@ package com.holla.group1.holla;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -176,12 +177,24 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
 
     @Override
     public void onPostsLoaded(List<Post> posts) {
-        post = posts.get(0);
-        drawPost(post);
-        if(post.has_liked) likeButton.setLiked(true);
+        if (posts == null) {
+            findViewById(R.id.view_post_activity_progressbar).setVisibility(View.INVISIBLE);
+            findViewById(R.id.view_post_activity_deleted).setVisibility(View.VISIBLE);
+            getSupportActionBar().setTitle("Post Not Found");
 
-        findViewById(R.id.view_post_activity_main).setVisibility(View.VISIBLE);
-        findViewById(R.id.view_post_activity_mask).setVisibility(View.INVISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() { finish(); }
+            },1000);
+
+        } else {
+            post = posts.get(0);
+            drawPost(post);
+            if (post.has_liked) likeButton.setLiked(true);
+
+            findViewById(R.id.view_post_activity_main).setVisibility(View.VISIBLE);
+            findViewById(R.id.view_post_activity_mask).setVisibility(View.INVISIBLE);
+        }
     }
 
     class CommentSubmitClick implements View.OnClickListener {
