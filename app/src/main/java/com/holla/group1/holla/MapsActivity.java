@@ -125,8 +125,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     private void initUserAccount() {
-        apiClient.getCurrentUserID();
-
+        //apiClient.getCurrentUserID();
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override

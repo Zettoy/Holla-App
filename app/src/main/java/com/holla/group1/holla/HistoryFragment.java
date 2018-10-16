@@ -2,12 +2,10 @@ package com.holla.group1.holla;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.post.PostListFragment;
-import com.holla.group1.holla.user.User;
 
 public class HistoryFragment extends PostListFragment {
 
@@ -45,8 +43,7 @@ public class HistoryFragment extends PostListFragment {
 
     @Override
     protected void readPostsFromBackend() {
-        Log.d("Userid", "readPostsFromBackend: " + User.CURRENT_USER_ID);
-        getApiClient().getPostsFromUserID(User.CURRENT_USER_ID);
+        getApiClient().getHistoryPosts();
     }
 
     private void deletePost(Post post) {

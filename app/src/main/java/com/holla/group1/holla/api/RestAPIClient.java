@@ -513,6 +513,58 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getHistoryPosts() {
+        String url = SERVER_LOCATION + "/posts/search/history";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mListener.onPostsLoaded(null);
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void getFeedPosts() {
+        String url = SERVER_LOCATION + "/posts/search/feed";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mListener.onPostsLoaded(null);
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void loadFakeTweets() {
         Runnable runnable = new Runnable() {
             @Override
