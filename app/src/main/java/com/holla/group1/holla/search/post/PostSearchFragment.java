@@ -20,7 +20,9 @@ public class PostSearchFragment extends PostListFragment {
     @Override
     protected void readPostsFromBackend() {
 
-        getApiClient().searchPostsByContent(this.query);
+        if(this.query.length() > 0) {
+            getApiClient().searchPostsByContent(this.query);
+        }
     }
 
     @Override
