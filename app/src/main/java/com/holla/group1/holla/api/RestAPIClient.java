@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -134,6 +135,37 @@ public class RestAPIClient {
         mNotificationsLoadedListener.onNotificationsLoaded(notifications);
     }
 
+    public void searchPostsByContent(String query) {
+        String url = SERVER_LOCATION + "/posts/search/content";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+        request_body.addProperty("query", query);
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parsePostsResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, error.toString());
+                    }
+                }
+
+        );
+        //remove this once backend search efficiency improves
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
         String url = SERVER_LOCATION + "/posts/search/location";
         JsonObject request_body = new JsonObject();

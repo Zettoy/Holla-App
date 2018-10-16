@@ -42,6 +42,7 @@ import com.holla.group1.holla.R;
 import com.holla.group1.holla.api.SearchUsersRequest;
 import com.holla.group1.holla.search.location.LocationSearchResult;
 import com.holla.group1.holla.search.location.LocationSearchResultFragment;
+import com.holla.group1.holla.search.post.PostSearchFragment;
 import com.holla.group1.holla.search.user.UserSearchResultFragment;
 import com.holla.group1.holla.user.User;
 
@@ -77,6 +78,13 @@ public class MultiSearchActivity extends AppCompatActivity implements
     private ViewPager mViewPager;
     private FusedLocationProviderClient mFusedLocationClient;
 
+    private void search_by_post_query(final String query) {
+        Fragment cur_fragment = getCurrentFragment();
+        if(cur_fragment instanceof PostSearchFragment) {
+            PostSearchFragment postSearchFragment = (PostSearchFragment) cur_fragment;
+            postSearchFragment.search(query);
+        }
+    }
     private void search_by_username(final String query) {
         SearchUsersRequest request = new SearchUsersRequest(this);
         request.setListener(new SearchUsersRequest.ResponseListener() {
@@ -84,7 +92,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             public void onSearchUsersResponse(List<User> users) {
 
                 Fragment cur_fragment = getCurrentFragment();
-                if(cur_fragment != null) {
+                if(cur_fragment instanceof UserSearchResultFragment) {
                     UserSearchResultFragment userSearchResultFragment = (UserSearchResultFragment) cur_fragment;
                     userSearchResultFragment.showResults(users);
 //                    LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
@@ -147,7 +155,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
                     break;
 
                 case TAB_POSTS:
-                    Log.d(TAG, "Posts");
+                    search_by_post_query(query);
                     break;
             }
         }
@@ -209,7 +217,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
     private void displayLocationSearchResults(List<LocationSearchResult.Item> list) {
         Fragment cur_fragment = getCurrentFragment();
-        if(cur_fragment != null) {
+        if(cur_fragment instanceof LocationSearchResultFragment){
             LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
             locationSearchResultFragment.showResults(list);
         }
@@ -234,6 +242,29 @@ public class MultiSearchActivity extends AppCompatActivity implements
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+                Fragment cur_frag = getCurrentFragment();
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                Fragment cur_frag = getCurrentFragment();
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+                Fragment cur_frag = getCurrentFragment();
+                if(MultiSearchActivity.this.searchView != null){
+                    String query = MultiSearchActivity.this.searchView.getQuery().toString();
+                    handleSearchQuery(query);
+                }
+
+            }
+        });
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
 
@@ -243,11 +274,14 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
 
+
+    private SearchView searchView;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_multi_search, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        this.searchView=searchView;
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
@@ -282,41 +316,6 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_multi_search, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -344,9 +343,11 @@ public class MultiSearchActivity extends AppCompatActivity implements
                 UserSearchResultFragment user_fragment = UserSearchResultFragment.newInstance();
                 return user_fragment;
 
-            } else {
-
-                return PlaceholderFragment.newInstance(position + 1);
+            } else if (position == TAB_POSTS) {
+                PostSearchFragment postSearchFragment = new PostSearchFragment();
+                return postSearchFragment;
+            }else{
+                return null;
             }
         }
 
