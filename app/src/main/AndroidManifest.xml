@@ -74,10 +74,6 @@
             android:label="ProfileActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".FilterActivity"
-            android:label="FilterActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".search.MultiSearchActivity"
             android:label=""
             android:theme="@style/AppTheme">
