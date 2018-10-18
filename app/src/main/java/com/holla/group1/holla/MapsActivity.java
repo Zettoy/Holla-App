@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
@@ -162,12 +163,10 @@ public class MapsActivity extends AppCompatActivity implements
         viewPager.setAdapter(adapter);
     }
 
-    public void openAutoCompleteActivity(View view) {
+    public void openSearchActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
         startActivityForResult(intent, MapsActivity.MAP_MOVE_LOCATION);
 
-
-//        MapSearch.openAutocompleteActivity(MapsActivity.this);
     }
 
     public void openNavigationDrawer(View view) {
@@ -202,11 +201,19 @@ public class MapsActivity extends AppCompatActivity implements
             public void onComplete(@NonNull Task<PlaceBufferResponse> task) {
                 if (task.isSuccessful()) {
                     PlaceBufferResponse response = task.getResult();
-                    Place place = response.get(0);
-                    //this should depend on whether map view or list view is showing
-                    if(mapFragment!=null){
-                        mapFragment.setMapLocationAndLoadPosts(place.getLatLng());
+                    if(response!=null && response.getCount() > 0){
 
+                        Place place = response.get(0);
+                        //this should depend on whether map view or list view is showing
+                        Button button = findViewById(R.id.search_button);
+                        button.setText(
+                                String.format("%s", place.getName())
+                        );
+
+                        if(mapFragment!=null){
+                            mapFragment.setMapLocationAndLoadPosts(place.getLatLng());
+
+                        }
                     }
                 }
             }

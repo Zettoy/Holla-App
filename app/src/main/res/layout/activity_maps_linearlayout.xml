@@ -40,13 +40,13 @@
                             android:src="@drawable/ic_menu" />
 
                     <Button
-                            android:id="@+id/open_button"
+                            android:id="@+id/search_button"
                             android:layout_width="0dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_weight="1"
                             android:background="@drawable/while_border"
-                            android:onClick="openAutoCompleteActivity"
+                            android:onClick="openSearchActivity"
                             android:textAllCaps="false"
                             android:textColor="@color/black"
                             android:text="@string/search_hint"/>
