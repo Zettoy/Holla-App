@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.holla.group1.holla.MapsActivity;
+import com.holla.group1.holla.ProfileActivity;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.api.SearchUsersRequest;
 import com.holla.group1.holla.search.location.LocationSearchResult;
@@ -184,6 +185,10 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(User user) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("userName", user.username);
+        intent.putExtra("userID", user.id);
+        startActivity(intent);
 //        finish();
     }
 
