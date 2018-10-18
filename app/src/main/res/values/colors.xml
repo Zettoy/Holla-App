@@ -10,7 +10,7 @@
     <color name="colorSecondary">#999999</color>
     <color name="colorBackground">#ffffff</color>
 
-    <color name="colorPrimaryDark">#515151</color>
+    <color name="colorPrimaryDark">#FF000000</color>
     <color name="colorAccent">#FF4081</color>
 
     <color name="orange">#ff5500</color>
