@@ -12,8 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.holla.group1.holla.api.RestAPIClient;
+import com.holla.group1.holla.user.User;
 
-public class ProfileActivity extends AppCompatActivity  {
+import java.util.List;
+
+public class ProfileActivity extends AppCompatActivity implements RestAPIClient.OnGetFollowingLoadedListener {
     private HistoryFragment historyFragment;
     private ListView historyPostListView;
     private String userName;
@@ -39,6 +42,10 @@ public class ProfileActivity extends AppCompatActivity  {
         apiClient = new RestAPIClient(this, null, null);
 
         //Todo: Call backend to see if we need to greyout follow/make it unfollow
+        if (userID != null && !userID.equals(User.CURRENT_USER_ID)) {
+            apiClient.setOnGetFollowingLoadedListener(this);
+            apiClient.getFollowingList();
+        }
 
         Toolbar toolbar = findViewById(R.id.activity_history_toolbar);
         setSupportActionBar(toolbar);
@@ -51,7 +58,11 @@ public class ProfileActivity extends AppCompatActivity  {
 
         historyFragment = (HistoryFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.history_post_list_fragment);
+        historyFragment.userID = userID;
         historyPostListView = historyFragment.getListView();
+        historyFragment.onRefresh();
+
+
     }
 
     @Override
@@ -62,6 +73,22 @@ public class ProfileActivity extends AppCompatActivity  {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void OnGetFollowingLoaded(List<String> users) {
+        followBtn.setText("Follow");
+        alreadyFollowing = false;
+
+        // Linear search over users
+        for (String user : users) {
+            if (userID.equals(user)) {
+                alreadyFollowing = true;
+                followBtn.setText("Unfollow");
+                break;
+            }
+        }
+        followBtn.setEnabled(true);
     }
 
     private class FollowBtnListener implements View.OnClickListener {

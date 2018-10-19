@@ -47,6 +47,7 @@ public class RestAPIClient {
     private OnCommentsLoadedListener mCommentsListener;
     private OnCommentSubmittedListener mCommentSubmittedListener;
     private OnNotificationsLoadedListener mNotificationsLoadedListener;
+    private OnGetFollowingLoadedListener mOnGetFollowingLoadedListener;
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -133,6 +134,25 @@ public class RestAPIClient {
         }
 
         mNotificationsLoadedListener.onNotificationsLoaded(notifications);
+    }
+
+    private void parseGetFollowingResponse(JsonArray response) {
+        ArrayList<String> followedUsers = new ArrayList<>();
+
+
+        for (JsonElement jsonElement : response) {
+            try {
+                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                JsonArray followingArray = jsonObject.get("following").getAsJsonArray();
+                for (JsonElement jsonElement1 : followingArray) {
+                    followedUsers.add(jsonElement1.getAsString());
+                }
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+        }
+
+        mOnGetFollowingLoadedListener.OnGetFollowingLoaded(followedUsers);
     }
 
     public void searchPostsByContent(String query) {
@@ -486,6 +506,33 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getFollowingList() {
+        String url = SERVER_LOCATION + "/follow/getfollowing";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        parseGetFollowingResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                        Log.e("getNotification", "onErrorResponse: " + error.toString());
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void getPostByPostID(String postID) {
         String url = SERVER_LOCATION + "/posts/search/postid";
         JsonObject request_body = new JsonObject();
@@ -634,6 +681,10 @@ public class RestAPIClient {
         this.mNotificationsLoadedListener = onNotificationLoadedListener;
     }
 
+    public void setOnGetFollowingLoadedListener(OnGetFollowingLoadedListener onGetFollowingLoadedListener) {
+        this.mOnGetFollowingLoadedListener = onGetFollowingLoadedListener;
+    }
+
     public interface OnPostsLoadedListener {
         void onPostsLoaded(List<Post> posts);
     }
@@ -648,5 +699,9 @@ public class RestAPIClient {
 
     public interface OnNotificationsLoadedListener {
         void onNotificationsLoaded(List<Notification> notifications);
+    }
+
+    public interface OnGetFollowingLoadedListener {
+        void OnGetFollowingLoaded(List<String> users);
     }
 }

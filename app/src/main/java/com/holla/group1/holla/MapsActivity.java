@@ -39,6 +39,7 @@ import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.search.MultiSearchActivity;
 import com.holla.group1.holla.signin.GoogleAccountSingleton;
 import com.holla.group1.holla.signin.StartupActivity;
+import com.holla.group1.holla.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,8 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void showProfileActivity(MenuItem item) {
         Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
+        intent.putExtra("userName", "YOU");
+        intent.putExtra("userID", User.CURRENT_USER_ID);
         startActivity(intent);
     }
 
@@ -122,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements
     }
 
     private void initUserAccount() {
-        //apiClient.getCurrentUserID();
+        apiClient.getCurrentUserID();
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override

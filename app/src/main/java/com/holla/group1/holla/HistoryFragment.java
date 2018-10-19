@@ -9,6 +9,8 @@ import com.holla.group1.holla.post.PostListFragment;
 
 public class HistoryFragment extends PostListFragment {
 
+    public String userID = "";
+
     @Override
     protected String[] onCreateMenuItems() {
         return new String[]{"Share", "Delete"};
@@ -43,7 +45,8 @@ public class HistoryFragment extends PostListFragment {
 
     @Override
     protected void readPostsFromBackend() {
-        getApiClient().getHistoryPosts();
+        //getApiClient().getHistoryPosts();
+        getApiClient().getPostsFromUserID(userID);
     }
 
     private void deletePost(Post post) {
