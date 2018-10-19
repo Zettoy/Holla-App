@@ -80,9 +80,13 @@ public class RestAPIClient {
                 if (jsonObject.has("author")) {
                     username = jsonObject.get("author").getAsString();
                 }
+                Integer num_comments = 0;
+                if (jsonObject.has("numComments")) {
+                    num_comments = jsonObject.get("numComments").getAsInt();
+                }
                 Post post = new Post(postId, loc, content, username, dateTime, locationStr);
                 post.setNum_likes(score);
-
+                post.num_comments = num_comments;
                 Boolean has_liked = jsonObject.get("hasVoted").getAsBoolean();
                 post.has_liked = has_liked;
                 posts.add(post);
