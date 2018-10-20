@@ -9,7 +9,7 @@ public class PostSearchFragment extends PostListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        
+
         // reload posts after returning from viewing one
         readPostsFromBackend();
     }
