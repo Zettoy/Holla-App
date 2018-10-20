@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBufferResponse;
@@ -76,7 +77,12 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void showProfileActivity(MenuItem item) {
         Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
-        intent.putExtra("userName", "YOU");
+        String name = "";
+        if(GoogleAccountSingleton.mGoogleSignInAccount!=null){
+            GoogleSignInAccount account = GoogleAccountSingleton.mGoogleSignInAccount;
+            name = account.getDisplayName();
+        }
+        intent.putExtra("userName", String.format("Your Profile (%s)", name));
         intent.putExtra("userID", User.CURRENT_USER_ID);
         startActivity(intent);
     }

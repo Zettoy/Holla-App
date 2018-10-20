@@ -61,17 +61,26 @@ public abstract class PostListFragment extends Fragment implements
     @Override
     public void onRefresh() {
         posts.clear();
+        adapter.notifyDataSetChanged();
         readPostsFromBackend();
+        swipeRefreshLayout.setRefreshing(true);
     }
 
     protected void exchangeViewIfNeeded() {
         if (posts.isEmpty()) {
             listView.setVisibility(View.INVISIBLE);
-            getView().findViewById(R.id.post_list_empty).setVisibility(View.VISIBLE);
+            View view = getView().findViewById(R.id.post_list_empty);
+            if(view!=null) {
+                view.setVisibility(View.VISIBLE);
+            }
 
         } else {
             listView.setVisibility(View.VISIBLE);
-            getView().findViewById(R.id.post_list_empty).setVisibility(View.INVISIBLE);
+            View view = getView().findViewById(R.id.post_list_empty);
+            if(view!=null) {
+                view.setVisibility(View.INVISIBLE);
+            }
+//            getView().findViewById(R.id.post_list_empty).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -113,6 +122,7 @@ public abstract class PostListFragment extends Fragment implements
     public void onPostsLoaded(List<Post> posts) {
         if (posts == null) return;
 
+        this.posts.clear();
         this.posts.addAll(posts);
         sortPostsByTime();
         adapter.notifyDataSetChanged();
