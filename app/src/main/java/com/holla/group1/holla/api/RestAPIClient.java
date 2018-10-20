@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.notification.Notification;
@@ -48,6 +49,7 @@ public class RestAPIClient {
     private OnCommentSubmittedListener mCommentSubmittedListener;
     private OnNotificationsLoadedListener mNotificationsLoadedListener;
     private OnGetFollowingLoadedListener mOnGetFollowingLoadedListener;
+    private OnGetPrivateStatusListener mOnGetPrivateStatusListener;
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -357,7 +359,6 @@ public class RestAPIClient {
                         try {
                             JsonObject jsonObject = response.get(0).getAsJsonObject();
                             User.CURRENT_USER_ID = jsonObject.get("id").getAsString();
-
                         } catch (Exception e) {
                             Log.d(TAG, "onResponse: " + e.toString());
                         }
@@ -558,6 +559,63 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getPrivateStatus(String userID) {
+        String url = SERVER_LOCATION + "/users/private/getstatus";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("id", userID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        JsonObject jsonObject = response.get(0).getAsJsonObject();
+                        mOnGetPrivateStatusListener.OnGetPrivateStatus(jsonObject.get("status").getAsBoolean());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mListener.onPostsLoaded(null);
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void setGetPrivateStatusListener(OnGetPrivateStatusListener listener) {
+        this.mOnGetPrivateStatusListener = listener;
+    }
+
+    public void setPrivate(boolean status) {
+        String url = SERVER_LOCATION + "/users/private/setstatus";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("status", status);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void getHistoryPosts() {
         String url = SERVER_LOCATION + "/posts/search/history";
         JsonObject request_body = new JsonObject();
@@ -701,5 +759,9 @@ public class RestAPIClient {
 
     public interface OnGetFollowingLoadedListener {
         void OnGetFollowingLoaded(List<String> users);
+    }
+
+    public interface OnGetPrivateStatusListener {
+        void OnGetPrivateStatus(boolean status);
     }
 }

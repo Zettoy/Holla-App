@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.places.GeoDataClient;
@@ -84,6 +86,7 @@ public class MapsActivity extends AppCompatActivity implements
         }
         intent.putExtra("userName", String.format("Your Profile (%s)", name));
         intent.putExtra("userID", User.CURRENT_USER_ID);
+        //intent.putExtra("loggedInUser", true);
         startActivity(intent);
     }
 
@@ -139,13 +142,12 @@ public class MapsActivity extends AppCompatActivity implements
         initUserAccount();
         drawer_init();
     }
+
     private void drawer_init(){
-
-
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        if(drawerLayout!=null){
-            View view = drawerLayout.findViewById(R.id.menu_drawer);
 
+        if (drawerLayout != null){
+            View view = drawerLayout.findViewById(R.id.menu_drawer);
         }
     }
 
