@@ -182,12 +182,6 @@ public class RestAPIClient {
                 }
 
         );
-        //remove this once backend search efficiency improves
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
     public void getPostsAtLocation(LatLng location, Integer radius_metres) {
@@ -274,11 +268,6 @@ public class RestAPIClient {
                 }
 
         );
-        request.setRetryPolicy(new DefaultRetryPolicy(
-                15000,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-        ));
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
