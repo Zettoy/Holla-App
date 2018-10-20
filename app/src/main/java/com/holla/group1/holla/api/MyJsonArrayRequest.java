@@ -44,7 +44,6 @@ public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
                 if(jsonObject.has("error")){
                     String error = jsonObject.get("error").getAsString();
                     Log.e(TAG, error);
-//                    Toast.makeText(String.format("Server error: %s", error));
                 }
 
             }
