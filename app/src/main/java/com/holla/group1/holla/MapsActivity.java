@@ -161,8 +161,8 @@ public class MapsActivity extends AppCompatActivity implements
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(mapFragment, "Map");
-        adapter.addFragment(new FeedFragment(), "Feed");
+        adapter.addFragment(mapFragment, getString(R.string.maps_activity_tab_map));
+        adapter.addFragment(new FeedFragment(), getString(R.string.maps_activity_tab_feed));
         viewPager.setAdapter(adapter);
     }
 
