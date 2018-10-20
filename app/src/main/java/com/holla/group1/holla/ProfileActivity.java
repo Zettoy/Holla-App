@@ -16,14 +16,16 @@ import com.holla.group1.holla.user.User;
 
 import java.util.List;
 
-public class ProfileActivity extends AppCompatActivity implements RestAPIClient.OnGetFollowingLoadedListener {
+public class ProfileActivity extends AppCompatActivity implements RestAPIClient.OnGetFollowingLoadedListener, RestAPIClient.OnGetPrivateStatusListener {
     private HistoryFragment historyFragment;
     private ListView historyPostListView;
     private String userName;
     private String userID;
+    private boolean loggedInUser;
     private Button followBtn;
     private boolean alreadyFollowing = false;
     private RestAPIClient apiClient;
+    private boolean privateAccount = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
         Intent intent = getIntent();
         userName = intent.getStringExtra("userName");
         userID = intent.getStringExtra("userID");
+        //loggedInUser = intent.getBooleanExtra("loggedInUser", false);
 
         TextView usernameTxt = (TextView) findViewById(R.id.usernameTxt);
         if (userName != null) usernameTxt.setText(userName);
@@ -46,6 +49,9 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
             apiClient.setOnGetFollowingLoadedListener(this);
             apiClient.getFollowingList();
         }
+
+        apiClient.setGetPrivateStatusListener(this);
+        apiClient.getPrivateStatus(userID);
 
         Toolbar toolbar = findViewById(R.id.activity_history_toolbar);
         setSupportActionBar(toolbar);
@@ -93,18 +99,46 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
         followBtn.setEnabled(true);
     }
 
+    @Override
+    public void OnGetPrivateStatus(boolean status) {
+        privateAccount = status;
+
+        if (userID.equals(User.CURRENT_USER_ID)) {
+            followBtn.setEnabled(true);
+            if (status) {
+                followBtn.setText("Unprivate");
+            } else {
+                followBtn.setText("Private");
+            }
+        }
+    }
+
     private class FollowBtnListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            if (alreadyFollowing) {
-                followBtn.setText("Follow");
-                apiClient.unfollowUser(userID);
-                alreadyFollowing = false;
+            if (userID.equals(User.CURRENT_USER_ID)) {
+                if (privateAccount) {
+                    apiClient.setPrivate(false);
+                    followBtn.setText("Private");
+                    privateAccount = false;
+                } else {
+                    apiClient.setPrivate(true);
+                    followBtn.setText("Unprivate");
+                    privateAccount = true;
+                }
             } else {
-                followBtn.setText("Unfollow");
-                apiClient.followUser(userID);
-                alreadyFollowing = true;
+                if (alreadyFollowing) {
+                    followBtn.setText("Follow");
+                    apiClient.unfollowUser(userID);
+                    alreadyFollowing = false;
+                } else {
+                    followBtn.setText("Unfollow");
+                    apiClient.followUser(userID);
+                    alreadyFollowing = true;
+                }
             }
+
+
         }
     }
 }

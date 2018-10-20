@@ -365,7 +365,7 @@ public class RestAPIClient {
                         try {
                             JsonObject jsonObject = response.get(0).getAsJsonObject();
                             User.CURRENT_USER_ID = jsonObject.get("id").getAsString();
-                            mapsActivity.
+                            mapsActivity.setupPrivate();
                         } catch (Exception e) {
                             Log.d(TAG, "onResponse: " + e.toString());
                         }

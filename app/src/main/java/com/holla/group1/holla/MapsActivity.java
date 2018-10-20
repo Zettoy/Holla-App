@@ -88,6 +88,7 @@ public class MapsActivity extends AppCompatActivity implements
         }
         intent.putExtra("userName", String.format("Your Profile (%s)", name));
         intent.putExtra("userID", User.CURRENT_USER_ID);
+        //intent.putExtra("loggedInUser", true);
         startActivity(intent);
     }
 
@@ -142,7 +143,11 @@ public class MapsActivity extends AppCompatActivity implements
 
         initUserAccount();
         drawer_init();
+        apiClient.setMapsActivity(this);
+        apiClient.getCurrentUserID();
+    }
 
+    public void setupPrivate() {
         apiClient.setGetPrivateStatusListener(this);
         apiClient.getPrivateStatus(User.CURRENT_USER_ID);
     }
@@ -274,11 +279,11 @@ public class MapsActivity extends AppCompatActivity implements
         if (menuItem.getItemId() == R.id.private_itm) {
             if (privateStatus == 0) {
                 apiClient.setPrivate(true);
-                MenuItem privateItem = findViewById(R.id.private_itm);
+                MenuItem privateItem = drawerLayout.findViewById(R.id.menu_drawer).findViewById(R.id.private_itm);
                 privateItem.setTitle("Set account public");
             } else if (privateStatus == 1) {
                 apiClient.setPrivate(false);
-                MenuItem privateItem = findViewById(R.id.private_itm);
+                MenuItem privateItem = drawerLayout.findViewById(R.id.private_itm);
                 privateItem.setTitle("Set account private");
             } else {
                 Toast.makeText(this, "Could not change status.", Toast.LENGTH_LONG)
@@ -317,13 +322,14 @@ public class MapsActivity extends AppCompatActivity implements
 
     @Override
     public void OnGetPrivateStatus(boolean status) {
+        /*DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         if (status == true) {
             privateStatus = 1;
-            MenuItem privateItem = findViewById(R.id.private_itm);
+            MenuItem privateItem = drawerLayout.findViewById(R.id.private_itm);
             privateItem.setTitle("Set public");
         } else {
             privateStatus = 0;
-        }
+        }*/
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {
