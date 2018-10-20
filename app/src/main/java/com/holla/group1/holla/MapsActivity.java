@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.places.GeoDataClient;
@@ -47,7 +49,7 @@ import java.util.List;
 
 public class MapsActivity extends AppCompatActivity implements
         NavigationView.OnNavigationItemSelectedListener,
-        OnCompleteListener<Void> {
+        OnCompleteListener<Void>, RestAPIClient.OnGetPrivateStatusListener {
 
     public static final int MAP_MOVE_LOCATION = 1;
     public static final String EXTRA_PLACE_ID = "place id";
@@ -60,6 +62,8 @@ public class MapsActivity extends AppCompatActivity implements
     private RestAPIClient apiClient;
     private ViewPager viewPager;
     private TabLayout tabLayout;
+
+    private int privateStatus = -1;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -138,14 +142,16 @@ public class MapsActivity extends AppCompatActivity implements
 
         initUserAccount();
         drawer_init();
+
+        apiClient.setGetPrivateStatusListener(this);
+        apiClient.getPrivateStatus(User.CURRENT_USER_ID);
     }
+
     private void drawer_init(){
-
-
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        if(drawerLayout!=null){
-            View view = drawerLayout.findViewById(R.id.menu_drawer);
 
+        if (drawerLayout != null){
+            View view = drawerLayout.findViewById(R.id.menu_drawer);
         }
     }
 
@@ -265,6 +271,21 @@ public class MapsActivity extends AppCompatActivity implements
             signOut();
         }
 
+        if (menuItem.getItemId() == R.id.private_itm) {
+            if (privateStatus == 0) {
+                apiClient.setPrivate(true);
+                MenuItem privateItem = findViewById(R.id.private_itm);
+                privateItem.setTitle("Set account public");
+            } else if (privateStatus == 1) {
+                apiClient.setPrivate(false);
+                MenuItem privateItem = findViewById(R.id.private_itm);
+                privateItem.setTitle("Set account private");
+            } else {
+                Toast.makeText(this, "Could not change status.", Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+
         return true;
     }
 
@@ -281,6 +302,28 @@ public class MapsActivity extends AppCompatActivity implements
         // Prevent the user being able to press back to get back to this activity
         startupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startupIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.private_itm:
+                return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void OnGetPrivateStatus(boolean status) {
+        if (status == true) {
+            privateStatus = 1;
+            MenuItem privateItem = findViewById(R.id.private_itm);
+            privateItem.setTitle("Set public");
+        } else {
+            privateStatus = 0;
+        }
     }
 
     private class ViewPagerAdapter extends FragmentStatePagerAdapter {

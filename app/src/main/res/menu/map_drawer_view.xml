@@ -20,6 +20,11 @@
                     android:title="Notification"
                     android:onClick="showNotificationActivity"/>
                 <item
+                    android:id="@+id/private_itm"
+                    android:icon="@drawable/ic_notification"
+                    android:title="Set Account Private"
+                    />
+                <item
                     android:id="@+id/sign_out_itm"
                     android:icon="@android:drawable/ic_lock_power_off"
                     android:title="Sign out" />
