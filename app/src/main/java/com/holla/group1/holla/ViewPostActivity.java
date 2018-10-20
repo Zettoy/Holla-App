@@ -1,6 +1,8 @@
 package com.holla.group1.holla;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +101,34 @@ public class ViewPostActivity extends AppCompatActivity implements OnLikeListene
 
         EditText commentEditText = findViewById(R.id.edt_comment);
         commentEditText.setOnFocusChangeListener(new CommentEditTextFocusChange());
+
+        ImageButton postMenuButton = findViewById(R.id.post_menu_button);
+
+        postMenuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMenuDialog();
+            }
+        });
+    }
+
+    private void showMenuDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setItems(new String[]{"Report"}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showReportMessage();
+            }
+        });
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showReportMessage() {
+        Toast.makeText(this, "Post has been reported.", Toast.LENGTH_LONG).show();
     }
 
     private void submitComment(String commentStr) {
