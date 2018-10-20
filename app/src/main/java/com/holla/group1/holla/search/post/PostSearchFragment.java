@@ -7,6 +7,14 @@ import java.util.List;
 
 public class PostSearchFragment extends PostListFragment {
     @Override
+    public void onResume() {
+        super.onResume();
+        
+        // reload posts after returning from viewing one
+        readPostsFromBackend();
+    }
+
+    @Override
     protected void exchangeViewIfNeeded() {
         //PostListFragment.exchangeViewIfNeeded seems to throw an exception...
 //        super.exchangeViewIfNeeded();
