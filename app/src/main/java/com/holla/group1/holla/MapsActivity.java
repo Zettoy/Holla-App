@@ -117,6 +117,13 @@ public class MapsActivity extends AppCompatActivity implements
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        MenuItem menuItem = navigationView.getMenu().getItem(0);
+        if(GoogleAccountSingleton.mGoogleSignInAccount != null){
+            String menu_title = String.format("%s",
+                    GoogleAccountSingleton.mGoogleSignInAccount.getEmail()
+            );
+            menuItem.setTitle(menu_title);
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         mGeoDataClient = Places.getGeoDataClient(this);
@@ -124,6 +131,16 @@ public class MapsActivity extends AppCompatActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannels();
 
         initUserAccount();
+        drawer_init();
+    }
+    private void drawer_init(){
+
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout!=null){
+            View view = drawerLayout.findViewById(R.id.menu_drawer);
+
+        }
     }
 
     private void initUserAccount() {
