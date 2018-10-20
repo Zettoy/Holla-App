@@ -13,7 +13,7 @@ public class Post {
     private LatLng location;
     private String username;
     private DateTime creation_time;
-    private Integer num_comments = 0;
+    public Integer num_comments = 0;
     private Integer num_likes = 0;
     private String locationStr;
 
