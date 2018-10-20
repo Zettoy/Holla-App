@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.holla.group1.holla.post.Post;
@@ -34,11 +35,13 @@ public class PostMapOverlay extends Fragment {
         TextView dateTextView = getView().findViewById(R.id.post_time);
         TextView commentsLikesTextView = getView().findViewById(R.id.post_comment_like);
         TextView locationTextView = getView().findViewById(R.id.post_location);
+        ImageButton postMenuButton = getView().findViewById(R.id.post_menu_button);
         contentTextView.setText(post.getContent().trim());
         usernameTextView.setText("@" + post.getUsername());
         dateTextView.setText(" · " + post.get_timestamp_ago());
         commentsLikesTextView.setText(String.format("%d comments · %d likes", post.getNum_comments(), post.getNum_likes()));
         locationTextView.setText(post.getLocationStr());
+        postMenuButton.setVisibility(View.INVISIBLE);
         Boolean isTruncated = Utils.isTextViewTruncated(contentTextView);
         TextView see_more = getView().findViewById(R.id.see_more);
         if (isTruncated) {
