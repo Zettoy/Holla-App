@@ -58,9 +58,11 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
 
         historyFragment = (HistoryFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.history_post_list_fragment);
-        historyFragment.userID = userID;
-        historyPostListView = historyFragment.getListView();
-        historyFragment.onRefresh();
+        if(historyFragment != null){
+            historyFragment.userID = userID;
+            historyPostListView = historyFragment.getListView();
+            historyFragment.onRefresh();
+        }
 
 
     }
