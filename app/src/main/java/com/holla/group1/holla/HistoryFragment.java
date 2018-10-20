@@ -46,7 +46,9 @@ public class HistoryFragment extends PostListFragment {
     @Override
     protected void readPostsFromBackend() {
         //getApiClient().getHistoryPosts();
-        getApiClient().getPostsFromUserID(userID);
+        if (!userID.equals("")) {
+            getApiClient().getPostsFromUserID(userID);
+        }
     }
 
     private void deletePost(Post post) {
