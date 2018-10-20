@@ -50,7 +50,6 @@ public class RestAPIClient {
     private OnNotificationsLoadedListener mNotificationsLoadedListener;
     private OnGetFollowingLoadedListener mOnGetFollowingLoadedListener;
     private OnGetPrivateStatusListener mOnGetPrivateStatusListener;
-    private MapsActivity mapsActivity; //so hacky
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -342,11 +341,6 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
-    // Please ignore me (I'm not here)
-    public void setMapsActivity(MapsActivity mapsActivity) {
-        this.mapsActivity = mapsActivity;
-    }
-
     public void getCurrentUserID() {
         String url = SERVER_LOCATION + "/users/search/requestUserID";
         final JsonObject request_body = new JsonObject();
@@ -365,7 +359,6 @@ public class RestAPIClient {
                         try {
                             JsonObject jsonObject = response.get(0).getAsJsonObject();
                             User.CURRENT_USER_ID = jsonObject.get("id").getAsString();
-                            mapsActivity.setupPrivate();
                         } catch (Exception e) {
                             Log.d(TAG, "onResponse: " + e.toString());
                         }
