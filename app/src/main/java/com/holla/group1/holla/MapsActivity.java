@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBufferResponse;
@@ -57,6 +58,8 @@ public class MapsActivity extends AppCompatActivity implements
     private MapFragment mapFragment;
 
     private RestAPIClient apiClient;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -74,7 +77,12 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void showProfileActivity(MenuItem item) {
         Intent intent = new Intent(MapsActivity.this, ProfileActivity.class);
-        intent.putExtra("userName", "YOU");
+        String name = "";
+        if(GoogleAccountSingleton.mGoogleSignInAccount!=null){
+            GoogleSignInAccount account = GoogleAccountSingleton.mGoogleSignInAccount;
+            name = account.getDisplayName();
+        }
+        intent.putExtra("userName", String.format("Your Profile (%s)", name));
         intent.putExtra("userID", User.CURRENT_USER_ID);
         startActivity(intent);
     }
@@ -106,15 +114,22 @@ public class MapsActivity extends AppCompatActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
+        MenuItem menuItem = navigationView.getMenu().getItem(0);
+        if(GoogleAccountSingleton.mGoogleSignInAccount != null){
+            String menu_title = String.format("%s",
+                    GoogleAccountSingleton.mGoogleSignInAccount.getEmail()
+            );
+            menuItem.setTitle(menu_title);
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
         mGeoDataClient = Places.getGeoDataClient(this);
@@ -122,6 +137,16 @@ public class MapsActivity extends AppCompatActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannels();
 
         initUserAccount();
+        drawer_init();
+    }
+    private void drawer_init(){
+
+
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        if(drawerLayout!=null){
+            View view = drawerLayout.findViewById(R.id.menu_drawer);
+
+        }
     }
 
     private void initUserAccount() {
@@ -192,6 +217,13 @@ public class MapsActivity extends AppCompatActivity implements
         if (requestCode == MAP_MOVE_LOCATION && resultCode == Activity.RESULT_OK) {
             String place_id = data.getStringExtra(EXTRA_PLACE_ID);
             handle_map_location_change_request(place_id);
+            if(tabLayout!=null && viewPager!=null){
+                ViewPagerAdapter viewPagerAdapter = (ViewPagerAdapter) viewPager.getAdapter();
+                tabLayout.setScrollPosition(0,0f,true);
+                viewPager.setCurrentItem(0);
+            }
+
+
         }
 
         if (requestCode == CREATE_POST_ACTIVITY) {

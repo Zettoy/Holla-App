@@ -10,14 +10,10 @@ public class FeedFragment extends PostListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        readPostsFromBackend();
+        onRefresh();
+//        readPostsFromBackend();
     }
 
-    @Override
-    public void onPostsLoaded(List<Post> posts) {
-        getPosts().clear();
-        super.onPostsLoaded(posts);
-    }
 
     @Override
     protected String[] onCreateMenuItems() {

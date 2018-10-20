@@ -2,8 +2,8 @@ package com.holla.group1.holla.api;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
 import com.android.volley.Response;
@@ -31,7 +31,17 @@ public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
                 requestString,
                 listener,
                 errorListener);
+
+        this.setRetryPolicy(
+         new DefaultRetryPolicy(
+                30000,
+                2,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        );
     }
+
     @Override
     protected Response<JsonArray> parseNetworkResponse(NetworkResponse response) {
         try {
@@ -41,7 +51,7 @@ public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
                             HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
             if (jsonString.startsWith("{")) {
                 JsonObject jsonObject = new JsonParser().parse(jsonString).getAsJsonObject();
-                if(jsonObject.has("error")){
+                if (jsonObject.has("error")) {
                     String error = jsonObject.get("error").getAsString();
                     Log.e(TAG, error);
                 }
