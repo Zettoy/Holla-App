@@ -1,5 +1,8 @@
 <resources>
 
+    <string name="maps_activity_tab_map">Explore</string>
+    <string name="maps_activity_tab_feed">My Feed</string>
+    
     <string name="app_name">Holla</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_make_post">MakePostActivity</string>

@@ -1,6 +1,8 @@
 package com.holla.group1.holla.api;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -8,12 +10,14 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonRequest;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 import java.io.UnsupportedEncodingException;
 
 public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
+    public static final String TAG = "MyJsonArrayRequest";
 
     public MyJsonArrayRequest(
             int method,
@@ -35,6 +39,15 @@ public class MyJsonArrayRequest extends JsonRequest<JsonArray> {
                     new String(
                             response.data,
                             HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+            if (jsonString.startsWith("{")) {
+                JsonObject jsonObject = new JsonParser().parse(jsonString).getAsJsonObject();
+                if(jsonObject.has("error")){
+                    String error = jsonObject.get("error").getAsString();
+                    Log.e(TAG, error);
+//                    Toast.makeText(String.format("Server error: %s", error));
+                }
+
+            }
             // TODO: Temp fix until I tell Josh to return a jsonarray on success for comment posting
             if (!jsonString.startsWith("[")) {
                 jsonString = "[" + jsonString + "]";
