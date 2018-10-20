@@ -57,6 +57,8 @@ public class MapsActivity extends AppCompatActivity implements
     private MapFragment mapFragment;
 
     private RestAPIClient apiClient;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
@@ -106,10 +108,10 @@ public class MapsActivity extends AppCompatActivity implements
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayShowTitleEnabled(false);
 
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        viewPager = findViewById(R.id.viewPager);
         setupViewPager(viewPager);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -192,6 +194,13 @@ public class MapsActivity extends AppCompatActivity implements
         if (requestCode == MAP_MOVE_LOCATION && resultCode == Activity.RESULT_OK) {
             String place_id = data.getStringExtra(EXTRA_PLACE_ID);
             handle_map_location_change_request(place_id);
+            if(tabLayout!=null && viewPager!=null){
+                ViewPagerAdapter viewPagerAdapter = (ViewPagerAdapter) viewPager.getAdapter();
+                tabLayout.setScrollPosition(0,0f,true);
+                viewPager.setCurrentItem(0);
+            }
+
+
         }
 
         if (requestCode == CREATE_POST_ACTIVITY) {
