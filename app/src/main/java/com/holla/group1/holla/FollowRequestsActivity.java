@@ -29,7 +29,7 @@ public class FollowRequestsActivity extends ListActivity {
 
         // initiate the listadapter
         ArrayAdapter<String> myAdapter = new ArrayAdapter <String>(this,
-                R.layout.row_layout_follow_request, R.id.listText, listValues);
+                R.layout.row_layout_follow_request, R.id.request_username_txt, listValues);
 
         // assign the list adapter
         setListAdapter(myAdapter);
