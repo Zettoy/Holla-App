@@ -8,8 +8,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.user.User;
@@ -48,6 +50,14 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
         if (userID != null && !userID.equals(User.CURRENT_USER_ID)) {
             apiClient.setOnGetFollowingLoadedListener(this);
             apiClient.getFollowingList();
+            ImageButton blacklistBtn = findViewById(R.id.blacklistBtn);
+            blacklistBtn.setVisibility(View.VISIBLE);
+            blacklistBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    blacklistUser();
+                }
+            });
         }
 
         apiClient.setGetPrivateStatusListener(this);
@@ -71,6 +81,13 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
         }
 
 
+    }
+
+    private void blacklistUser() {
+        apiClient.blacklistUser(userID);
+        Toast.makeText(this,"User has been blacklisted!", Toast.LENGTH_LONG).show();
+        ImageButton blacklistBtn = findViewById(R.id.blacklistBtn);
+        blacklistBtn.setEnabled(false);
     }
 
     @Override
