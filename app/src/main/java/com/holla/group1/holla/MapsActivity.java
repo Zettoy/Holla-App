@@ -102,7 +102,6 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-        //refresh posts in map view / feed view
     }
 
     @Override
