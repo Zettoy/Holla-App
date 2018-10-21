@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.holla.group1.holla.Config;
+import com.holla.group1.holla.api.RestAPIClient;
 import com.holla.group1.holla.post.Post;
 import com.holla.group1.holla.post.PostListFragment;
 
@@ -33,8 +34,10 @@ public class PostSearchFragment extends PostListFragment {
     @Override
     protected void readPostsFromBackend() {
 
-//        getApiClient().searchPostsByContent(this.query);
-        getApiClient().getPostsAtLocation(this.location);
+        RestAPIClient apiClient = getApiClient();
+        if(apiClient!=null){
+            apiClient.getPostsAtLocation(this.location);
+        }
     }
 
     private void show_filtered_posts(){

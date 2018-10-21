@@ -8,6 +8,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -33,6 +34,8 @@ import com.google.android.gms.location.places.GeoDataClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBufferResponse;
 import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -99,6 +102,7 @@ public class MapsActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        //refresh posts in map view / feed view
     }
 
     @Override
@@ -195,6 +199,14 @@ public class MapsActivity extends AppCompatActivity implements
 
     public void openSearchActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MultiSearchActivity.class);
+
+        if(mapFragment!=null && mapFragment.getmMap() != null){
+            CameraPosition cameraPosition = mapFragment.getmMap().getCameraPosition();
+            LatLng camera_target = cameraPosition.target;
+            if(camera_target!=null){
+                intent.putExtra(MultiSearchActivity.EXTRA_LOCATION, camera_target);
+            }
+        }
         startActivityForResult(intent, MapsActivity.MAP_MOVE_LOCATION);
 
     }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -33,6 +34,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.holla.group1.holla.Config;
 import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.ProfileActivity;
 import com.holla.group1.holla.R;
@@ -229,6 +231,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
         }
     }
 
+    public static final String EXTRA_LOCATION = "location";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,9 +239,23 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        Intent intent = getIntent();
+        LatLng location = Config.STARTING_LOCATION;
+        if(intent.hasExtra(EXTRA_LOCATION)){
+            LatLng parceled_location = intent.getParcelableExtra(EXTRA_LOCATION);
+            if(parceled_location!=null){
+                location = parceled_location;
+            }
+        }
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(
+                getSupportFragmentManager(),
+                location
+        );
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -276,6 +293,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
         mViewPager.setCurrentItem(DEFAULT_TAB);
         mGeoDataClient = Places.getGeoDataClient(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
     }
 
     @Override
@@ -324,9 +342,10 @@ public class MultiSearchActivity extends AppCompatActivity implements
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Fragment mCurrentFragment;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private LatLng location;
+        public SectionsPagerAdapter(FragmentManager fm, LatLng location) {
             super(fm);
+            this.location = location;
         }
 
         public Fragment getCurrentFragment() {
@@ -347,6 +366,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
             } else if (position == TAB_POSTS) {
                 PostSearchFragment postSearchFragment = new PostSearchFragment();
+                postSearchFragment.setLocation(this.location);
                 return postSearchFragment;
             } else {
                 return null;
