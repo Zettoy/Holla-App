@@ -655,6 +655,32 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void updateFollowRequest(String userID, boolean status) {
+        String url = SERVER_LOCATION + "/users/private/updatefollowrequest";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("accept", status);
+        request_body.addProperty("requester", userID);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void getHistoryPosts() {
         String url = SERVER_LOCATION + "/posts/search/history";
         JsonObject request_body = new JsonObject();

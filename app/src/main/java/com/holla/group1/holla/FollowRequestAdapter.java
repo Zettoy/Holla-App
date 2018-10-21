@@ -24,7 +24,7 @@ public class FollowRequestAdapter extends ArrayAdapter<Pair<String, String>> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Pair<String, String> user = getItem(position);
+        final Pair<String, String> user = getItem(position);
         this.user = user;
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
@@ -38,13 +38,14 @@ public class FollowRequestAdapter extends ArrayAdapter<Pair<String, String>> {
             public void onClick(View v) {
                 remove(getItem(position));
                 notifyDataSetChanged();
-                
+                apiClient.updateFollowRequest(user.second, true);
             }
         });
         btnDecline.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 remove(getItem(position));
                 notifyDataSetChanged();
+                apiClient.updateFollowRequest(user.second, false);
             }
         });
 
