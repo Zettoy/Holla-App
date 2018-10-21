@@ -3,6 +3,7 @@ package com.holla.group1.holla;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,7 +40,7 @@ public class MapFragment extends Fragment implements
     @Override
     public void onResume() {
         super.onResume();
-        if(mMap!=null){
+        if (mMap != null) {
             refreshPosts();
             focusedPost = null;
             MapFragmentUtilities.hideOverlay(this);
@@ -62,38 +64,57 @@ public class MapFragment extends Fragment implements
         return view;
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
+    private final static int REQUEST_CODE_LOCATION = 1;
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getContext(), "Permission granted", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getContext(), "Location permission granted", Toast.LENGTH_LONG).show();
+            setupMap(mMap);
         } else {
-            int returned = 0;
-            ActivityCompat.requestPermissions(getActivity(),
+            ActivityCompat.requestPermissions(this.getActivity(),
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    returned);
+                    REQUEST_CODE_LOCATION);
         }
 
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_CODE_LOCATION : {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    if(this.mMap!=null) {
+                        setupMap(this.mMap);
+                    }
+                }
+            }
+        }
+    }
+
+    private void setupMap(GoogleMap map) {
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
         setMapLocationAndLoadPosts(Config.STARTING_LOCATION);
-//        refreshPosts();
-//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Config.STARTING_LOCATION, Config.STARTING_ZOOM_LEVEL));
-        mMap.setOnMarkerClickListener(this);
-        mMap.setOnMapClickListener(this);
+        map.setOnMarkerClickListener(this);
+        map.setOnMapClickListener(this);
+        refreshPosts();
     }
 
     @Override
@@ -141,7 +162,6 @@ public class MapFragment extends Fragment implements
         for (Post p : posts) {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(p.getLocation());
-            //markerOptions.position(new LatLng(30, 150));
             Marker marker = mMap.addMarker(markerOptions);
             markerPostHashMap.put(marker, p);
         }
@@ -151,7 +171,6 @@ public class MapFragment extends Fragment implements
             LatLng loc = mMap.getCameraPosition().target;
             setMapLocationAndLoadPosts(loc);
         }
-//        apiClient.getPostsAtLocation(Config.STARTING_LOCATION, 10000);
     }
 
     public GoogleMap getmMap() {
