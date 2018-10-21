@@ -2,6 +2,7 @@ package com.holla.group1.holla;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Pair;
 import android.widget.ArrayAdapter;
 
 import com.holla.group1.holla.R;
@@ -27,13 +28,12 @@ public class FollowRequestsActivity extends ListActivity {
         listValues.add("Blackberry");
         listValues.add("Windows Phone");
 
-        // initiate the listadapter
-        ArrayAdapter<String> myAdapter = new ArrayAdapter <String>(this,
-                R.layout.row_layout_follow_request, R.id.request_username_txt, listValues);
+        ArrayList<Pair<String, String>> users = new ArrayList<>();
+        users.add(new Pair<String, String>("John", "093490283"));
+        users.add(new Pair<String, String>("Greg", "0934902833"));
 
-        // assign the list adapter
-        setListAdapter(myAdapter);
-
+        FollowRequestAdapter adapter = new FollowRequestAdapter(this, users);
+        setListAdapter(adapter);
     }
 
     // when an item of the list is clicked
