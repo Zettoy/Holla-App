@@ -13,16 +13,13 @@ public class HistoryFragment extends PostListFragment {
 
     @Override
     protected String[] onCreateMenuItems() {
-        return new String[]{"Share", "Delete"};
+        return new String[]{"Delete"};
     }
 
     @Override
     protected void onMenuOptionItemSelected(int which, final Post currentPost) {
         switch (which) {
-            case 0: // "Share"
-                break;
-
-            case 1: // "Delete"
+            case 0: // "Delete"
                 final AlertDialog.Builder confirm = new AlertDialog.Builder(getContext());
                 confirm.setTitle("Delete");
                 confirm.setMessage("Are you sure you want to delete this post?");
