@@ -52,6 +52,15 @@
             android:enabled="false"
             android:text="Follow" />
 
+        <ImageButton
+            android:id="@+id/blacklistBtn"
+            android:layout_width="38dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@id/followBtn"
+            android:src="@drawable/ic_delete"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
     <fragment
