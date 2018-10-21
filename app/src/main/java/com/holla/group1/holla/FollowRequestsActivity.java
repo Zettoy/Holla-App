@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Pair;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -49,15 +50,13 @@ public class FollowRequestsActivity extends AppCompatActivity implements RestAPI
         adapter.setApi(apiClient);
     }
 
-    // when an item of the list is clicked
-    /*@Override
-    protected void onListItemClick(ListView list, View view, int position, long id) {
-        super.onListItemClick(list, view, position, id);
-
-        String selectedItem = (String) getListView().getItemAtPosition(position);
-        //String selectedItem = (String) getListAdapter().getItem(position);
-
-        text.setText("You clicked " + selectedItem + " at position " + position);
-    }*/
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
