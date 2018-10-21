@@ -4,19 +4,14 @@ package com.holla.group1.holla.api;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.holla.group1.holla.MapsActivity;
 import com.holla.group1.holla.R;
 import com.holla.group1.holla.comment.Comment;
 import com.holla.group1.holla.notification.Notification;
@@ -26,7 +21,6 @@ import com.holla.group1.holla.signin.GoogleAccountSingleton;
 import com.holla.group1.holla.user.User;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -186,7 +180,7 @@ public class RestAPIClient {
         );
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
-    public void getPostsAtLocation(LatLng location, Integer radius_metres) {
+    public void getPostsAtLocation(LatLng location) {
         String url = SERVER_LOCATION + "/posts/search/location";
         JsonObject request_body = new JsonObject();
         JsonObject location_obj = new JsonObject();

@@ -23,7 +23,7 @@ public abstract class PostListFragment extends Fragment implements
     private List<Post> posts;
     private ListView listView;
     private PostAdapter adapter;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    public SwipeRefreshLayout swipeRefreshLayout;
 
     private RestAPIClient apiClient;
 
@@ -34,7 +34,7 @@ public abstract class PostListFragment extends Fragment implements
         apiClient = new RestAPIClient(getContext(), this, null);
 
         posts = new ArrayList<>();
-        readPostsFromBackend();
+//        readPostsFromBackend();
 
         listView = view.findViewById(R.id.post_list);
 
@@ -53,9 +53,15 @@ public abstract class PostListFragment extends Fragment implements
 
         swipeRefreshLayout = view.findViewById(R.id.post_list_swipe_refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setRefreshing(true);
+//        swipeRefreshLayout.setRefreshing(true);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onRefresh();
     }
 
     @Override
@@ -67,24 +73,23 @@ public abstract class PostListFragment extends Fragment implements
     }
 
     protected void exchangeViewIfNeeded() {
+        View this_view = getView();
+        View post_list_empty = null;
+        if(this_view!=null){
+            post_list_empty = this_view.findViewById(R.id.post_list_empty);
+            if(post_list_empty!=null) {
+                Integer visibility = (posts.isEmpty())? View.VISIBLE : View.INVISIBLE;
+                post_list_empty.setVisibility(visibility);
+            }
+        }
         if (posts.isEmpty()) {
             listView.setVisibility(View.INVISIBLE);
-            View view = getView().findViewById(R.id.post_list_empty);
-            if(view!=null) {
-                view.setVisibility(View.VISIBLE);
-            }
-
         } else {
             listView.setVisibility(View.VISIBLE);
-            View view = getView().findViewById(R.id.post_list_empty);
-            if(view!=null) {
-                view.setVisibility(View.INVISIBLE);
-            }
-//            getView().findViewById(R.id.post_list_empty).setVisibility(View.INVISIBLE);
         }
     }
 
-    private void sortPostsByTime() {
+    public void sortPostsByTime() {
         Collections.sort(posts, new Comparator<Post>() {
             @Override
             public int compare(Post p1, Post p2) {

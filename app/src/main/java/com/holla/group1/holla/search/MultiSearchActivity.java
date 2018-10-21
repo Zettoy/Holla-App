@@ -17,14 +17,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -78,14 +74,16 @@ public class MultiSearchActivity extends AppCompatActivity implements
      */
     private ViewPager mViewPager;
     private FusedLocationProviderClient mFusedLocationClient;
+    private SearchView searchView;
 
     private void search_by_post_query(final String query) {
         Fragment cur_fragment = getCurrentFragment();
-        if(cur_fragment instanceof PostSearchFragment) {
+        if (cur_fragment instanceof PostSearchFragment) {
             PostSearchFragment postSearchFragment = (PostSearchFragment) cur_fragment;
             postSearchFragment.search(query);
         }
     }
+
     private void search_by_username(final String query) {
         SearchUsersRequest request = new SearchUsersRequest(this);
         request.setListener(new SearchUsersRequest.ResponseListener() {
@@ -93,7 +91,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             public void onSearchUsersResponse(List<User> users) {
 
                 Fragment cur_fragment = getCurrentFragment();
-                if(cur_fragment instanceof UserSearchResultFragment) {
+                if (cur_fragment instanceof UserSearchResultFragment) {
                     UserSearchResultFragment userSearchResultFragment = (UserSearchResultFragment) cur_fragment;
                     userSearchResultFragment.showResults(users);
 //                    LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
@@ -169,9 +167,10 @@ public class MultiSearchActivity extends AppCompatActivity implements
     }
 
     public boolean onQueryTextChange(String s) {
-        if(!(getCurrentFragment() instanceof PostSearchFragment)){
-            handleSearchQuery(s);
-        }
+//        if(!(getCurrentFragment() instanceof PostSearchFragment)){
+//            handleSearchQuery(s);
+//        }
+        handleSearchQuery(s);
         return false;
     }
 
@@ -224,12 +223,11 @@ public class MultiSearchActivity extends AppCompatActivity implements
 
     private void displayLocationSearchResults(List<LocationSearchResult.Item> list) {
         Fragment cur_fragment = getCurrentFragment();
-        if(cur_fragment instanceof LocationSearchResultFragment){
+        if (cur_fragment instanceof LocationSearchResultFragment) {
             LocationSearchResultFragment locationSearchResultFragment = (LocationSearchResultFragment) cur_fragment;
             locationSearchResultFragment.showResults(list);
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -265,7 +263,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             @Override
             public void onPageScrollStateChanged(int i) {
                 Fragment cur_frag = getCurrentFragment();
-                if(MultiSearchActivity.this.searchView != null){
+                if (MultiSearchActivity.this.searchView != null) {
                     String query = MultiSearchActivity.this.searchView.getQuery().toString();
                     handleSearchQuery(query);
                 }
@@ -280,15 +278,12 @@ public class MultiSearchActivity extends AppCompatActivity implements
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
-
-
-    private SearchView searchView;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_multi_search, menu);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        this.searchView=searchView;
+        this.searchView = searchView;
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(this);
@@ -353,7 +348,7 @@ public class MultiSearchActivity extends AppCompatActivity implements
             } else if (position == TAB_POSTS) {
                 PostSearchFragment postSearchFragment = new PostSearchFragment();
                 return postSearchFragment;
-            }else{
+            } else {
                 return null;
             }
         }
