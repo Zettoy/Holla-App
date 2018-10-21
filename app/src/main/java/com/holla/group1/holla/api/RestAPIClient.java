@@ -4,6 +4,7 @@ package com.holla.group1.holla.api;
 import android.content.Context;
 import android.os.Handler;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -44,6 +45,7 @@ public class RestAPIClient {
     private OnNotificationsLoadedListener mNotificationsLoadedListener;
     private OnGetFollowingLoadedListener mOnGetFollowingLoadedListener;
     private OnGetPrivateStatusListener mOnGetPrivateStatusListener;
+    private OnGetFollowRequestsLoadedListener mOnGetFollowRequestsLoadedListener;
 
     public RestAPIClient(Context ctx, OnPostsLoadedListener listener, OnCommentsLoadedListener commentsListener) {
         this.context = ctx;
@@ -584,14 +586,80 @@ public class RestAPIClient {
         RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
     }
 
+    public void getFollowRequests(String userID) {
+        String url = SERVER_LOCATION + "/users/private/getfollowrequests";
+        final JsonObject request_body = new JsonObject();
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {
+                        List<Pair<String,String>> requestUsers = new ArrayList<>();
+
+                        JsonObject jsonObject = response.get(0).getAsJsonObject();
+                        JsonArray requestsArray = jsonObject.get("requests").getAsJsonArray();
+                        for (int i = 0; i < requestsArray.size(); i++) {
+                            requestUsers.add(new Pair<String, String>(
+                                    requestsArray.get(i).getAsJsonObject().get("firstName").getAsString(),
+                                    requestsArray.get(i).getAsJsonObject().get("_id").getAsString()));
+                        }
+
+                        mOnGetFollowRequestsLoadedListener.OnGetFollowRequestsLoaded(requestUsers);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //mListener.onPostsLoaded(null);
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
     public void setGetPrivateStatusListener(OnGetPrivateStatusListener listener) {
         this.mOnGetPrivateStatusListener = listener;
+    }
+
+    public void setOnGetFollowRequestsLoadedListener(OnGetFollowRequestsLoadedListener listener) {
+        this.mOnGetFollowRequestsLoadedListener = listener;
     }
 
     public void setPrivate(boolean status) {
         String url = SERVER_LOCATION + "/users/private/setstatus";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("status", status);
+        request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
+
+        MyJsonArrayRequest request = new MyJsonArrayRequest(
+                Request.Method.POST,
+                url,
+                request_body.toString(),
+                new Response.Listener<JsonArray>() {
+                    @Override
+                    public void onResponse(JsonArray response) {}
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handling errors OMEGALUL
+                    }
+                }
+        );
+
+        RequestQueueSingleton.getInstance(this.context).addToRequestQueue(request);
+    }
+
+    public void updateFollowRequest(String userID, boolean status) {
+        String url = SERVER_LOCATION + "/users/private/updatefollowrequest";
+        JsonObject request_body = new JsonObject();
+        request_body.addProperty("accept", status);
+        request_body.addProperty("requester", userID);
         request_body.addProperty("token", GoogleAccountSingleton.mGoogleSignInAccount.getIdToken());
 
         MyJsonArrayRequest request = new MyJsonArrayRequest(
@@ -760,5 +828,9 @@ public class RestAPIClient {
 
     public interface OnGetPrivateStatusListener {
         void OnGetPrivateStatus(boolean status);
+    }
+
+    public interface OnGetFollowRequestsLoadedListener {
+        void OnGetFollowRequestsLoaded(List<Pair<String, String>> users);
     }
 }
