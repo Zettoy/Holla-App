@@ -110,6 +110,9 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
             } else {
                 followBtn.setText("Private");
             }
+        } else {
+            TextView usernameTxt = (TextView) findViewById(R.id.usernameTxt);
+            if (userName != null) usernameTxt.setText(userName + "(Private)");
         }
     }
 
@@ -135,10 +138,11 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
                     followBtn.setText("Unfollow");
                     apiClient.followUser(userID);
                     alreadyFollowing = true;
+                    if (privateAccount == true) {
+                        followBtn.setEnabled(false);
+                    }
                 }
             }
-
-
         }
     }
 }
