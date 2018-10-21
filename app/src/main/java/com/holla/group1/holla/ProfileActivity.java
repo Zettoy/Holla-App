@@ -112,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity implements RestAPIClient.
             }
         } else {
             TextView usernameTxt = (TextView) findViewById(R.id.usernameTxt);
-            if (userName != null) usernameTxt.setText(userName + "(Private)");
+            if (userName != null && status) usernameTxt.setText(userName + "(Private)");
         }
     }
 
