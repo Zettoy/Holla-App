@@ -371,6 +371,9 @@ public class RestAPIClient {
     }
 
     public void updateDeviceToken(String token) {
+        if(GoogleAccountSingleton.mGoogleSignInAccount == null){
+            return;
+        }
         String url = SERVER_LOCATION + "/users/update/deviceToken";
         JsonObject request_body = new JsonObject();
         request_body.addProperty("deviceToken", token);

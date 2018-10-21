@@ -66,6 +66,14 @@ public class MapsActivity extends AppCompatActivity implements
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(mapFragment!=null){
+            mapFragment.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        }
+    }
+
     public void showMakePostActivity(View view) {
         Intent intent = new Intent(MapsActivity.this, MakePostActivity.class);
         startActivityForResult(intent, CREATE_POST_ACTIVITY);
