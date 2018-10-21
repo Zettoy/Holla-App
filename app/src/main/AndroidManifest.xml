@@ -86,6 +86,11 @@
             android:label="NotificationActivity"
             android:theme="@style/AppTheme"/>
 
+        <activity
+            android:name=".FollowRequestsActivity"
+            android:label="FollowRequestsActvivity"
+            android:theme="@style/AppTheme"/>
+
         <service android:name=".service.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

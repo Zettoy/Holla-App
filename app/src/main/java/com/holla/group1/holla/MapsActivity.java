@@ -107,6 +107,11 @@ public class MapsActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    public void showFollowRequestsActivity(MenuItem item) {
+        Intent intent = new Intent(MapsActivity.this, FollowRequestsActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
