@@ -6,34 +6,32 @@ import android.util.Pair;
 import android.widget.ArrayAdapter;
 
 import com.holla.group1.holla.R;
+import com.holla.group1.holla.api.RestAPIClient;
+import com.holla.group1.holla.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FollowRequestsActivity extends ListActivity {
+public class FollowRequestsActivity extends ListActivity implements RestAPIClient.OnGetFollowRequestsLoadedListener {
     //private TextView text;
     private List<String> listValues;
+    private RestAPIClient apiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_follow_requests);
 
-        //text = (TextView) findViewById(R.id.mainText);
+        apiClient = new RestAPIClient(this, null, null);
+        apiClient.setOnGetFollowRequestsLoadedListener(this);
+        apiClient.getFollowRequests(User.CURRENT_USER_ID);
+    }
 
-        listValues = new ArrayList<String>();
-        listValues.add("Android");
-        listValues.add("iOS");
-        listValues.add("Symbian");
-        listValues.add("Blackberry");
-        listValues.add("Windows Phone");
-
-        ArrayList<Pair<String, String>> users = new ArrayList<>();
-        users.add(new Pair<String, String>("John", "093490283"));
-        users.add(new Pair<String, String>("Greg", "0934902833"));
-
-        FollowRequestAdapter adapter = new FollowRequestAdapter(this, users);
+    @Override
+    public void OnGetFollowRequestsLoaded(List<Pair<String,String>> users) {
+        FollowRequestAdapter adapter = new FollowRequestAdapter(this, (ArrayList<Pair<String, String>>) users);
         setListAdapter(adapter);
+        adapter.setApi(apiClient);
     }
 
     // when an item of the list is clicked
