@@ -17,4 +17,11 @@ API Server is live here: [http://188.166.250.144:3000](http://188.166.250.144:30
 ### API Documentation
 Access the Holla backend API documentation at: [https://github.com/Zettoy/Holla/wiki](https://github.com/Zettoy/Holla/wiki)
 
-
+![image](/image/image/1.JPG)
+![image](/image/image/2.JPG)
+![image](/image/image/3.JPG)
+![image](/image/image/4.JPG)
+![image](/image/image/5.JPG)
+![image](/image/image/6.JPG)
+![image](/image/image/7.JPG)
+![image](/image/image/8.JPG)
